@@ -1,5 +1,5 @@
 
-# Project Alpha
+# Project Alpha by Team eepy
 
 Our DnD Inspired, Console based RPG Game called: Whispers of the web
 
