@@ -6,8 +6,8 @@
     public int intelligence { get; set;}
     public int charisma { get; set; }
     
-    public Player(string name, int strength, int agility, int intelligence, int charisma) {
-        this.hitPoints = 100;
+    public Player(string name, int hitPoints, int strength, int agility, int intelligence, int charisma) {
+        this.hitPoints = hitPoints;
         this.name = name;
         this.strength = strength;
         this.agility = agility;
