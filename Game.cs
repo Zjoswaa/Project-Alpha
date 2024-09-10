@@ -4,7 +4,9 @@ public class Game {
     private Player Player = null;
 
     List<Quest> quests = new() {
-        new Quest(1, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.")
+        new Quest(1, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map."),
+        new Quest(2, "Test", "Completed", true),
+        new Quest(3, "Test", "Not completed", false)
     };
 
     public Game() {
@@ -75,7 +77,9 @@ public class Game {
         this.pressAnyKey();
         Console.Clear();
 
-        Player.SetQuest(quests[0]);
+        Player.AddQuest(quests[0]);
+        Player.KnownQuests.Add(quests[1]);
+        Player.KnownQuests.Add(quests[2]);
         this.pressAnyKey();
 
         while(true) {
@@ -151,7 +155,7 @@ public class Game {
         Console.Clear();
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
-        Console.WriteLine("Q: Show current quest.");
+        Console.WriteLine("Q: Show quests");
         if (Player.ClassName == "sorcerer") {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("S: Spell book");
@@ -170,7 +174,7 @@ public class Game {
                     choiceMade = true;
                     break;
                 case "Q":
-                    this.ShowCurrentQuest();
+                    this.ShowQuests();
                     choiceMade = true;
                     break;
                 case "S":
@@ -189,19 +193,11 @@ public class Game {
         }
     }
 
-    private void ShowCurrentQuest() {
+    private void ShowQuests() {
         Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Current Quest");
-        Console.ResetColor();
-        Console.Write("Name: ");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(Player.CurrentQuest.Name);
-        Console.ResetColor();
-        Console.Write("Description: ");
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(Player.CurrentQuest.Description);
-        Console.ResetColor();
+        foreach (Quest quest in this.Player.KnownQuests) {
+            Console.WriteLine($"- {quest}");
+        }
         this.pressAnyKey();
     }
 
@@ -219,9 +215,8 @@ public class Game {
         if (this.Player.ActiveWeapon != null) {
             Console.WriteLine($"Current equipped weapon: \x1B[95m{this.Player.ActiveWeapon.Name}\x1B[0m");
         } else {
-
+            Console.WriteLine($"Current equipped weapon: \x1B[90mNone\x1B[0m");
         }
-        Console.WriteLine($"Current equipped weapon: None");
         this.pressAnyKey();
     }
 }

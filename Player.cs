@@ -8,7 +8,7 @@
     public int Intelligence { get; set;}
     public int Charisma { get; set; }
 
-    public Quest CurrentQuest { get; set; }
+    public List<Quest> KnownQuests { get; set; } = new();
     public List<Item> Items { get; set; } = new();
     public Weapon ActiveWeapon { get; set; }
     
@@ -21,22 +21,20 @@
         this.Agility = Agility;
         this.Intelligence = Intelligence;
         this.Charisma = Charisma;
-
-        this.CurrentQuest = null;
     }
 
-    public void SetQuest(Quest Quest) {
-        this.CurrentQuest = Quest;
+    public void AddQuest(Quest Quest) {
+        this.KnownQuests.Add(Quest);
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Started Quest");
+        Console.WriteLine("Added Quest");
         Console.ResetColor();
         Console.Write("Name: ");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(this.CurrentQuest.Name);
+        Console.WriteLine(Quest.Name);
         Console.ResetColor();
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(this.CurrentQuest.Description);
+        Console.WriteLine(Quest.Description);
         Console.ResetColor();
     }
 }
