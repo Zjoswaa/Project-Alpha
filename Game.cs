@@ -138,6 +138,7 @@ public class Game {
                     continue;
             }
         }
+        Player.ActiveWeapon = (Weapon)Player.Items[0];
         Console.Write($"Created {this.Player.ClassName} ");
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
@@ -214,6 +215,13 @@ public class Game {
         foreach (Item item in Player.Items) {
             Console.WriteLine($"- {item}");
         }
+        Console.WriteLine();
+        if (this.Player.ActiveWeapon != null) {
+            Console.WriteLine($"Current equipped weapon: \x1B[95m{this.Player.ActiveWeapon.Name}\x1B[0m");
+        } else {
+
+        }
+        Console.WriteLine($"Current equipped weapon: None");
         this.pressAnyKey();
     }
 }
