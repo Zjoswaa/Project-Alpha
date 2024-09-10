@@ -1,6 +1,9 @@
 ﻿public class Game {
+    private Player player = null;
+
     public Game() {
         this.welcome();
+        this.createPlayer();
         this.intro();
     }
 
@@ -32,7 +35,7 @@
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("campfire");
         Console.ResetColor();
-        Console.WriteLine(". You dont remember falling asleep.");
+        Console.WriteLine(". You don't remember falling asleep.");
         Console.WriteLine("\"Last night must have been rough\" you tell yourself.");
         this.pressAnyKey();
         Console.WriteLine("The early morning mist clung to the trees, and the distant sounds of the forest surrounded you, birds chirping, leaves rustling.");
@@ -74,5 +77,50 @@
         Console.ReadKey();
         Console.Clear();
         Console.ResetColor();
+    }
+
+    private void createPlayer() {
+        Console.Clear();
+        Console.Write("What is your name: ");
+        string name = Console.ReadLine();
+        if (name == "" || name == null) {
+            name = "Player";
+        }
+        Console.WriteLine($"Select a class for player {name}:");
+        Console.WriteLine("\t\tHP\tSTR\tAGI\tINT\tCHA");
+        Console.WriteLine("1: Warrior\t80\t7\t2\t1\t2");
+        Console.WriteLine("2: Archer\t40\t3\t9\t2\t2");
+        Console.WriteLine("3: Sorcerer\t20\t1\t3\t10\t4");
+        Console.WriteLine("4: Rogue\t40\t3\t7\t1\t5");
+        bool choiceMade = false;
+        while (!choiceMade) {
+            switch (Console.ReadLine()) {
+                case "1":
+                    this.player = new Player(name, 80, 7, 2, 1, 2);
+                    choiceMade = true;
+                    break;
+                case "2":
+                    this.player = new Player(name, 40, 3, 9, 2, 2);
+                    choiceMade = true;
+                    break;
+                case "3":
+                    this.player = new Player(name, 20, 1, 3, 10, 4);
+                    choiceMade = true;
+                    break;
+                case "4":
+                    this.player = new Player(name, 40, 3, 7, 1, 5);
+                    choiceMade = true;
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice");
+                    continue;
+            }
+        }
+        Console.Write("Created character ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write(name);
+        Console.ResetColor();
+        Console.WriteLine(", good luck!");
+        this.pressAnyKey();
     }
 }
