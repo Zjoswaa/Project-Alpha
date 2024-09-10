@@ -154,6 +154,10 @@ public class Game {
 
     private void ShowActionMenu() {
         Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("HP: ");
+        Console.ResetColor();
+        Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
         Console.WriteLine("Q: Show quests");
