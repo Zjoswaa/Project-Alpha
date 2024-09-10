@@ -124,17 +124,17 @@ public class Game {
                     break;
                 case "2":
                     this.Player = new Player(name, "archer", 40, 3, 9, 2, 2);
-                    Player.Items.Add(new Weapon(0, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12));
+                    Player.Items.Add(new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12));
                     choiceMade = true;
                     break;
                 case "3":
                     this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
-                    Player.Items.Add(new Weapon(0, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15));
+                    Player.Items.Add(new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15));
                     choiceMade = true;
                     break;
                 case "4":
                     this.Player = new Player(name, "rogue", 40, 3, 7, 1, 5);
-                    Player.Items.Add(new Weapon(0, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12));
+                    Player.Items.Add(new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12));
                     choiceMade = true;
                     break;
                 default:
@@ -142,7 +142,8 @@ public class Game {
                     continue;
             }
         }
-        Player.ActiveWeapon = (Weapon)Player.Items[0];
+        this.Player.ItemCounts.Add(1);
+        this.Player.ActiveWeapon = (Weapon)Player.Items[0];
         Console.Write($"Created {this.Player.ClassName} ");
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
@@ -208,8 +209,8 @@ public class Game {
         Console.Write("Inventory");
         Console.ResetColor();
         Console.WriteLine(":");
-        foreach (Item item in Player.Items) {
-            Console.WriteLine($"- {item}");
+        for (int i = 0; i < this.Player.Items.Count; i++) {
+            Console.WriteLine($"- {this.Player.Items[i]} {this.Player.ItemCounts[i]}x");
         }
         Console.WriteLine();
         if (this.Player.ActiveWeapon != null) {

@@ -25,10 +25,10 @@ public class Quest {
         return $"\x1B[91m{this.Name} \x1B[90m{this.Description}\x1B[0m";
     }
 
-    //override public bool Equals(object? obj) {
-    //    if (obj == null || !(obj is Quest)) {
-    //        return false;
-    //    }
-    //    return this.ID == ((Quest)obj).ID;
-    //}
+    override public bool Equals(object? obj) {
+        if (obj == null || !(obj is Quest)) {
+            return false;
+        }
+        return this.ID == ((Quest)obj).ID;
+    }
 }
