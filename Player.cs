@@ -9,8 +9,8 @@
     public int Charisma { get; set; }
 
     public List<Quest> KnownQuests { get; set; } = new();
-    public List<Item> Items { get; set; } = new();
-    public List<int> ItemCounts { get; set; } = new();
+    public Dictionary<Item, int> Items { get; set; } = new();
+    //public List<int> ItemCounts { get; set; } = new();
     public Weapon ActiveWeapon { get; set; }
     
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
