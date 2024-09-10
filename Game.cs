@@ -120,7 +120,7 @@
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
         Console.ResetColor();
-        Console.WriteLine(", good luck!");
+        Console.WriteLine(", Good luck!");
         this.pressAnyKey();
     }
 }
