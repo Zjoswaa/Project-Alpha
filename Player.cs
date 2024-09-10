@@ -7,6 +7,9 @@
     public int Agility { get; set;}
     public int Intelligence { get; set;}
     public int Charisma { get; set; }
+
+    public Quest CurrentQuest { get; set; }
+    public List<Item> Items { get; set; } = new();
     
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
         this.Name = Name;
@@ -17,5 +20,22 @@
         this.Agility = Agility;
         this.Intelligence = Intelligence;
         this.Charisma = Charisma;
+
+        this.CurrentQuest = null;
+    }
+
+    public void SetQuest(Quest Quest) {
+        this.CurrentQuest = Quest;
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Started Quest");
+        Console.ResetColor();
+        Console.Write("Name: ");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(this.CurrentQuest.Name);
+        Console.ResetColor();
+        Console.Write("Description: ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(this.CurrentQuest.Description);
+        Console.ResetColor();
     }
 }

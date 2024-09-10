@@ -1,5 +1,11 @@
-﻿public class Game {
+﻿using System.Drawing;
+
+public class Game {
     private Player Player = null;
+
+    List<Quest> quests = new() {
+        new Quest(1, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.")
+    };
 
     public Game() {
         this.welcome();
@@ -68,6 +74,13 @@
         Console.WriteLine("After that he walked away, vanishing into the deep forest just like he appeared.");
         this.pressAnyKey();
         Console.Clear();
+
+        Player.SetQuest(quests[0]);
+        this.pressAnyKey();
+
+        while(true) {
+            ShowActionMenu();
+        }
     }
 
     private void pressAnyKey() {
@@ -102,18 +115,22 @@
             switch (Console.ReadLine()) {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
+                    Player.Items.Add(new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10));
                     choiceMade = true;
                     break;
                 case "2":
                     this.Player = new Player(name, "archer", 40, 3, 9, 2, 2);
+                    Player.Items.Add(new Weapon(0, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12));
                     choiceMade = true;
                     break;
                 case "3":
                     this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
+                    Player.Items.Add(new Weapon(0, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15));
                     choiceMade = true;
                     break;
                 case "4":
                     this.Player = new Player(name, "rogue", 40, 3, 7, 1, 5);
+                    Player.Items.Add(new Weapon(0, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12));
                     choiceMade = true;
                     break;
                 default:
@@ -126,6 +143,77 @@
         Console.Write(name);
         Console.ResetColor();
         Console.WriteLine(", Good luck!");
+        this.pressAnyKey();
+    }
+
+    private void ShowActionMenu() {
+        Console.Clear();
+        Console.WriteLine("I: Open inventory");
+        Console.WriteLine("M: Show map");
+        Console.WriteLine("Q: Show current quest.");
+        if (Player.ClassName == "sorcerer") {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("S: Spell book");
+            Console.ResetColor();
+        }
+
+        bool choiceMade = false;
+        while (!choiceMade) {
+            switch (Console.ReadLine().ToUpper()) {
+                case "I":
+                    this.ShowInventory();
+                    choiceMade = true;
+                    break;
+                case "M":
+                    // TODO: Show map
+                    choiceMade = true;
+                    break;
+                case "Q":
+                    this.ShowCurrentQuest();
+                    choiceMade = true;
+                    break;
+                case "S":
+                    if (Player.ClassName == "sorcerer") {
+                        // TODO: Show spell book
+                        choiceMade = true;
+                        break;
+                    } else {
+                        Console.WriteLine("Invalid input");
+                        continue;
+                    }
+                default:
+                    Console.WriteLine("Invalid input");
+                    continue;
+            }
+        }
+    }
+
+    private void ShowCurrentQuest() {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Current Quest");
+        Console.ResetColor();
+        Console.Write("Name: ");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(Player.CurrentQuest.Name);
+        Console.ResetColor();
+        Console.Write("Description: ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(Player.CurrentQuest.Description);
+        Console.ResetColor();
+        this.pressAnyKey();
+    }
+
+    private void ShowInventory() {
+        Console.Clear();
+        Console.Write($"{Player.Name}'s ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Inventory");
+        Console.ResetColor();
+        Console.WriteLine(":");
+        foreach (Item item in Player.Items) {
+            Console.WriteLine($"- {item}");
+        }
         this.pressAnyKey();
     }
 }
