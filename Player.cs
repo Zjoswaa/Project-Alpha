@@ -1,17 +1,19 @@
 ﻿public class Player {
-    public string name { get; set; }
-    public int hitPoints { get; set; }
-    public int strength { get; set; }
-    public int agility { get; set;}
-    public int intelligence { get; set;}
-    public int charisma { get; set; }
+    public string Name { get; set; }
+    public int HitPoints { get; set; }
+    public int MaxHitPoints { get; }
+    public int Strength { get; set; }
+    public int Agility { get; set;}
+    public int Intelligence { get; set;}
+    public int Charisma { get; set; }
     
-    public Player(string name, int hitPoints, int strength, int agility, int intelligence, int charisma) {
-        this.hitPoints = hitPoints;
-        this.name = name;
-        this.strength = strength;
-        this.agility = agility;
-        this.intelligence = intelligence;
-        this.charisma = charisma;
+    public Player(string Name, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
+        this.Name = Name;
+        this.HitPoints = HitPoints;
+        this.MaxHitPoints = HitPoints;
+        this.Strength = Strength;
+        this.Agility = Agility;
+        this.Intelligence = Intelligence;
+        this.Charisma = Charisma;
     }
 }

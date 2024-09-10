@@ -1,5 +1,5 @@
 ﻿public class Game {
-    private Player player = null;
+    private Player Player = null;
 
     public Game() {
         this.welcome();
@@ -96,19 +96,19 @@
         while (!choiceMade) {
             switch (Console.ReadLine()) {
                 case "1":
-                    this.player = new Player(name, 80, 7, 2, 1, 2);
+                    this.Player = new Player(name, 80, 7, 2, 1, 2);
                     choiceMade = true;
                     break;
                 case "2":
-                    this.player = new Player(name, 40, 3, 9, 2, 2);
+                    this.Player = new Player(name, 40, 3, 9, 2, 2);
                     choiceMade = true;
                     break;
                 case "3":
-                    this.player = new Player(name, 20, 1, 3, 10, 4);
+                    this.Player = new Player(name, 20, 1, 3, 10, 4);
                     choiceMade = true;
                     break;
                 case "4":
-                    this.player = new Player(name, 40, 3, 7, 1, 5);
+                    this.Player = new Player(name, 40, 3, 7, 1, 5);
                     choiceMade = true;
                     break;
                 default:
