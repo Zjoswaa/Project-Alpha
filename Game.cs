@@ -86,7 +86,12 @@
         if (name == "" || name == null) {
             name = "Player";
         }
-        Console.WriteLine($"Select a class for player {name}:");
+        Console.Clear();
+        Console.Write("Select a class for player ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(name);
+        Console.WriteLine();
+        Console.ResetColor();
         Console.WriteLine("\t\tHP\tSTR\tAGI\tINT\tCHA");
         Console.WriteLine("1: Warrior\t80\t7\t2\t1\t2");
         Console.WriteLine("2: Archer\t40\t3\t9\t2\t2");
@@ -96,19 +101,19 @@
         while (!choiceMade) {
             switch (Console.ReadLine()) {
                 case "1":
-                    this.Player = new Player(name, 80, 7, 2, 1, 2);
+                    this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
                     choiceMade = true;
                     break;
                 case "2":
-                    this.Player = new Player(name, 40, 3, 9, 2, 2);
+                    this.Player = new Player(name, "archer", 40, 3, 9, 2, 2);
                     choiceMade = true;
                     break;
                 case "3":
-                    this.Player = new Player(name, 20, 1, 3, 10, 4);
+                    this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
                     choiceMade = true;
                     break;
                 case "4":
-                    this.Player = new Player(name, 40, 3, 7, 1, 5);
+                    this.Player = new Player(name, "rogue", 40, 3, 7, 1, 5);
                     choiceMade = true;
                     break;
                 default:
@@ -116,7 +121,7 @@
                     continue;
             }
         }
-        Console.Write("Created character ");
+        Console.Write($"Created {this.Player.ClassName} ");
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
         Console.ResetColor();
