@@ -5,8 +5,8 @@ public class Game {
 
     List<Quest> quests = new() {
         new Quest(1, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map."),
-        new Quest(2, "Test", "Completed", true),
-        new Quest(3, "Test", "Not completed", false)
+        new Quest(2, "Test", "Completed", true), // TODO: Remove
+        new Quest(3, "Test", "Not completed", false) // TODO: Remove
     };
 
     public Game() {
@@ -119,22 +119,22 @@ public class Game {
             switch (Console.ReadLine()) {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
-                    Player.Items.Add(new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10));
+                    Player.Items[new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10)] = 1;
                     choiceMade = true;
                     break;
                 case "2":
                     this.Player = new Player(name, "archer", 40, 3, 9, 2, 2);
-                    Player.Items.Add(new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12));
+                    Player.Items[new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12)] = 1;
                     choiceMade = true;
                     break;
                 case "3":
                     this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
-                    Player.Items.Add(new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15));
+                    Player.Items[new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15)] = 1;
                     choiceMade = true;
                     break;
                 case "4":
                     this.Player = new Player(name, "rogue", 40, 3, 7, 1, 5);
-                    Player.Items.Add(new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12));
+                    Player.Items[new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12)] = 1;
                     choiceMade = true;
                     break;
                 default:
@@ -142,8 +142,10 @@ public class Game {
                     continue;
             }
         }
-        this.Player.ItemCounts.Add(1);
-        this.Player.ActiveWeapon = (Weapon)Player.Items[0];
+
+        this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
+        this.Player.Items[new Item(4, "Bone", "Drops from a skeleton")] = 5; // TODO: Remove
+        this.Player.Items[new Item(4, "Bone", "Drops from a skeleton")] += 5; // TODO: Remove
         Console.Write($"Created {this.Player.ClassName} ");
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
@@ -214,7 +216,7 @@ public class Game {
         Console.ResetColor();
         Console.WriteLine(":");
         for (int i = 0; i < this.Player.Items.Count; i++) {
-            Console.WriteLine($"- {this.Player.Items[i]} {this.Player.ItemCounts[i]}x");
+            Console.WriteLine($"- {this.Player.Items.ElementAt(i).Key} {this.Player.Items.ElementAt(i).Value}x");
         }
         Console.WriteLine();
         if (this.Player.ActiveWeapon != null) {
