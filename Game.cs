@@ -62,7 +62,7 @@
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Write("Arachthos");
         Console.ResetColor();
-        Console.WriteLine("\", he said, \"but his is not about me, this is about you.\"");
+        Console.WriteLine("\", he said, \"but this is not about me, this is about you.\"");
         this.pressAnyKey();
         Console.WriteLine("\"Head to the nearby city if you want to learn what happened.\" Arachthos said.");
         Console.WriteLine("After that he walked away, vanishing into the deep forest just like he appeared.");
