@@ -10,6 +10,7 @@
 
     public Quest CurrentQuest { get; set; }
     public List<Item> Items { get; set; } = new();
+    public Weapon ActiveWeapon { get; set; }
     
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
         this.Name = Name;
