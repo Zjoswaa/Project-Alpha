@@ -53,4 +53,44 @@ public class Location
         if (location == "W") return LocationToWest;
         return null;
     }
+
+    // Use this method to give the player the option to move and check the map.
+    // Always use "World.LocationByID(1)" as the parameter when starting the game (unless testing)
+    public static void PlayerMovement(Location? currentLocation)
+    {
+        while (true)
+        {
+            if (currentLocation != null)
+            {
+                Console.WriteLine($"\nYou are currently at {currentLocation.Name}.");
+                Console.WriteLine($"Description: {currentLocation.Description}");
+                Console.WriteLine(currentLocation.Compass());
+            }
+
+            Console.WriteLine("Enter a direction to move (N/E/S/W) or M to check the map:");
+
+            string userInput = Console.ReadLine().ToUpper();
+
+            if (userInput == "M")
+            {
+                World.WorldMap();
+            }
+
+            else
+            {
+                Location? newLocation = currentLocation?.GetLocationAt(userInput);
+
+                if (newLocation != null)
+                {
+                    currentLocation = newLocation;
+                    break;
+                }
+
+                else
+                {
+                    Console.WriteLine("The terrain blocks off this path. You can't take this route.");
+                }
+            }
+        }
+    }
 }
