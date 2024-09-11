@@ -30,12 +30,44 @@
         Console.WriteLine("Added Quest");
         Console.ResetColor();
         Console.Write("Name: ");
-        Console.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(Quest.Name);
         Console.ResetColor();
         Console.Write("Description: ");
-        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
         Console.ResetColor();
+    }
+
+    public void AskAddQuest(Quest Quest) {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Do you want to accept this quest (y/n):");
+        Console.ResetColor();
+        Console.Write("Name: ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(Quest.Name);
+        Console.ResetColor();
+        Console.Write("Description: ");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine(Quest.Description);
+        Console.ResetColor();
+
+        while (true) {
+            string input = Console.ReadLine().ToUpper();
+            if (input == "Y") {
+                this.KnownQuests.Add(Quest);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Added Quest");
+                Console.ResetColor();
+                break;
+            } else if (input == "N") {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Declined Quest");
+                Console.ResetColor();
+                break;
+            } else {
+                continue;
+            }
+        }
     }
 }
