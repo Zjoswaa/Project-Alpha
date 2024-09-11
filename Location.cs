@@ -15,33 +15,36 @@ public class Location
         this.Description = Description;
     }
 
+    // Dynamic compass that changes based on possible routes
     public string Compass()
     {
-        string s = "From here you can go:\n";
+        string direction = "From here you can go:\n\n";
+        string north = "";
+        string east = "";
+        string south = "";
+        string west = "";
+
         if (LocationToNorth != null)
         {
-            s += "    P\n    A\n";
-        }
-        if (LocationToWest != null)
-        {
-            s += "  VFT";
-        }
-        else
-        {
-            s += "    |";
+            north = $"[N]";
         }
         if (LocationToEast != null)
         {
-            s += "GBS";
+            east = $"[E]";
         }
-        s += "\n";
         if (LocationToSouth != null)
         {
-            s += "    H\n    ";
+            south = $"[S]";
         }
-        return s;
+        if (LocationToWest != null)
+        {
+            west = $"[W]";
+        }
+
+        return $"{direction}\n     {north}\n  {west}   {east}\n     {south}";
     }
 
+    // Based on user input, returns the location in that direction
     public Location? GetLocationAt(string location)
     {
         if (location == "N") return LocationToNorth;
