@@ -2,19 +2,22 @@ public class Quest {
     public int ID;
     public string Name;
     public string Description;
+    public string QuestType; // MAIN or SIDE
     public bool Completed;
     
-    public Quest(int ID, string Name, string Description) {
+    public Quest(int ID, string Name, string Description, string QuestType) {
         this.ID = ID;
         this.Name = Name;
         this.Description = Description;
+        this.QuestType = QuestType;
         this.Completed = false;
     }
 
-    public Quest(int ID, string Name, string Description, bool Completed) {
+    public Quest(int ID, string Name, string Description, string QuestType, bool Completed) {
         this.ID = ID;
         this.Name = Name;
         this.Description = Description;
+        this.QuestType = QuestType;
         this.Completed = Completed;
     }
 

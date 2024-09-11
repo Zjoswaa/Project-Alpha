@@ -4,9 +4,17 @@ public class Game {
     private Player Player = null;
 
     List<Quest> quests = new() {
-        new Quest(1, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map."),
-        new Quest(2, "Test", "Completed", true), // TODO: Remove
-        new Quest(3, "Test", "Not completed", false) // TODO: Remove
+        new Quest(0, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.", "MAIN"),
+        new Quest(1, "Test", "Completed", "SIDE", true), // TODO: Remove
+        new Quest(2, "Test", "Not completed", "SIDE", false), // TODO: Remove
+    };
+
+    List<Item> items = new() {
+        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10),
+        new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12),
+        new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15),
+        new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12),
+        new Item(4, "Bone", "Drops from a skeleton")
     };
 
     public Game() {
@@ -78,8 +86,8 @@ public class Game {
         Console.Clear();
 
         Player.AddQuest(quests[0]);
-        Player.KnownQuests.Add(quests[1]);
-        Player.KnownQuests.Add(quests[2]);
+        this.pressAnyKey();
+        this.Player.AskAddQuest(quests[1]);
         this.pressAnyKey();
 
         while(true) {
@@ -91,6 +99,15 @@ public class Game {
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.Write("Press any key to continue...");
+        Console.ReadKey();
+        Console.Clear();
+        Console.ResetColor();
+    }
+
+    private void pressAnyKey(string Message) {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.Write($"{Message}");
         Console.ReadKey();
         Console.Clear();
         Console.ResetColor();
@@ -110,48 +127,63 @@ public class Game {
         Console.WriteLine();
         Console.ResetColor();
         Console.WriteLine("\t\tHP\tSTR\tAGI\tINT\tCHA");
-        Console.WriteLine("1: Warrior\t80\t7\t2\t1\t2");
-        Console.WriteLine("2: Archer\t40\t3\t9\t2\t2");
-        Console.WriteLine("3: Sorcerer\t20\t1\t3\t10\t4");
-        Console.WriteLine("4: Rogue\t40\t3\t7\t1\t5");
+        Console.WriteLine("1: \x1B[91mWarrior\x1B[0m\t80\t7\t2\t1\t2");
+        Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t2\t2");
+        Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
+        Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
         bool choiceMade = false;
         while (!choiceMade) {
             switch (Console.ReadLine()) {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
-                    Player.Items[new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10)] = 1;
+                    Player.Items[items[0]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
                     this.Player = new Player(name, "archer", 40, 3, 9, 2, 2);
-                    Player.Items[new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12)] = 1;
+                    Player.Items[items[1]] = 1;
                     choiceMade = true;
                     break;
                 case "3":
                     this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
-                    Player.Items[new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15)] = 1;
+                    Player.Items[items[2]] = 1;
                     choiceMade = true;
                     break;
                 case "4":
                     this.Player = new Player(name, "rogue", 40, 3, 7, 1, 5);
-                    Player.Items[new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12)] = 1;
+                    Player.Items[items[3]] = 1;
                     choiceMade = true;
                     break;
                 default:
-                    Console.WriteLine("Invalid choice");
+                    Console.WriteLine("Invalid choice (1-4)");
                     continue;
             }
         }
 
         this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
-        this.Player.Items[new Item(4, "Bone", "Drops from a skeleton")] = 5; // TODO: Remove
-        this.Player.Items[new Item(4, "Bone", "Drops from a skeleton")] += 5; // TODO: Remove
-        Console.Write($"Created {this.Player.ClassName} ");
+        this.Player.Items[items[4]] = 5; // TODO: Remove
+        this.Player.Items[items[4]] += 5; // TODO: Remove
+        switch (this.Player.ClassName) {
+            case "warrior":
+                Console.Write($"Created \x1B[91m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
+                break;
+            case "archer":
+                Console.Write($"Created \x1B[92m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
+                break;
+            case "sorcerer":
+                Console.Write($"Created \x1B[96m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
+                break;
+            case "rogue":
+                Console.Write($"Created \x1B[34m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
+                break;
+            default: // Wont happen
+                break;
+        }
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
         Console.ResetColor();
         Console.WriteLine(", Good luck!");
-        this.pressAnyKey();
+        this.pressAnyKey("Press any key to start...");
     }
 
     private void ShowActionMenu() {
@@ -162,7 +194,7 @@ public class Game {
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
-        Console.WriteLine("Q: Show quests");
+        Console.WriteLine("Q: Manage quests");
         if (Player.ClassName == "sorcerer") {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("S: Spell book");
@@ -202,10 +234,22 @@ public class Game {
 
     private void ShowQuests() {
         Console.Clear();
+        int questNum = 0;
+        // First print main quests
         foreach (Quest quest in this.Player.KnownQuests) {
-            Console.WriteLine($"- {quest}");
+            if (quest.QuestType == "MAIN") {
+                questNum++;
+                Console.WriteLine($"\x1B[1m\x1B[33m[{questNum}]\x1B[0m\t{quest}");
+            }
         }
-        this.pressAnyKey();
+        // Then print side quest
+        foreach (Quest quest in this.Player.KnownQuests) {
+            if (quest.QuestType == "SIDE") {
+                questNum++;
+                Console.WriteLine($"[{questNum}]\t{quest}");
+            }
+        }
+        this.pressAnyKey("Press any key to exit quest list...");
     }
 
     private void ShowInventory() {
@@ -224,6 +268,6 @@ public class Game {
         } else {
             Console.WriteLine($"Current equipped weapon: \x1B[90mNone\x1B[0m");
         }
-        this.pressAnyKey();
+        this.pressAnyKey("Press any key to exit inventory...");
     }
 }
