@@ -20,7 +20,7 @@ public class World
     public static void PopulateLocations()
     {
         // Creates all locations
-        Location home = new Location(1, "Home", "PLACEHOLDER");
+        Location forest = new Location(1, "Forest", "PLACEHOLDER");
         Location townSquare = new Location(2, "Town Square", "PLACEHOLDER");
         Location militarycamp = new Location(3, "Military Camp", "PLACEHOLDER");
         Location alchemisthut = new Location(4, "Alchemist's Hut", "PLACEHOLDER");
@@ -31,8 +31,8 @@ public class World
         Location kings_castle = new Location(9, "Royal Palace", "PLACEHOLDER");
 
         // Links all locations together
-        home.LocationToNorth = townSquare;
-        townSquare.LocationToSouth = home;
+        forest.LocationToNorth = townSquare;
+        townSquare.LocationToSouth = forest;
         townSquare.LocationToNorth = alchemisthut;
         alchemisthut.LocationToSouth = townSquare;
         alchemisthut.LocationToEast = kingsPass;
@@ -51,7 +51,7 @@ public class World
         farmhouse.LocationToEast = farmermedows;
 
         // Adds the locations to a list for display
-        Locations.Add(home);
+        Locations.Add(forest);
         Locations.Add(townSquare);
         Locations.Add(militarycamp);
         Locations.Add(alchemisthut);
@@ -99,7 +99,7 @@ public class World
                                                                |
                                                                |
                                                     +----------------------+
-                                                    |         Home         |
+                                                    |        Forest        |
                                                     +----------------------+
 ";
 
