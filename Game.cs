@@ -22,6 +22,7 @@ public class Game {
         this.welcome();
         this.createPlayer();
         this.intro();
+        this.start();
     }
 
     private void welcome() {
@@ -86,6 +87,10 @@ public class Game {
         this.pressAnyKey();
         Console.Clear();
 
+
+    }
+
+    private void start() {
         Player.AddQuest(quests[0]);
         this.pressAnyKey();
         //this.Player.AskAddQuest(quests[1]);
