@@ -89,8 +89,10 @@ public class Game {
         this.pressAnyKey();
         this.Player.AskAddQuest(quests[1]);
         this.pressAnyKey();
+        this.Player.AskAddQuest(quests[2]);
+        this.pressAnyKey();
 
-        while(true) {
+        while (true) {
             ShowActionMenu();
         }
     }
@@ -192,6 +194,7 @@ public class Game {
         Console.Write("HP: ");
         Console.ResetColor();
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
+        Console.WriteLine(this.Player.KnownQuests.Count);
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
         Console.WriteLine("Q: Manage quests");
@@ -213,7 +216,7 @@ public class Game {
                     choiceMade = true;
                     break;
                 case "Q":
-                    this.ShowQuests();
+                    this.ManageQuests();
                     choiceMade = true;
                     break;
                 case "S":
@@ -234,22 +237,47 @@ public class Game {
 
     private void ShowQuests() {
         Console.Clear();
-        int questNum = 0;
         // First print main quests
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "MAIN") {
-                questNum++;
-                Console.WriteLine($"\x1B[1m\x1B[33m[{questNum}]\x1B[0m\t{quest}");
+                Console.WriteLine($"\x1B[1m\x1B[33m[{quest.ID}]\x1B[0m\t{quest}");
             }
         }
         // Then print side quest
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "SIDE") {
-                questNum++;
-                Console.WriteLine($"[{questNum}]\t{quest}");
+                Console.WriteLine($"[{quest.ID}]\t{quest}");
             }
         }
-        this.pressAnyKey("Press any key to exit quest list...");
+        Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to delete that quest. \x1B[1m\x1B[33mMain quests\x1B[0m\x1b[36m cannot be deleted.\x1B[0m");
+    }
+
+    private void ManageQuests() {
+        this.ShowQuests();
+        while (true) {
+            string input = Console.ReadLine();
+            if (input == null || input == "") {
+                break;
+            }
+            else {
+                if (!int.TryParse(input, out int inputNum)) {
+                    Console.WriteLine("Invalid input");
+                    continue;
+                }
+                Quest toRemove = null;
+                foreach (Quest quest in this.Player.KnownQuests) {
+                    if (quest.ID == inputNum) {
+                        if (quest.QuestType == "MAIN") {
+                            continue;
+                        } else if (quest.QuestType == "SIDE") {
+                            toRemove = quest;
+                        }
+                    }
+                }
+                this.Player.KnownQuests.Remove(toRemove);
+            }
+            this.ShowQuests();
+        }
     }
 
     private void ShowInventory() {
@@ -269,5 +297,10 @@ public class Game {
             Console.WriteLine($"Current equipped weapon: \x1B[90mNone\x1B[0m");
         }
         this.pressAnyKey("Press any key to exit inventory...");
+    }
+
+    private void CheckQuestsCompletion() {
+        // if Player.location == "City"
+        // this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
     }
 }
