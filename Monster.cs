@@ -27,13 +27,13 @@
             switch (choice)
             {
                 case "1":
-                    player.Attack(monster);
+                    //player.Attack(monster);
                     break;
                 case "2":
-                    player.Defend();
+                    //player.Defend();
                     break;
                 case "3":
-                    player.UsePotion();
+                    //player.UsePotion();
                     break;
                 case "4":
                     if (questType == "Side Quest")
@@ -53,7 +53,7 @@
 
             if (monster.CurrentHitPoints > 0)
             {
-                monster.Attack(player);
+                //monster.Attack(player);
                 Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
             }
 

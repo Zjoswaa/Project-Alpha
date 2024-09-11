@@ -2,14 +2,15 @@
 
 public class Game {
     private Player Player = null;
+    private World World;
 
-    List<Quest> quests = new() {
+    private List<Quest> quests = new() {
         new Quest(0, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.", "MAIN"),
         new Quest(1, "Test", "Completed", "SIDE", true), // TODO: Remove
         new Quest(2, "Test", "Not completed", "SIDE", false), // TODO: Remove
     };
 
-    List<Item> items = new() {
+    private List<Item> items = new() {
         new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10),
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15),
@@ -87,12 +88,13 @@ public class Game {
 
         Player.AddQuest(quests[0]);
         this.pressAnyKey();
-        this.Player.AskAddQuest(quests[1]);
-        this.pressAnyKey();
-        this.Player.AskAddQuest(quests[2]);
-        this.pressAnyKey();
+        //this.Player.AskAddQuest(quests[1]);
+        //this.pressAnyKey();
+        //this.Player.AskAddQuest(quests[2]);
+        //this.pressAnyKey();
 
         while (true) {
+            this.CheckQuestsCompletion();
             ShowActionMenu();
         }
     }
@@ -194,7 +196,6 @@ public class Game {
         Console.Write("HP: ");
         Console.ResetColor();
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
-        Console.WriteLine(this.Player.KnownQuests.Count);
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
         Console.WriteLine("Q: Manage quests");
@@ -212,7 +213,10 @@ public class Game {
                     choiceMade = true;
                     break;
                 case "M":
-                    // TODO: Show map
+                    Console.Clear();
+                    Console.WriteLine($"You are currently at: {this.Player.CurrentLocation.Name}");
+                    World.WorldMap();
+                    this.pressAnyKey();
                     choiceMade = true;
                     break;
                 case "Q":
@@ -300,7 +304,8 @@ public class Game {
     }
 
     private void CheckQuestsCompletion() {
-        // if Player.location == "City"
-        // this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
+        if (this.Player.CurrentLocation == World.LocationByID(1)) {
+            this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
+        }
     }
 }

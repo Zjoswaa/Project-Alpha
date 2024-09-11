@@ -93,4 +93,12 @@ public class Location
             }
         }
     }
+
+    // Function needed to compare equality to an Item object
+    override public bool Equals(object? obj) {
+        if (obj == null || !(obj is Location)) {
+            return false;
+        }
+        return this.ID == ((Location)obj).ID;
+    }
 }
