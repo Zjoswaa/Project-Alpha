@@ -63,8 +63,7 @@ public class World
     }
 
     // Fetches a location by ID
-    public static Location LocationByID(int id)
-    {
+    public static Location LocationByID(int id) {
         foreach (Location location in Locations)
         {
             if (location.ID == id)
