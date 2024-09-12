@@ -56,7 +56,7 @@ public class Location
 
     // Use this method to give the player the option to move and check the map.
     // Always use "World.LocationByID(1)" as the parameter when starting the game (unless testing)
-    public static void PlayerMovement(Location? currentLocation)
+    public static void PlayerMovement(Location? currentLocation, Player Player)
     {
         while (true)
         {
@@ -67,29 +67,26 @@ public class Location
                 Console.WriteLine(currentLocation.Compass());
             }
 
-            Console.WriteLine("Enter a direction to move (N/E/S/W) or M to check the map:");
+            Console.WriteLine("Enter a direction to move (N/E/S/W), press enter to exit:");
 
             string userInput = Console.ReadLine().ToUpper();
 
-            if (userInput == "M")
-            {
-                World.WorldMap();
+            if (userInput == null || userInput == "") {
+                return;
             }
 
-            else
-            {
-                Location? newLocation = currentLocation?.GetLocationAt(userInput);
+            Location? newLocation = currentLocation?.GetLocationAt(userInput);
 
-                if (newLocation != null)
-                {
-                    currentLocation = newLocation;
+            if (userInput == "N" || userInput == "E" || userInput == "S" || userInput == "W") {
+                if (newLocation != null) {
+                    Player.CurrentLocation = newLocation;
+                    //currentLocation = newLocation;
                     break;
-                }
-
-                else
-                {
+                } else {
                     Console.WriteLine("The terrain blocks off this path. You can't take this route.");
                 }
+            } else {
+                Console.WriteLine("Invalid input (N/E/S/W), press enter to exit:");
             }
         }
     }

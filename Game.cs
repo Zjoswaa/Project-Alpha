@@ -204,6 +204,7 @@ public class Game {
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
         Console.WriteLine("Q: Manage quests");
+        Console.WriteLine("W: Walk in a direction");
         if (Player.ClassName == "sorcerer") {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("S: Spell book");
@@ -237,6 +238,10 @@ public class Game {
                         Console.WriteLine("Invalid input");
                         continue;
                     }
+                case "W":
+                    Location.PlayerMovement(this.Player.CurrentLocation, this.Player);
+                    choiceMade = true;
+                    break;
                 default:
                     Console.WriteLine("Invalid input");
                     continue;

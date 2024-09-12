@@ -7,7 +7,7 @@
     public int Agility { get; set;}
     public int Intelligence { get; set;}
     public int Charisma { get; set; }
-    public Location CurrentLocation { get; set; } = World.LocationByID(2);
+    public Location CurrentLocation { get; set; } = World.LocationByID(1);
 
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Item, int> Items { get; set; } = new();
