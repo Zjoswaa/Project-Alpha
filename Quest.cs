@@ -3,21 +3,24 @@ public class Quest {
     public string Name;
     public string Description;
     public string QuestType; // MAIN or SIDE
+    public Dictionary<Item, int> Rewards;
     public bool Completed;
     
-    public Quest(int ID, string Name, string Description, string QuestType) {
+    public Quest(int ID, string Name, string Description, string QuestType, Dictionary<Item, int> Rewards) {
         this.ID = ID;
         this.Name = Name;
         this.Description = Description;
         this.QuestType = QuestType;
+        this.Rewards = Rewards;
         this.Completed = false;
     }
 
-    public Quest(int ID, string Name, string Description, string QuestType, bool Completed) {
+    public Quest(int ID, string Name, string Description, string QuestType, Dictionary<Item, int> Rewards, bool Completed) {
         this.ID = ID;
         this.Name = Name;
         this.Description = Description;
         this.QuestType = QuestType;
+        this.Rewards = Rewards;
         this.Completed = Completed;
     }
 

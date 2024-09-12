@@ -29,6 +29,7 @@
         this.KnownQuests.Add(Quest);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Added Quest");
+        Console.WriteLine();
         Console.ResetColor();
         Console.Write("Name: ");
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -37,7 +38,10 @@
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
-        Console.ResetColor();
+        Console.WriteLine("\x1B[0mRewards:");
+        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        }
     }
 
     public void AskAddQuest(Quest Quest) {
@@ -51,7 +55,10 @@
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
-        Console.ResetColor();
+        Console.WriteLine("\x1B[0mRewards:");
+        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        }
 
         while (true) {
             string input = Console.ReadLine().ToUpper();

@@ -5,17 +5,17 @@ public class Game {
     private World World;
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.", "MAIN"),
-        new Quest(1, "Test", "Completed", "SIDE", true), // TODO: Remove
-        new Quest(2, "Test", "Not completed", "SIDE", false), // TODO: Remove
+        new Quest(0, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }),
+        new Quest(1, "Test", "Completed", "SIDE", null, true), // TODO: Remove
+        new Quest(2, "Test", "Not completed", "SIDE", null, false), // TODO: Remove
     };
 
-    private List<Item> items = new() {
+    private static List<Item> items = new() {
         new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10),
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12),
-        new Item(4, "Bone", "Drops from a skeleton")
+        new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire")
     };
 
     public Game() {
@@ -170,8 +170,7 @@ public class Game {
         }
 
         this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
-        this.Player.Items[items[4]] = 5; // TODO: Remove
-        this.Player.Items[items[4]] += 5; // TODO: Remove
+
         switch (this.Player.ClassName) {
             case "warrior":
                 Console.Write($"Created \x1B[91m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
@@ -249,15 +248,21 @@ public class Game {
         // First print main quests
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "MAIN") {
-                Console.WriteLine($"\x1B[1m\x1B[33m[{quest.ID}]\x1B[0m\t{quest}");
+                Console.WriteLine($"\x1B[1m\x1B[33m[{quest.ID}]\x1B[0m {quest}");
+                foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
+                    Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                }
             }
         }
         // Then print side quest
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "SIDE") {
-                Console.WriteLine($"[{quest.ID}]\t{quest}");
+                foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
+                    Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                }
             }
         }
+        Console.WriteLine();
         Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to delete that quest. \x1B[1m\x1B[33mMain quests\x1B[0m\x1b[36m cannot be deleted.\x1B[0m");
     }
 
@@ -311,6 +316,7 @@ public class Game {
     private void CheckQuestsCompletion() {
         if (this.Player.CurrentLocation == World.LocationByID(1)) {
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
+            // TODO: Add rewards to player inventory
         }
     }
 }
