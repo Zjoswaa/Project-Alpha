@@ -156,6 +156,7 @@ public class Game {
                 case "3":
                     this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
                     Player.Items[items[2]] = 1;
+                    Player.Items[items[4]] = 5;
                     choiceMade = true;
                     break;
                 case "4":
@@ -313,10 +314,24 @@ public class Game {
         this.pressAnyKey("Press any key to exit inventory...");
     }
 
+    private void GivePlayerItems(Player Player, Dictionary<Item, int> Items) {
+        foreach (KeyValuePair<Item, int> kvp in Items) {
+            // If the player already has the item
+            if (Player.Items.ContainsKey(kvp.Key)) {
+                Player.Items[kvp.Key] += kvp.Value;
+            }
+            // Else add it to the inventory
+            else {
+                Player.Items[kvp.Key] = kvp.Value;
+            }
+        }
+    }
+
     private void CheckQuestsCompletion() {
-        if (this.Player.CurrentLocation == World.LocationByID(1)) {
+        // If player is in the city and the quest has not yet been completed
+        if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
-            // TODO: Add rewards to player inventory
+            this.GivePlayerItems(this.Player, this.quests[0].Rewards);
         }
     }
 }
