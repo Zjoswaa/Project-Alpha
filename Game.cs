@@ -306,9 +306,9 @@ public class Game {
         }
         Console.WriteLine();
         if (this.Player.ActiveWeapon != null) {
-            Console.WriteLine($"Current equipped weapon: \x1B[95m{this.Player.ActiveWeapon.Name}\x1B[0m");
+            Console.WriteLine($"Current equipped weapon: {this.Player.ActiveWeapon.Name}");
         } else {
-            Console.WriteLine($"Current equipped weapon: \x1B[90mNone\x1B[0m");
+            Console.WriteLine($"Current equipped weapon: None");
         }
         this.pressAnyKey("Press any key to exit inventory...");
     }

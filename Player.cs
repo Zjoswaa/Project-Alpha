@@ -26,9 +26,16 @@
     }
 
     public void AddQuest(Quest Quest) {
-        this.KnownQuests.Add(Quest);
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Added Quest");
+        Console.WriteLine("================================================================================================================================");
+        Console.WriteLine("   ___                  _         _       _     _          _ ");
+        Console.WriteLine("  / _ \\ _   _  ___  ___| |_      / \\   __| | __| | ___  __| |");
+        Console.WriteLine(" | | | | | | |/ _ \\/ __| __|    / _ \\ / _` |/ _` |/ _ \\/ _` |");
+        Console.WriteLine(" | |_| | |_| |  __/\\__ \\ |_    / ___ \\ (_| | (_| |  __/ (_| |");
+        Console.WriteLine("  \\__\\_\\\\__,_|\\___||___/\\__|  /_/   \\_\\__,_|\\__,_|\\___|\\__,_|");
+        Console.WriteLine("                                                             ");
+        Console.WriteLine("================================================================================================================================");
+        this.KnownQuests.Add(Quest);
         Console.WriteLine();
         Console.ResetColor();
         Console.Write("Name: ");
