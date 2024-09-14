@@ -16,13 +16,14 @@ public class Game {
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
         new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire", false),
-        new Item(5, "Health Potion", "A refreshing potion that restores your health", true)
+        new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5),
+        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
     };
 
     public Game() {
         this.welcome();
         this.createPlayer();
-        this.intro();
+        //this.intro();
         this.start();
     }
 
@@ -206,6 +207,9 @@ public class Game {
         Console.WriteLine("M: Show map");
         Console.WriteLine("Q: Manage quests");
         Console.WriteLine("W: Walk in a direction");
+        if (this.Player.CurrentLocation.ID == 1) {
+            Console.WriteLine("F: Fight Slime");
+        }
         if (Player.ClassName == "sorcerer") {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("S: Spell book");
@@ -242,6 +246,15 @@ public class Game {
                 case "W":
                     Location.PlayerMovement(this.Player.CurrentLocation, this.Player);
                     choiceMade = true;
+                    break;
+                case "F":
+                    if (this.Player.CurrentLocation.ID == 1) {
+                        choiceMade = true;
+                        this.Player.Fight(new Monster(0, "Slime", 20, 20, 5), null);
+                    } else {
+                        Console.WriteLine("Invalid input");
+                        continue;
+                    }
                     break;
                 default:
                     Console.WriteLine("Invalid input");
