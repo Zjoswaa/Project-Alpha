@@ -15,61 +15,33 @@
         this.MaximumDamage = MaximumDamage;
     }
 
-    public void Fight(Player player, Monster monster, string questType)
+    public bool Attack(Player player)
     {
-        bool inCombat = true;
-
-        while (inCombat && player.HitPoints > 0 && monster.CurrentHitPoints > 0)
+        int damage = 0;
+        Random rand = new Random();
+        if (player.IsDefending)
         {
-            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Potion (4) Flee");
-            string choice = Console.ReadLine();
-
-            switch (choice)
+            damage = rand.Next(0, this.MaximumDamage) - rand.Next(0, player.ActiveWeapon.Defence);
+            if (damage < 0)
             {
-                case "1":
-                    //player.Attack(monster);
-                    break;
-                case "2":
-                    //player.Defend();
-                    break;
-                case "3":
-                    //player.UsePotion();
-                    break;
-                case "4":
-                    if (questType == "Side Quest")
-                    {
-                        Console.WriteLine($"You fled from the {monster.Name}. The quest is canceled.");
-                        inCombat = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine("You cannot flee from a main quest!");
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice.");
-                    break;
+                damage = 0;
             }
-
-            if (monster.CurrentHitPoints > 0)
-            {
-                //monster.Attack(player);
-                Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
-            }
-
-            if (player.HitPoints <= 0)
-            {
-                Console.WriteLine("You were defeated!");
-                inCombat = false;
-            }
-            else if (monster.CurrentHitPoints <= 0)
-            {
-                Console.WriteLine($"You defeated {monster.Name}!");
-                inCombat = false;
-            }
+            player.IsDefending = false;
         }
+        else 
+        { 
+            damage = rand.Next(0, this.MaximumDamage); 
+        }
+        Console.WriteLine($"{this.Name} attacks {player.Name} for {damage} damage!");
+        player.HitPoints -= damage;
+        if (player.HitPoints < 0)
+        {
+            Console.WriteLine($"{this.Name} has defeated {player.Name}.");
+            return false;
+        }
+        Console.WriteLine($"{player.Name} has {player.HitPoints} HP left.");
+        return true;
     }
-
 }
 
 // Sogaand - 09/11/2024
@@ -84,3 +56,4 @@
 // --*IMPLEMENT PLAYER's Attack, Defend and UsePotion method
 // --*IMPLEMENT MONSTERS's Attack (and maybe Defend?) method
 // --Probably add player HitPoints as well after monster attacks (line 56/57)
+

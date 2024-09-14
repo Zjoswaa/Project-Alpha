@@ -11,11 +11,12 @@ public class Game {
     };
 
     private static List<Item> items = new() {
-        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10),
-        new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12),
-        new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15),
-        new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12),
-        new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire")
+        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10, 5),
+        new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
+        new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
+        new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
+        new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire", false),
+        new Item(5, "Health Potion", "A refreshing potion that restores your health", true)
     };
 
     public Game() {
