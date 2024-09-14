@@ -8,10 +8,10 @@
     public int Intelligence { get; set; }
     public int Charisma { get; set; }
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
+    public bool IsDefending { get; set; } = false;
 
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Item, int> Items { get; set; } = new();
-    //public List<int> ItemCounts { get; set; } = new();
     public Weapon ActiveWeapon { get; set; }
 
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
@@ -86,22 +86,22 @@
         }
     }
 
-    public void Fight(Monster monster, Player player, Quest Quest)
+    public void Fight(Monster monster, Quest Quest)
     {
         bool inCombat = true;
 
         while (inCombat && this.HitPoints > 0 && monster.CurrentHitPoints > 0)
         {
-            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Potion (4) Flee");
+            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
             string choice = Console.ReadLine();
 
             switch (choice)
             {
                 case "1":
-                    this.Attack(monster, player);
+                    inCombat = this.Attack(monster);
                     break;
                 case "2":
-                    //player.Defend();
+                    this.Defend();
                     break;
                 case "3":
                     //player.UsePotion();
@@ -121,13 +121,12 @@
                     Console.WriteLine("Invalid choice.");
                     break;
             }
+            inCombat = monster.Attack(this);
         }
     }
 
-    public void Attack(Monster monster, Player player)
+    public bool Attack(Monster monster)
     {
-        bool inCombat = true;
-
         Random rand = new Random();
         int damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
         Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
@@ -135,19 +134,42 @@
         monster.CurrentHitPoints -= damage;
         if (monster.CurrentHitPoints > 0)
         {
-            monster.Attack(player);
+            monster.Attack(this);
             Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
         }
 
         if (this.HitPoints <= 0)
         {
             Console.WriteLine("You were defeated!");
-            inCombat = false;
+            return false;
         }
         else if (monster.CurrentHitPoints <= 0)
         {
             Console.WriteLine($"You defeated {monster.Name}!");
-            inCombat = false;
+            return false;
+
         }
+        return true;
+    }
+
+    public void Defend()
+    {
+        this.IsDefending = true;
+        Console.WriteLine($"{this.Name} is bracing for impact!");
+
+    }
+
+    public void UseConsumable()
+    {
+        Console.Write($"{this.Name}'s ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Consumable Items");
+        Console.ResetColor();
+        Console.WriteLine(":");
+        for (int i = 0; i < this.Items.Count; i++)
+        {
+            Console.WriteLine($"- {this.Items.ElementAt(i).Key} {this.Items.ElementAt(i).Value}x");
+        }
+        Console.WriteLine();
     }
 }
