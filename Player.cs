@@ -4,8 +4,8 @@
     public int HitPoints { get; set; }
     public int MaxHitPoints { get; }
     public int Strength { get; set; }
-    public int Agility { get; set;}
-    public int Intelligence { get; set;}
+    public int Agility { get; set; }
+    public int Intelligence { get; set; }
     public int Charisma { get; set; }
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
 
@@ -13,7 +13,7 @@
     public Dictionary<Item, int> Items { get; set; } = new();
     //public List<int> ItemCounts { get; set; } = new();
     public Weapon ActiveWeapon { get; set; }
-    
+
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
         this.Name = Name;
         this.ClassName = ClassName;
@@ -83,6 +83,71 @@
             } else {
                 continue;
             }
+        }
+    }
+
+    public void Fight(Monster monster, Player player, Quest Quest)
+    {
+        bool inCombat = true;
+
+        while (inCombat && this.HitPoints > 0 && monster.CurrentHitPoints > 0)
+        {
+            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Potion (4) Flee");
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    this.Attack(monster, player);
+                    break;
+                case "2":
+                    //player.Defend();
+                    break;
+                case "3":
+                    //player.UsePotion();
+                    break;
+                case "4":
+                    if (Quest.QuestType == "SIDE")
+                    {
+                        Console.WriteLine($"You fled from the {monster.Name}. The quest is canceled.");
+                        inCombat = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You cannot flee from a main quest!");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            }
+        }
+    }
+
+    public void Attack(Monster monster, Player player)
+    {
+        bool inCombat = true;
+
+        Random rand = new Random();
+        int damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
+        Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+
+        monster.CurrentHitPoints -= damage;
+        if (monster.CurrentHitPoints > 0)
+        {
+            monster.Attack(player);
+            Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
+        }
+
+        if (this.HitPoints <= 0)
+        {
+            Console.WriteLine("You were defeated!");
+            inCombat = false;
+        }
+        else if (monster.CurrentHitPoints <= 0)
+        {
+            Console.WriteLine($"You defeated {monster.Name}!");
+            inCombat = false;
         }
     }
 }

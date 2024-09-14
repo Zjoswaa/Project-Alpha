@@ -15,61 +15,13 @@
         this.MaximumDamage = MaximumDamage;
     }
 
-    public void Fight(Player player, Monster monster, string questType)
+    public void Attack(Player player)
     {
-        bool inCombat = true;
-
-        while (inCombat && player.HitPoints > 0 && monster.CurrentHitPoints > 0)
-        {
-            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Potion (4) Flee");
-            string choice = Console.ReadLine();
-
-            switch (choice)
-            {
-                case "1":
-                    //player.Attack(monster);
-                    break;
-                case "2":
-                    //player.Defend();
-                    break;
-                case "3":
-                    //player.UsePotion();
-                    break;
-                case "4":
-                    if (questType == "Side Quest")
-                    {
-                        Console.WriteLine($"You fled from the {monster.Name}. The quest is canceled.");
-                        inCombat = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine("You cannot flee from a main quest!");
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice.");
-                    break;
-            }
-
-            if (monster.CurrentHitPoints > 0)
-            {
-                //monster.Attack(player);
-                Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
-            }
-
-            if (player.HitPoints <= 0)
-            {
-                Console.WriteLine("You were defeated!");
-                inCombat = false;
-            }
-            else if (monster.CurrentHitPoints <= 0)
-            {
-                Console.WriteLine($"You defeated {monster.Name}!");
-                inCombat = false;
-            }
-        }
+        Random rand = new Random();
+        int damage = rand.Next(0, this.MaximumDamage);
+        Console.WriteLine($"{this.Name} attacks {player.Name} for {damage} damage!");
+        Console.WriteLine($"{player.HitPoints}");
     }
-
 }
 
 // Sogaand - 09/11/2024
