@@ -120,7 +120,10 @@
                     inCombat = monster.Attack(this);
                     break;
                 case "3":
-                    this.UseConsumable();
+                    if (!this.UseConsumable()) {
+                        Console.Clear();
+                        continue;
+                    }
                     inCombat = monster.Attack(this);
                     break;
                 case "4":
@@ -137,18 +140,21 @@
                     break;
                 case "5":
                     if (this.ClassName != "sorcerer") {
-                        Console.WriteLine("Invalid choice.");
+                        //Console.WriteLine("Invalid choice.");
                         break;
                     } else {
-                        this.UseSpell();
+                        if (!this.UseSpell()) {
+                            Console.Clear();
+                            continue;
+                        }
                         inCombat = monster.Attack(this);
                         break;
                     }
                 default:
-                    Console.WriteLine("Invalid choice.");
+                    //Console.WriteLine("Invalid choice.");
                     break;
             }
-            // Reduce spell cooldowns
+            // Decrease spell cooldowns
             if (this.ClassName == "sorcerer") {
                 foreach (KeyValuePair<Spell, int> kvp in this.Spells) {
                     this.Spells[kvp.Key] = Math.Max(0, this.Spells[kvp.Key] - 1);
@@ -190,7 +196,7 @@
 
     }
 
-    public void UseConsumable()
+    public bool UseConsumable()
     {
         Console.Clear();
         Console.Write($"{this.Name}'s ");
@@ -204,13 +210,11 @@
                 Console.WriteLine($"[{this.Items.ElementAt(i).Key.ID}] {this.Items.ElementAt(i).Key.Name} {this.Items.ElementAt(i).Value}x");
             }
         }
-        Console.WriteLine("\x1B[36mPress enter to exit, input any number to use that item\x1B[0m");
-        bool ChoiceMade = false;
-        while (!ChoiceMade) {
+        Console.WriteLine("\x1B[36mPress enter to close, input any number to use that item\x1B[0m");
+        while (true) {
             string input = Console.ReadLine();
             if (input == null || input == "") {
-                ChoiceMade = true;
-                break;
+                return false;
             }
             if (!int.TryParse(input, out int Choice)) {
                 Console.WriteLine("Invalid input");
@@ -223,22 +227,20 @@
                             Console.WriteLine($"You don't have any {((Consumable)obj).Name}.");
                             continue;
                         }
+                        Console.WriteLine($"{this.Name} uses {((Consumable)obj).Name}");
                         // Decrease item count by 1
                         this.Items[((Consumable)obj)] -= 1;
                         // Increase player health
                         this.HitPoints += ((Consumable)obj).Restoration;
-                        ChoiceMade = true;
-                        break;
-                    } else {
-                        Console.WriteLine("Invalid input");
-                        continue;
+                        return true;
                     }
                 }
             }
+            Console.WriteLine("Invalid input");
         }
     }
 
-    private void UseSpell() {
+    private bool UseSpell() {
         Console.Clear();
         Console.Write($"{this.Name}'s ");
         Console.Write("\x1b[96mSpell book\x1b[0m");
@@ -248,12 +250,10 @@
         }
         Console.WriteLine("\x1B[36mPress enter to close spell book, enter any number to use that spell.\x1B[0m");
         
-        bool ChoiceMade = false;
-        while (!ChoiceMade) {
+        while (true) {
             string input = Console.ReadLine();
             if (input == null || input == "") {
-                ChoiceMade = true;
-                break;
+                return false;
             }
             if (!int.TryParse(input, out int Choice)) {
                 Console.WriteLine("Invalid input");
@@ -266,20 +266,19 @@
                             Console.WriteLine($"{((Spell)obj).Name} is on cooldown");
                             continue;
                         }
+                        Console.Clear();
+                        Console.WriteLine($"{this.Name} uses {((Spell)obj).Name}");
                         // Decrease item count by 1
                         this.Spells[((Spell)obj)] = ((Spell)obj).Cooldown;
                         // If it is a heal spell, heal the player
                         if (obj is HealSpell) {
                             this.HitPoints = Math.Min(this.MaxHitPoints, this.HitPoints + ((HealSpell)obj).Heal);
                         }
-                        ChoiceMade = true;
-                        break;
-                    } else {
-                        Console.WriteLine("Invalid input");
-                        continue;
+                        return true;
                     }
                 }
             }
+            Console.WriteLine("Invalid input");
         }
     }
 }
