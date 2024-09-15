@@ -92,7 +92,7 @@ public class World
                                                                |                         |
                                                                |                         |
 +----------------------+  +----------------------+  +----------------------+  +----------------------+  +----------------------+
-|      Farmhouse       |--|   Farmer's Meadows   |--|    Duskmire Town     |--|     Military Camp    |--|   Torture Chambers   |
+|      Farmhouse       |--|   Farmer's Meadows   |--|    Duskmire City     |--|     Military Camp    |--|   Torture Chambers   |
 +----------------------+  +----------------------+  +----------------------+  +----------------------+  +----------------------+
                                                                |
                                                                |

@@ -173,7 +173,7 @@ public class Game {
         while (!choiceMade) {
             switch (Console.ReadLine()) {
                 case "1":
-                    this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
+                    this.Player = new Player(name, "warrior", 1, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
                     choiceMade = true;
                     break;
@@ -232,17 +232,16 @@ public class Game {
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
         Console.Write("\x1B[34mLocation:\x1B[0m ");
         Console.WriteLine(this.Player.CurrentLocation.Name);
-        Console.WriteLine("I: Open inventory");
-        Console.WriteLine("M: Show map");
-        Console.WriteLine("Q: Manage quests");
-        Console.WriteLine("W: Walk in a direction");
+        Console.WriteLine();
+        Console.WriteLine("\x1b[1m\x1b[33m[I]\x1b[0m Open inventory");
+        Console.WriteLine("\x1b[1m\x1b[33m[M]\x1b[0m Show map");
+        Console.WriteLine("\x1b[1m\x1b[33m[Q]\x1b[0m Manage quests");
+        Console.WriteLine("\x1b[1m\x1b[33m[W]\x1b[0m Walk in a direction");
         if (this.Player.CurrentLocation.ID == 1) {
-            Console.WriteLine("F: Fight Slime");
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Slime");
         }
         if (Player.ClassName == "sorcerer") {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("S: Spell book");
-            Console.ResetColor();
+            Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
         }
 
         bool choiceMade = false;
@@ -256,7 +255,7 @@ public class Game {
                     Console.Clear();
                     Console.WriteLine($"Current location: \x1B[34m{this.Player.CurrentLocation.Name}\x1B[0m");
                     World.WorldMap();
-                    Util.pressAnyKey();
+                    Util.pressAnyKey("Press any key to close the map...");
                     choiceMade = true;
                     break;
                 case "Q":
@@ -266,6 +265,8 @@ public class Game {
                 case "S":
                     if (Player.ClassName == "sorcerer") {
                         // TODO: Show spell book
+                        this.ShowSpellBook();
+                        Util.pressAnyKey("Press any key to exit spell book...");
                         choiceMade = true;
                         break;
                     } else {
@@ -383,6 +384,13 @@ public class Game {
         if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
             this.GivePlayerItems(this.Player, this.quests[0].Rewards);
+        }
+    }
+
+    private void ShowSpellBook() {
+        Console.Clear();
+        foreach (KeyValuePair<Spell, int> kvp in this.Player.Spells) {
+            Console.WriteLine($"{kvp.Key}");
         }
     }
 }
