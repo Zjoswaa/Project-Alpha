@@ -28,12 +28,12 @@
     public void AddQuest(Quest Quest) {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("================================================================================================================================");
-        Console.WriteLine("   ___                  _         _       _     _          _ ");
-        Console.WriteLine("  / _ \\ _   _  ___  ___| |_      / \\   __| | __| | ___  __| |");
-        Console.WriteLine(" | | | | | | |/ _ \\/ __| __|    / _ \\ / _` |/ _` |/ _ \\/ _` |");
-        Console.WriteLine(" | |_| | |_| |  __/\\__ \\ |_    / ___ \\ (_| | (_| |  __/ (_| |");
-        Console.WriteLine("  \\__\\_\\\\__,_|\\___||___/\\__|  /_/   \\_\\__,_|\\__,_|\\___|\\__,_|");
-        Console.WriteLine("                                                             ");
+        Console.WriteLine("                                    ___                  _         _       _     _          _ ");
+        Console.WriteLine("                                   / _ \\ _   _  ___  ___| |_      / \\   __| | __| | ___  __| |");
+        Console.WriteLine("                                  | | | | | | |/ _ \\/ __| __|    / _ \\ / _` |/ _` |/ _ \\/ _` |");
+        Console.WriteLine("                                  | |_| | |_| |  __/\\__ \\ |_    / ___ \\ (_| | (_| |  __/ (_| |");
+        Console.WriteLine("                                   \\__\\_\\\\__,_|\\___||___/\\__|  /_/   \\_\\__,_|\\__,_|\\___|\\__,_|");
+        Console.WriteLine("                                                                                              ");
         Console.WriteLine("================================================================================================================================");
         this.KnownQuests.Add(Quest);
         Console.WriteLine();
@@ -129,6 +129,7 @@
                     break;
             }
         }
+        Util.pressAnyKey();
     }
 
     public bool Attack(Monster monster)
@@ -138,10 +139,10 @@
         Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
 
         monster.CurrentHitPoints -= damage;
-        if (monster.CurrentHitPoints > 0)
-        {
-            Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
-        }
+        //if (monster.CurrentHitPoints > 0)
+        //{
+        //    Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
+        //}
 
         if (this.HitPoints <= 0)
         {
@@ -152,7 +153,6 @@
         {
             Console.WriteLine($"You defeated {monster.Name}!");
             return false;
-
         }
         return true;
     }

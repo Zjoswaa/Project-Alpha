@@ -41,7 +41,7 @@ public class Location
             west = $"[W]";
         }
 
-        return $"{direction}\n     {north}\n  {west}   {east}\n     {south}";
+        return $"{direction}\n     \x1B[31m{north}\x1B[0m\n  {west}   {east}\n     {south}";
     }
 
     // Based on user input, returns the location in that direction
@@ -62,11 +62,13 @@ public class Location
         {
             if (currentLocation != null)
             {
-                Console.WriteLine($"\nYou are currently at {currentLocation.Name}.");
-                Console.WriteLine($"Description: {currentLocation.Description}");
+                Console.Clear();
+                Console.WriteLine($"Current location: \x1B[34m{currentLocation.Name}\x1B[0m");
+                Console.WriteLine($"Description: \x1B[90m{currentLocation.Description}\x1B[0m");
                 Console.WriteLine(currentLocation.Compass());
             }
 
+            Console.WriteLine();
             Console.WriteLine("Enter a direction to move (N/E/S/W), press enter to exit:");
 
             string userInput = Console.ReadLine().ToUpper();

@@ -2,10 +2,10 @@
 
 public class Game {
     private Player Player = null;
-    private World World;
+    private World World = new();
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to the city.", "The strange old man told you find the nearby city. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }),
+        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }),
         new Quest(1, "Test", "Completed", "SIDE", null, true), // TODO: Remove
         new Quest(2, "Test", "Not completed", "SIDE", null, false), // TODO: Remove
     };
@@ -15,7 +15,7 @@ public class Game {
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
-        new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire", false),
+        new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire"),
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
     };
@@ -25,6 +25,51 @@ public class Game {
         this.createPlayer();
         //this.intro();
         this.start();
+    }
+
+    private void Restart() {
+        this.Player = null;
+        this.World = new();
+        this.welcome();
+        this.createPlayer();
+        //this.intro();
+        this.start();
+    }
+
+    private void GameOverCheck() {
+        if (this.Player.HitPoints <= 0) {
+            Console.Clear();
+            Console.WriteLine("\x1B[31m================================================================================================================================");
+            Console.WriteLine("                                        ____                          ___                 ");
+            Console.WriteLine("                                       / ___| __ _ _ __ ___   ___    / _ \\__   _____ _ __ ");
+            Console.WriteLine("                                      | |  _ / _` | '_ ` _ \\ / _ \\  | | | \\ \\ / / _ \\ '__|");
+            Console.WriteLine("                                      | |_| | (_| | | | | | |  __/  | |_| |\\ V /  __/ |   ");
+            Console.WriteLine("                                       \\____|\\__,_|_| |_| |_|\\___|   \\___/  \\_/ \\___|_|   ");
+            Console.WriteLine("                                                                                          ");
+            Console.WriteLine("================================================================================================================================\x1B[0m");
+            Console.WriteLine();
+            Console.WriteLine("Restart? (Y/N)");
+            while (true) {
+                string input = Console.ReadLine().ToUpper();
+                if (input == "Y") {
+                    break;
+                } else if (input == "N") {
+                    Console.Clear();
+                    Console.WriteLine("\x1B[36m================================================================================================================================");
+                    Console.WriteLine("                    _____ _                 _            __                     _             _             ");
+                    Console.WriteLine("                   |_   _| |__   __ _ _ __ | | _____    / _| ___  _ __    _ __ | | __ _ _   _(_)_ __   __ _ ");
+                    Console.WriteLine("                     | | | '_ \\ / _` | '_ \\| |/ / __|  | |_ / _ \\| '__|  | '_ \\| |/ _` | | | | | '_ \\ / _` |");
+                    Console.WriteLine("                     | | | | | | (_| | | | |   <\\__ \\  |  _| (_) | |     | |_) | | (_| | |_| | | | | | (_| |");
+                    Console.WriteLine("                     |_| |_| |_|\\__,_|_| |_|_|\\_\\___/  |_|  \\___/|_|     | .__/|_|\\__,_|\\__, |_|_| |_|\\__, |");
+                    Console.WriteLine("                                                                         |_|            |___/         |___/ ");
+                    Console.WriteLine("================================================================================================================================\x1B[0m");
+                    System.Environment.Exit(0);
+                } else {
+                    continue;
+                }
+            }
+            this.Restart();
+        }
     }
 
     private void welcome() {
@@ -57,12 +102,12 @@ public class Game {
         Console.ResetColor();
         Console.WriteLine(". You don't remember falling asleep.");
         Console.WriteLine("\"Last night must have been rough\" you tell yourself.");
-        this.pressAnyKey();
+        Util.pressAnyKey();
         Console.WriteLine("The early morning mist clung to the trees, and the distant sounds of the forest surrounded you, birds chirping, leaves rustling.");
         Console.WriteLine("The burnt remains of your campfire gave off a faint, smoky scent, but your mind was clouded with confusion.");
         Console.WriteLine("You couldn't recall how you'd ended up here, or why the campfire had burned down to ashes.");
         Console.WriteLine("You notice a masked man approach you.");
-        this.pressAnyKey();
+        Util.pressAnyKey();
         Console.WriteLine("Your heart raced as the masked figure drew closer.");
         Console.WriteLine("He moved with a deliberate, almost unnatural calmness, his dark clothes blending with the shadows of the trees.");
         Console.Write("The mask itself was ");
@@ -70,23 +115,23 @@ public class Game {
         Console.Write("eerie—green");
         Console.ResetColor();
         Console.WriteLine(" and featureless, except for a single vertical scar running down from the left eye to the chin.");
-        this.pressAnyKey();
+        Util.pressAnyKey();
         Console.WriteLine("\"I see you're awake\" he said, his voice muffled and cold.");
         Console.WriteLine("You swallowed hard, your throat dry. \"Who are you? What happened here?\"");
-        this.pressAnyKey();
+        Util.pressAnyKey();
         Console.WriteLine("He remained still for a moment, then took a step forward. \"That depends. Do you remember anything about last night?\"");
         Console.WriteLine("You racked your brain, trying to piece together the fragments of memory. But it was like the details slipped away, like smoke.");
-        this.pressAnyKey();
+        Util.pressAnyKey();
         Console.WriteLine("\"I...I don't remember,\" you admitted, tensing. \"Who are you? What do you want?\"");
         Console.Write("The masked man let out a soft, rattling laugh. \"My name is ");
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Write("Arachthos");
         Console.ResetColor();
         Console.WriteLine("\", he said, \"but this is not about me, this is about you.\"");
-        this.pressAnyKey();
-        Console.WriteLine("\"Head to the nearby city if you want to learn what happened.\" Arachthos said.");
+        Util.pressAnyKey();
+        Console.WriteLine("\"Head to the nearby city of Duskmire if you want to learn what happened.\" Arachthos said.");
         Console.WriteLine("After that he walked away, vanishing into the deep forest just like he appeared.");
-        this.pressAnyKey();
+        Util.pressAnyKey();
         Console.Clear();
 
 
@@ -94,7 +139,7 @@ public class Game {
 
     private void start() {
         Player.AddQuest(quests[0]);
-        this.pressAnyKey();
+        Util.pressAnyKey();
         //this.Player.AskAddQuest(quests[1]);
         //this.pressAnyKey();
         //this.Player.AskAddQuest(quests[2]);
@@ -104,24 +149,6 @@ public class Game {
             this.CheckQuestsCompletion();
             ShowActionMenu();
         }
-    }
-
-    private void pressAnyKey() {
-        Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
-        Console.Write("Press any key to continue...");
-        Console.ReadKey();
-        Console.Clear();
-        Console.ResetColor();
-    }
-
-    private void pressAnyKey(string Message) {
-        Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
-        Console.Write($"{Message}");
-        Console.ReadKey();
-        Console.Clear();
-        Console.ResetColor();
     }
 
     private void createPlayer() {
@@ -174,6 +201,7 @@ public class Game {
 
         this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
 
+        Console.Clear();
         switch (this.Player.ClassName) {
             case "warrior":
                 Console.Write($"Created \x1B[91m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
@@ -193,16 +221,17 @@ public class Game {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write(name);
         Console.ResetColor();
-        Console.WriteLine(", Good luck!");
-        this.pressAnyKey("Press any key to start...");
+        Console.WriteLine();
+        Console.WriteLine("Good luck, have fun!");
+        Util.pressAnyKey("Press any key to start...");
     }
 
     private void ShowActionMenu() {
         Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("HP: ");
-        Console.ResetColor();
+        Console.Write("\x1B[32mHP:\x1B[0m ");
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
+        Console.Write("\x1B[34mLocation:\x1B[0m ");
+        Console.WriteLine(this.Player.CurrentLocation.Name);
         Console.WriteLine("I: Open inventory");
         Console.WriteLine("M: Show map");
         Console.WriteLine("Q: Manage quests");
@@ -225,9 +254,9 @@ public class Game {
                     break;
                 case "M":
                     Console.Clear();
-                    Console.WriteLine($"You are currently at: {this.Player.CurrentLocation.Name}");
+                    Console.WriteLine($"Current location: \x1B[34m{this.Player.CurrentLocation.Name}\x1B[0m");
                     World.WorldMap();
-                    this.pressAnyKey();
+                    Util.pressAnyKey();
                     choiceMade = true;
                     break;
                 case "Q":
@@ -251,6 +280,7 @@ public class Game {
                     if (this.Player.CurrentLocation.ID == 1) {
                         choiceMade = true;
                         this.Player.Fight(new Monster(0, "Slime", 20, 20, 5), null);
+                        this.GameOverCheck();
                     } else {
                         Console.WriteLine("Invalid input");
                         continue;
@@ -308,7 +338,9 @@ public class Game {
                         }
                     }
                 }
-                this.Player.KnownQuests.Remove(toRemove);
+                if (toRemove != null) {
+                    this.Player.KnownQuests.Remove(toRemove);
+                }
             }
             this.ShowQuests();
         }
@@ -330,7 +362,7 @@ public class Game {
         } else {
             Console.WriteLine($"Current equipped weapon: None");
         }
-        this.pressAnyKey("Press any key to exit inventory...");
+        Util.pressAnyKey("Press any key to exit inventory...");
     }
 
     private void GivePlayerItems(Player Player, Dictionary<Item, int> Items) {
