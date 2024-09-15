@@ -24,15 +24,3 @@
     }
 }
 
-// Sogaand - 09/11/2024
-
-// UPDATE LOG:
-// --Can now choose one of four actions; Attack, Defend, Use Potion or Flee
-// --Fleeing is only possible on a SIDE QUEST
-// --Exits combat after player or monster dies
-
-
-// TO DO: 
-// --*IMPLEMENT PLAYER's Attack, Defend and UsePotion method
-// --*IMPLEMENT MONSTERS's Attack (and maybe Defend?) method
-// --Probably add player HitPoints as well after monster attacks (line 56/57)
