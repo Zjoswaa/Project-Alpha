@@ -11,7 +11,8 @@
     public bool IsDefending { get; set; } = false;
 
     public List<Quest> KnownQuests { get; set; } = new();
-    public Dictionary<Item, int> Items { get; set; } = new();
+    public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
+    public Dictionary<Item, int> Items { get; set; } = new(); // Item and count
     public Weapon ActiveWeapon { get; set; }
 
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
@@ -23,6 +24,11 @@
         this.Agility = Agility;
         this.Intelligence = Intelligence;
         this.Charisma = Charisma;
+
+        if (ClassName == "sorcerer") {
+            Spells = new();
+            Spells[new HealSpell(0, "Heal Spell", "A powerful spell that will heal the user.", 5, 10)] = 0;
+        }
     }
 
     public void AddQuest(Quest Quest) {
@@ -95,7 +101,11 @@
         {
             Console.WriteLine($"Player \x1B[32mHP\x1B[0m: {this.HitPoints}");
             Console.WriteLine($"{monster.Name} \x1B[32mHP\x1B[0m: {monster.CurrentHitPoints}");
-            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
+            if (this.ClassName == "sorcerer") {
+                Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) \x1b[96mOpen Spell book\x1b[0m");
+            } else {
+                Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
+            }
             string choice = Console.ReadLine();
 
             Console.Clear();
@@ -111,6 +121,7 @@
                     break;
                 case "3":
                     this.UseConsumable();
+                    inCombat = monster.Attack(this);
                     break;
                 case "4":
                     if (Quest == null || Quest.QuestType == "SIDE")
@@ -124,9 +135,24 @@
                         Console.WriteLine("You cannot flee from a main quest!");
                     }
                     break;
+                case "5":
+                    if (this.ClassName != "sorcerer") {
+                        Console.WriteLine("Invalid choice.");
+                        break;
+                    } else {
+                        this.UseSpell();
+                        inCombat = monster.Attack(this);
+                        break;
+                    }
                 default:
                     Console.WriteLine("Invalid choice.");
                     break;
+            }
+            // Reduce spell cooldowns
+            if (this.ClassName == "sorcerer") {
+                foreach (KeyValuePair<Spell, int> kvp in this.Spells) {
+                    this.Spells[kvp.Key] = Math.Max(0, this.Spells[kvp.Key] - 1);
+                }
             }
         }
         Util.pressAnyKey();
@@ -201,6 +227,51 @@
                         this.Items[((Consumable)obj)] -= 1;
                         // Increase player health
                         this.HitPoints += ((Consumable)obj).Restoration;
+                        ChoiceMade = true;
+                        break;
+                    } else {
+                        Console.WriteLine("Invalid input");
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+
+    private void UseSpell() {
+        Console.Clear();
+        Console.Write($"{this.Name}'s ");
+        Console.Write("\x1b[96mSpell book\x1b[0m");
+        Console.WriteLine(":");
+        foreach (KeyValuePair<Spell, int> kvp in this.Spells) {
+            Console.WriteLine($"\x1b[1m\x1b[33m[{kvp.Key.ID}]\x1b[0m {kvp.Key.Name} \x1b[90m(Cooldown: {kvp.Value})\x1b[0m");
+        }
+        Console.WriteLine("\x1B[36mPress enter to close spell book, enter any number to use that spell.\x1B[0m");
+        
+        bool ChoiceMade = false;
+        while (!ChoiceMade) {
+            string input = Console.ReadLine();
+            if (input == null || input == "") {
+                ChoiceMade = true;
+                break;
+            }
+            if (!int.TryParse(input, out int Choice)) {
+                Console.WriteLine("Invalid input");
+                continue;
+            }
+            foreach (Object obj in this.Spells.Keys) {
+                if (obj is Spell) {
+                    if (((Spell)obj).ID == Choice) {
+                        if (this.Spells[((Spell)obj)] != 0) {
+                            Console.WriteLine($"{((Spell)obj).Name} is on cooldown");
+                            continue;
+                        }
+                        // Decrease item count by 1
+                        this.Spells[((Spell)obj)] = ((Spell)obj).Cooldown;
+                        // If it is a heal spell, heal the player
+                        if (obj is HealSpell) {
+                            this.HitPoints = Math.Min(this.MaxHitPoints, this.HitPoints + ((HealSpell)obj).Heal);
+                        }
                         ChoiceMade = true;
                         break;
                     } else {
