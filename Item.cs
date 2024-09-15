@@ -11,6 +11,13 @@
         this.IsConsumable = IsConsumable;
     }
 
+    public Item(int ID, string Name, string Description) {
+        this.ID = ID;
+        this.Name = Name;
+        this.Description = Description;
+        this.IsConsumable = false;
+    }
+
     override public string? ToString() {
         return $"{this.Name} \x1B[90m{this.Description}\x1B[0m";
     }

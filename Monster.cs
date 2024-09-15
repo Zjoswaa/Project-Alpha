@@ -17,15 +17,15 @@
 
     public bool Attack(Player player)
     {
+        if (this.CurrentHitPoints <= 0) {
+            return false;
+        }
+
         int damage = 0;
         Random rand = new Random();
         if (player.IsDefending)
         {
-            damage = rand.Next(0, this.MaximumDamage) - rand.Next(0, player.ActiveWeapon.Defence);
-            if (damage < 0)
-            {
-                damage = 0;
-            }
+            damage = Math.Max(0, rand.Next(0, this.MaximumDamage) - rand.Next(0, player.ActiveWeapon.Defence));
             player.IsDefending = false;
         }
         else 
@@ -36,11 +36,11 @@
         player.HitPoints -= damage;
         if (player.HitPoints < 0)
         {
+            player.HitPoints = 0;
             Console.WriteLine($"{this.Name} has defeated {player.Name}.");
             return false;
         }
-        Console.WriteLine($"{player.Name} has {player.HitPoints} HP left.");
+        //Console.WriteLine($"{player.Name} has {player.HitPoints} HP left.");
         return true;
     }
 }
-
