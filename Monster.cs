@@ -15,12 +15,32 @@
         this.MaximumDamage = MaximumDamage;
     }
 
-    public void Attack(Player player)
+    public bool Attack(Player player)
     {
+        int damage = 0;
         Random rand = new Random();
-        int damage = rand.Next(0, this.MaximumDamage);
+        if (player.IsDefending)
+        {
+            damage = rand.Next(0, this.MaximumDamage) - rand.Next(0, player.ActiveWeapon.Defence);
+            if (damage < 0)
+            {
+                damage = 0;
+            }
+            player.IsDefending = false;
+        }
+        else 
+        { 
+            damage = rand.Next(0, this.MaximumDamage); 
+        }
         Console.WriteLine($"{this.Name} attacks {player.Name} for {damage} damage!");
-        Console.WriteLine($"{player.HitPoints}");
+        player.HitPoints -= damage;
+        if (player.HitPoints < 0)
+        {
+            Console.WriteLine($"{this.Name} has defeated {player.Name}.");
+            return false;
+        }
+        Console.WriteLine($"{player.Name} has {player.HitPoints} HP left.");
+        return true;
     }
 }
 

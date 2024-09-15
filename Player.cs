@@ -8,10 +8,10 @@
     public int Intelligence { get; set; }
     public int Charisma { get; set; }
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
+    public bool IsDefending { get; set; } = false;
 
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Item, int> Items { get; set; } = new();
-    //public List<int> ItemCounts { get; set; } = new();
     public Weapon ActiveWeapon { get; set; }
 
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
@@ -86,31 +86,38 @@
         }
     }
 
-    public void Fight(Monster monster, Player player, Quest Quest)
+    public void Fight(Monster monster, Quest Quest)
     {
+        Console.Clear();
         bool inCombat = true;
 
         while (inCombat && this.HitPoints > 0 && monster.CurrentHitPoints > 0)
         {
-            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Potion (4) Flee");
+            Console.WriteLine($"Player \x1B[32mHP\x1B[0m: {this.HitPoints}");
+            Console.WriteLine($"{monster.Name} \x1B[32mHP\x1B[0m: {monster.CurrentHitPoints}");
+            Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
             string choice = Console.ReadLine();
 
+            Console.Clear();
             switch (choice)
             {
                 case "1":
-                    this.Attack(monster, player);
+                    inCombat = this.Attack(monster);
+                    inCombat = monster.Attack(this);
                     break;
                 case "2":
-                    //player.Defend();
+                    this.Defend();
+                    inCombat = monster.Attack(this);
                     break;
                 case "3":
-                    //player.UsePotion();
+                    this.UseConsumable();
                     break;
                 case "4":
-                    if (Quest.QuestType == "SIDE")
+                    if (Quest == null || Quest.QuestType == "SIDE")
                     {
-                        Console.WriteLine($"You fled from the {monster.Name}. The quest is canceled.");
+                        //Console.WriteLine($"You fled from the {monster.Name}.");
                         inCombat = false;
+                        break;
                     }
                     else
                     {
@@ -124,10 +131,8 @@
         }
     }
 
-    public void Attack(Monster monster, Player player)
+    public bool Attack(Monster monster)
     {
-        bool inCombat = true;
-
         Random rand = new Random();
         int damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
         Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
@@ -135,19 +140,75 @@
         monster.CurrentHitPoints -= damage;
         if (monster.CurrentHitPoints > 0)
         {
-            monster.Attack(player);
             Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
         }
 
         if (this.HitPoints <= 0)
         {
             Console.WriteLine("You were defeated!");
-            inCombat = false;
+            return false;
         }
         else if (monster.CurrentHitPoints <= 0)
         {
             Console.WriteLine($"You defeated {monster.Name}!");
-            inCombat = false;
+            return false;
+
+        }
+        return true;
+    }
+
+    public void Defend()
+    {
+        this.IsDefending = true;
+        Console.WriteLine($"{this.Name} is bracing for impact!");
+
+    }
+
+    public void UseConsumable()
+    {
+        Console.Clear();
+        Console.Write($"{this.Name}'s ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Consumable Items");
+        Console.ResetColor();
+        Console.WriteLine(":");
+        for (int i = 0; i < this.Items.Count; i++)
+        {
+            if (this.Items.ElementAt(i).Key.IsConsumable) {
+                Console.WriteLine($"[{this.Items.ElementAt(i).Key.ID}] {this.Items.ElementAt(i).Key.Name} {this.Items.ElementAt(i).Value}x");
+            }
+        }
+        Console.WriteLine("\x1B[36mPress enter to exit, input any number to use that item\x1B[0m");
+        bool ChoiceMade = false;
+        while (!ChoiceMade) {
+            string input = Console.ReadLine();
+            if (input == null || input == "") {
+                ChoiceMade = true;
+                break;
+            }
+            if (!int.TryParse(input, out int Choice)) {
+                Console.WriteLine("Invalid input");
+                continue;
+            }
+            foreach (Object obj in this.Items.Keys) {
+                if (obj is Consumable) {
+                    if (((Consumable)obj).ID == Choice) {
+                        if (this.Items[((Consumable)obj)] == 0) {
+                            Console.WriteLine($"You don't have any {((Consumable)obj).Name}.");
+                            continue;
+                        }
+                        // Decrease item count by 1
+                        this.Items[((Consumable)obj)] -= 1;
+                        // Increase player health
+                        this.HitPoints += ((Consumable)obj).Restoration;
+                        ChoiceMade = true;
+                        break;
+                    } else {
+                        Console.WriteLine("Invalid input");
+                        continue;
+                    }
+                }
+            }
         }
     }
 }

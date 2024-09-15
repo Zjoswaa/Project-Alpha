@@ -2,11 +2,13 @@
     public int ID;
     public string Name;
     public string Description;
+    public bool IsConsumable;
 
-    public Item(int ID, string Name, string Description) {
+    public Item(int ID, string Name, string Description, bool IsConsumable) {
         this.ID = ID;
         this.Name = Name;
         this.Description = Description;
+        this.IsConsumable = IsConsumable;
     }
 
     override public string? ToString() {
