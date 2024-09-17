@@ -185,7 +185,6 @@ public class Game {
                 case "3":
                     this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
                     Player.Items[items[2]] = 1;
-                    Player.Items[items[4]] = 5;
                     choiceMade = true;
                     break;
                 case "4":
