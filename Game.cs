@@ -173,7 +173,7 @@ public class Game {
         while (!choiceMade) {
             switch (Console.ReadLine()) {
                 case "1":
-                    this.Player = new Player(name, "warrior", 1, 7, 2, 1, 2);
+                    this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
                     choiceMade = true;
                     break;
