@@ -80,7 +80,7 @@ class ItemShop
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
                 itemNumber += 1;
-                Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value}");
+                Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value} left");
             }
 
             Console.WriteLine("\nType the number corresponding with the item or type 'X' to exit:");
@@ -124,7 +124,7 @@ class ItemShop
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
                 itemNumber += 1;
-                Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value}");
+                Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value} left");
             }
 
             Console.WriteLine("\nType the number corresponding with the item or type 'X' to exit:");
