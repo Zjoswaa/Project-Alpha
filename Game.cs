@@ -18,6 +18,7 @@ public class Game {
         new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire"),
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
+        new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
     };
 
     public Game() {
