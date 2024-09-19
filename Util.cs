@@ -16,4 +16,13 @@
         Console.Clear();
         Console.ResetColor();
     }
+
+    public static Item GetItemByID(int ID, List<Item> items) {
+        foreach (Item item in items) {
+            if (item.ID == ID) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

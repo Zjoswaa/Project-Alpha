@@ -24,7 +24,7 @@ public class Game {
     public Game() {
         this.welcome();
         this.createPlayer();
-        this.intro();
+        //this.intro();
         this.start();
     }
 
@@ -174,6 +174,7 @@ public class Game {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
+                    Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
@@ -245,7 +246,7 @@ public class Game {
 
         bool choiceMade = false;
         while (!choiceMade) {
-            switch (Console.ReadLine().ToUpper()) {
+            switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "I":
                     this.ShowInventory();
                     choiceMade = true;
@@ -354,7 +355,7 @@ public class Game {
         Console.ResetColor();
         Console.WriteLine(":");
         for (int i = 0; i < this.Player.Items.Count; i++) {
-            Console.WriteLine($"- {this.Player.Items.ElementAt(i).Key} {this.Player.Items.ElementAt(i).Value}x");
+            Console.WriteLine($"[{this.Player.Items.ElementAt(i).Key.ID}] {this.Player.Items.ElementAt(i).Key} {this.Player.Items.ElementAt(i).Value}x");
         }
         Console.WriteLine();
         Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
@@ -363,7 +364,36 @@ public class Game {
         } else {
             Console.WriteLine($"Current equipped weapon: None");
         }
-        Util.pressAnyKey("Press any key to exit inventory...");
+
+
+        Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
+        while (true) {
+            string input = Console.ReadLine();
+            if (input == null || input == "") {
+                break;
+            } else {
+                if (!int.TryParse(input, out int inputNum)) {
+                    Console.WriteLine("Invalid input");
+                    continue;
+                }
+                bool itemFound = false;
+                foreach (Item item in this.Player.Items.Keys) {
+                    if (item.ID == inputNum) {
+                        itemFound = true;
+                    }
+                }
+                if (!itemFound) {
+                    Console.WriteLine("Invalid input");
+                    continue;
+                }
+                if (Util.GetItemByID(inputNum, items) is not Weapon) {
+                    Console.WriteLine("This is not a weapon");
+                    continue;
+                }
+                this.Player.ActiveWeapon = (Weapon)Util.GetItemByID(inputNum, items);
+                break;
+            }
+        }
     }
 
     private void GivePlayerItems(Player Player, Dictionary<Item, int> Items) {
