@@ -169,6 +169,7 @@ public class Game {
         Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t2\t2");
         Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
         Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
+        Console.WriteLine("5: \x1b[93mMonk\u001b[0m\t40\t8\t");
         bool choiceMade = false;
         while (!choiceMade) {
             switch (Console.ReadLine()) {
