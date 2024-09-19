@@ -7,6 +7,7 @@
     public int Agility { get; set; }
     public int Intelligence { get; set; }
     public int Charisma { get; set; }
+    public int Coins { get; set; } = 10;
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
     public bool IsDefending { get; set; } = false;
 
