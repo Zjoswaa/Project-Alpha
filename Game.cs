@@ -20,6 +20,9 @@ public class Game {
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
     };
 
+    private static ItemShop TownShop;
+    private static ItemShop AlchemistShop;
+
     public Game() {
         this.welcome();
         this.createPlayer();
@@ -297,15 +300,21 @@ public class Game {
                 case "E":
                     if (this.Player.CurrentLocation.ID == 4)
                     {
-                        ItemShop alchemistShop = new(this.Player);
-                        alchemistShop.AlchemistCatalog();
+                        if (AlchemistShop is null)
+                        {
+                            AlchemistShop = new(Player);
+                        }
+                        AlchemistShop.AlchemistCatalog();
                         choiceMade = true;
                     }
                     else if (this.Player.CurrentLocation.ID == 2)
                     {
-                        ItemShop TownShop = new(this.Player);
+                        if (TownShop is null)
+                        {
+                            TownShop = new(Player);
+                        }
                         TownShop.TownCatalog();
-                        break;
+                        choiceMade = true;
                     }
                     break;
                 default:

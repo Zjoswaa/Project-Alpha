@@ -5,7 +5,6 @@ class ItemShop
 
     public ItemShop(Player player)
     {
-        Stock = new Dictionary<Item, int>{};
         Player = player;
     }
 
@@ -50,7 +49,10 @@ class ItemShop
         Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
         Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10);
 
-        Stock = new Dictionary<Item, int>(){ {potion, 2}, {bigPotion, 2} };
+        if (Stock is null)
+        {
+            Stock = new Dictionary<Item, int>(){ {potion, 2}, {bigPotion, 2} };
+        }
 
         Console.WriteLine("Welcome, take a look around.\n");
 
@@ -60,6 +62,56 @@ class ItemShop
             itemNumber += 1;
             Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value}");
         }
+        bool k = true;
+        while (k)
+        {
+            Console.WriteLine("\nType the number corresponding with the item or type 'X' to exit:");
+
+            string userPurchase = Console.ReadLine().ToUpper();
+
+            try
+            {
+                switch (userPurchase)
+                {
+                    case "1":
+                        PurchaseItem(potion, 3);
+                        break;
+                    case "2":
+                        PurchaseItem(bigPotion, 5);
+                        break;
+                    case "X":
+                        k = false;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("This product is out of stock!");
+                
+                continue;
+            }
+        }
+    }
+
+    public void TownCatalog()
+    {
+        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
+        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10);
+
+        if (Stock is null)
+        {
+            Stock = new Dictionary<Item, int>(){ {potion, 2}, {bigPotion, 2} };
+        }
+
+        Console.WriteLine("Welcome, take a look around.\n");
+
+        int itemNumber = 0;
+        foreach (KeyValuePair<Item, int> kvp in Stock)
+        {
+            itemNumber += 1;
+            Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value}");
+        }
+
         bool k = true;
         while (k)
         {
@@ -77,40 +129,6 @@ class ItemShop
                     break;
                 case "X":
                     k = false;
-                    break;
-            }
-        }
-    }
-
-    public void TownCatalog()
-    {
-        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
-        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10);
-
-        Stock = new Dictionary<Item, int>(){ {potion, 2}, {bigPotion, 2} };
-
-        Console.WriteLine("Welcome, take a look around.\n");
-
-        int itemNumber = 0;
-        foreach (KeyValuePair<Item, int> kvp in Stock)
-        {
-            itemNumber += 1;
-            Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value}");
-        }
-
-        while (true)
-        {
-            Console.WriteLine("\nType the number corresponding with the item or type 'X' to exit:");
-
-            string userPurchase = Console.ReadLine();
-
-            switch (userPurchase)
-            {
-                case "1":
-                    PurchaseItem(potion, 3);
-                    break;
-                case "2":
-                    PurchaseItem(potion, 5);
                     break;
             }
         }
