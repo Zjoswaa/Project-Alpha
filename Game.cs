@@ -26,7 +26,7 @@ public class Game {
     public Game() {
         this.welcome();
         this.createPlayer();
-        //this.intro();
+        this.intro();
         this.start();
     }
 
