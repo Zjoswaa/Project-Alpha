@@ -3,17 +3,22 @@ class ItemShop
     public Dictionary<Item, int> Stock;
     private Player Player;
 
+    //Instantiate ItemShop with a player field to access currency
     public ItemShop(Player player)
     {
         Player = player;
     }
 
+    // Method used to make comparisons regarding the player's inventory and the shop's stock
+    // Responsible for removing item from stock and adding it to the player's inventory, for a price
     public void PurchaseItem(Item item, int price)
     {
-        if (Player.Coins >= price && Stock.ContainsKey(item))
+        if (Player.Coins >= price)
         {
             if (Stock[item] != 0)
             {
+                // Checks if item already exists in player inventory
+                // If it does, increases value by 1 rather than adding the same item separately
                 if (Player.Items.ContainsKey(item))
                 {
                     Player.Items[item] += 1;
@@ -40,6 +45,7 @@ class ItemShop
         }
     }
 
+    //Method that gets called to create the alchemist's shop
     public void AlchemistCatalog()
     {
         Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
@@ -67,6 +73,7 @@ class ItemShop
 
             string userPurchase = Console.ReadLine().ToUpper();
 
+            //Will have to add more cases if you want to add more items to the shop
             switch (userPurchase)
             {
                 case "1":
@@ -82,6 +89,7 @@ class ItemShop
         }
     }
 
+    //Method that gets called to create the town's shop
     public void TownCatalog()
     {
         Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
