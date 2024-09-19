@@ -21,6 +21,9 @@ public class Game {
         new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
     };
 
+    private static ItemShop TownShop;
+    private static ItemShop AlchemistShop;
+
     public Game() {
         this.welcome();
         this.createPlayer();
@@ -233,6 +236,14 @@ public class Game {
         Console.WriteLine(this.Player.CurrentLocation.Name);
         Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
         Console.WriteLine();
+        if (this.Player.CurrentLocation.ID == 4)
+        {
+            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Alchemist's Shop");
+        }
+        if (this.Player.CurrentLocation.ID == 2)
+        {
+            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Clerk's Shop");
+        }
         Console.WriteLine("\x1b[1m\x1b[33m[I]\x1b[0m Open inventory");
         Console.WriteLine("\x1b[1m\x1b[33m[M]\x1b[0m Show map");
         Console.WriteLine("\x1b[1m\x1b[33m[Q]\x1b[0m Manage quests");
@@ -285,6 +296,26 @@ public class Game {
                     } else {
                         Console.WriteLine("Invalid input");
                         continue;
+                    }
+                    break;
+                case "E":
+                    if (this.Player.CurrentLocation.ID == 4)
+                    {
+                        if (AlchemistShop is null)
+                        {
+                            AlchemistShop = new(Player);
+                        }
+                        AlchemistShop.AlchemistCatalog();
+                        choiceMade = true;
+                    }
+                    else if (this.Player.CurrentLocation.ID == 2)
+                    {
+                        if (TownShop is null)
+                        {
+                            TownShop = new(Player);
+                        }
+                        TownShop.TownCatalog();
+                        choiceMade = true;
                     }
                     break;
                 default:
