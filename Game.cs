@@ -15,7 +15,7 @@ public class Game {
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
-        new Item(4, "Gold Coin", "A widely used currency in the world of Duskmire"),
+        new Item(4, "Coin", "A currency widely used in the city of Duskmire"),
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
         new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
@@ -134,8 +134,6 @@ public class Game {
         Console.WriteLine("After that he walked away, vanishing into the deep forest just like he appeared.");
         Util.pressAnyKey();
         Console.Clear();
-
-
     }
 
     private void start() {
@@ -232,6 +230,7 @@ public class Game {
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
         Console.Write("\x1B[34mLocation:\x1B[0m ");
         Console.WriteLine(this.Player.CurrentLocation.Name);
+        Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
         Console.WriteLine();
         Console.WriteLine("\x1b[1m\x1b[33m[I]\x1b[0m Open inventory");
         Console.WriteLine("\x1b[1m\x1b[33m[M]\x1b[0m Show map");
@@ -358,6 +357,7 @@ public class Game {
             Console.WriteLine($"- {this.Player.Items.ElementAt(i).Key} {this.Player.Items.ElementAt(i).Value}x");
         }
         Console.WriteLine();
+        Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
         if (this.Player.ActiveWeapon != null) {
             Console.WriteLine($"Current equipped weapon: {this.Player.ActiveWeapon.Name}");
         } else {
@@ -383,7 +383,8 @@ public class Game {
         // If player is in the city and the quest has not yet been completed
         if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
-            this.GivePlayerItems(this.Player, this.quests[0].Rewards);
+            //this.GivePlayerItems(this.Player, this.quests[0].Rewards);
+            this.Player.Coins += 5;
         }
     }
 

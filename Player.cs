@@ -9,6 +9,7 @@
     public int Charisma { get; set; }
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
     public bool IsDefending { get; set; } = false;
+    public int Coins { get; set; }
 
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
@@ -24,6 +25,7 @@
         this.Agility = Agility;
         this.Intelligence = Intelligence;
         this.Charisma = Charisma;
+        this.Coins = 0;
 
         if (ClassName == "sorcerer") {
             Spells = new();
