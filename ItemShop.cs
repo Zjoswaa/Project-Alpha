@@ -13,6 +13,21 @@ class ItemShop
     // Responsible for removing item from stock and adding it to the player's inventory, for a price
     public void PurchaseItem(Item item, int price)
     {
+        Console.Clear();
+        Console.WriteLine($"This product costs {price} gold coins. Purchase this item? (y/n)");
+        string purchaseInput = Console.ReadLine().ToLower();
+        while (purchaseInput != "y" && purchaseInput != "n")
+        {
+            Console.WriteLine("Invalid input.");
+            Console.WriteLine($"This product costs {price} gold coins. Purchase this item? (y/n)");
+            purchaseInput = Console.ReadLine().ToLower();
+        }
+        if (purchaseInput == "n")
+        {
+            Console.Clear();
+            return;
+        }
+
         if (Player.Coins >= price)
         {
             if (Stock[item] != 0)
@@ -29,7 +44,6 @@ class ItemShop
                 }
                 Stock[item] -= 1;
                 Player.Coins -= price;
-                Console.Clear();
                 Console.WriteLine($"{item} has been added to your inventory.");
             }
             else
