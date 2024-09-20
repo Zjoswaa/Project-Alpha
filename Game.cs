@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-public class Game {
+﻿public class Game {
     private Player Player = null;
     private World World = new();
 
@@ -15,16 +13,19 @@ public class Game {
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
-        new Item(4, "Coin", "A currency widely used in the city of Duskmire"),
-        new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5),
-        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
+        new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
+        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
+        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
         new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
     };
+
+    private static ItemShop TownShop;
+    private static ItemShop AlchemistShop;
 
     public Game() {
         this.welcome();
         this.createPlayer();
-        this.intro();
+        //this.intro();
         this.start();
     }
 
@@ -169,12 +170,14 @@ public class Game {
         Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
         Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
         Console.WriteLine("5: \x1B[93mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
+
         bool choiceMade = false;
         while (!choiceMade) {
             switch (Console.ReadLine()) {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
+                    Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
@@ -241,6 +244,14 @@ public class Game {
         Console.WriteLine(this.Player.CurrentLocation.Name);
         Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
         Console.WriteLine();
+        if (this.Player.CurrentLocation.ID == 4)
+        {
+            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Alchemist's Shop");
+        }
+        if (this.Player.CurrentLocation.ID == 2)
+        {
+            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Clerk's Shop");
+        }
         Console.WriteLine("\x1b[1m\x1b[33m[I]\x1b[0m Open inventory");
         Console.WriteLine("\x1b[1m\x1b[33m[M]\x1b[0m Show map");
         Console.WriteLine("\x1b[1m\x1b[33m[Q]\x1b[0m Manage quests");
@@ -254,7 +265,7 @@ public class Game {
 
         bool choiceMade = false;
         while (!choiceMade) {
-            switch (Console.ReadLine().ToUpper()) {
+            switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "I":
                     this.ShowInventory();
                     choiceMade = true;
@@ -293,6 +304,26 @@ public class Game {
                     } else {
                         Console.WriteLine("Invalid input");
                         continue;
+                    }
+                    break;
+                case "E":
+                    if (this.Player.CurrentLocation.ID == 4)
+                    {
+                        if (AlchemistShop is null)
+                        {
+                            AlchemistShop = new(Player);
+                        }
+                        AlchemistShop.AlchemistCatalog();
+                        choiceMade = true;
+                    }
+                    else if (this.Player.CurrentLocation.ID == 2)
+                    {
+                        if (TownShop is null)
+                        {
+                            TownShop = new(Player);
+                        }
+                        TownShop.TownCatalog();
+                        choiceMade = true;
                     }
                     break;
                 default:
@@ -363,7 +394,7 @@ public class Game {
         Console.ResetColor();
         Console.WriteLine(":");
         for (int i = 0; i < this.Player.Items.Count; i++) {
-            Console.WriteLine($"- {this.Player.Items.ElementAt(i).Key} {this.Player.Items.ElementAt(i).Value}x");
+            Console.WriteLine($"[{this.Player.Items.ElementAt(i).Key.ID}] {this.Player.Items.ElementAt(i).Key} {this.Player.Items.ElementAt(i).Value}x");
         }
         Console.WriteLine();
         Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
@@ -372,18 +403,34 @@ public class Game {
         } else {
             Console.WriteLine($"Current equipped weapon: None");
         }
-        Util.pressAnyKey("Press any key to exit inventory...");
-    }
 
-    private void GivePlayerItems(Player Player, Dictionary<Item, int> Items) {
-        foreach (KeyValuePair<Item, int> kvp in Items) {
-            // If the player already has the item
-            if (Player.Items.ContainsKey(kvp.Key)) {
-                Player.Items[kvp.Key] += kvp.Value;
-            }
-            // Else add it to the inventory
-            else {
-                Player.Items[kvp.Key] = kvp.Value;
+
+        Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
+        while (true) {
+            string input = Console.ReadLine();
+            if (input == null || input == "") {
+                break;
+            } else {
+                if (!int.TryParse(input, out int inputNum)) {
+                    Console.WriteLine("Invalid input");
+                    continue;
+                }
+                bool itemFound = false;
+                foreach (Item item in this.Player.Items.Keys) {
+                    if (item.ID == inputNum) {
+                        itemFound = true;
+                    }
+                }
+                if (!itemFound) {
+                    Console.WriteLine("Invalid input");
+                    continue;
+                }
+                if (Util.GetItemByID(inputNum, items) is not Weapon) {
+                    Console.WriteLine("This is not a weapon");
+                    continue;
+                }
+                this.Player.ActiveWeapon = (Weapon)Util.GetItemByID(inputNum, items);
+                break;
             }
         }
     }
@@ -391,6 +438,7 @@ public class Game {
     private void CheckQuestsCompletion() {
         // If player is in the city and the quest has not yet been completed
         if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
+            this.NotifyQuestCompletion(this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])]);
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
             //this.GivePlayerItems(this.Player, this.quests[0].Rewards);
             this.Player.Coins += 5;
@@ -402,5 +450,27 @@ public class Game {
         foreach (KeyValuePair<Spell, int> kvp in this.Player.Spells) {
             Console.WriteLine($"{kvp.Key}");
         }
+    }
+
+    private void NotifyQuestCompletion(Quest Quest) {
+        Console.Clear();
+        Console.WriteLine("\x1b[36m================================================================================================================================");
+        Console.WriteLine("                           ___                  _       ____                      _      _           _ ");
+        Console.WriteLine("                          / _ \\ _   _  ___  ___| |_    / ___|___  _ __ ___  _ __ | | ___| |_ ___  __| |");
+        Console.WriteLine("                         | | | | | | |/ _ \\/ __| __|  | |   / _ \\| '_ ` _ \\| '_ \\| |/ _ \\ __/ _ \\/ _` |");
+        Console.WriteLine("                         | |_| | |_| |  __/\\__ \\ |_   | |__| (_) | | | | | | |_) | |  __/ ||  __/ (_| |");
+        Console.WriteLine("                          \\__\\_\\\\__,_|\\___||___/\\__|   \\____\\___/|_| |_| |_| .__/|_|\\___|\\__\\___|\\__,_|");
+        Console.WriteLine("                                                                           |_|                         ");
+        Console.WriteLine("================================================================================================================================\x1B[0m");
+        Console.WriteLine();
+        Console.Write("Name: ");
+        Console.WriteLine($"\x1b[32m{Quest.Name}\x1b[0m");
+        Console.Write("Description: ");
+        Console.WriteLine($"\x1b[90m{Quest.Description}\x1b[0m");
+        Console.WriteLine("\x1B[0mRewards:");
+        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        }
+        Util.pressAnyKey();
     }
 }
