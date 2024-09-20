@@ -25,4 +25,17 @@
         }
         return null;
     }
+
+    public static void GivePlayerItems(Player Player, Dictionary<Item, int> Items) {
+        foreach (KeyValuePair<Item, int> kvp in Items) {
+            // If the player already has the item
+            if (Player.Items.ContainsKey(kvp.Key)) {
+                Player.Items[kvp.Key] += kvp.Value;
+            }
+            // Else add it to the inventory
+            else {
+                Player.Items[kvp.Key] = kvp.Value;
+            }
+        }
+    }
 }
