@@ -6,7 +6,7 @@
     }
 
     override public string? ToString() {
-        return $"{this.Name} \x1B[32m(Max damage: {this.Restoration})\u001b[0m \x1B[90m{this.Description}\x1B[0m";
+        return $"{this.Name} \x1B[32m(Max heal: {this.Restoration})\u001b[0m \x1B[90m{this.Description}\x1B[0m";
     }
 
     override public bool Equals(object? obj) {

@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-public class Game {
+﻿public class Game {
     private Player Player = null;
     private World World = new();
 
@@ -15,9 +13,9 @@ public class Game {
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
-        new Item(4, "Coin", "A currency widely used in the city of Duskmire"),
-        new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5),
-        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10),
+        new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
+        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
+        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
         new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
     };
 
@@ -171,7 +169,7 @@ public class Game {
         Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t2\t2");
         Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
         Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
-        Console.WriteLine("5: \x1b[93mMonk\u001b[0m\t40\t8\t");
+        Console.WriteLine("5: \x1b[93mMonk\x1B[0m\t\t40\t8\t4\t4\t4");
         bool choiceMade = false;
         while (!choiceMade) {
             switch (Console.ReadLine()) {
@@ -197,7 +195,7 @@ public class Game {
                     choiceMade = true;
                     break;
                 default:
-                    Console.WriteLine("Invalid choice (1-4)");
+                    Console.WriteLine("Invalid choice (1-5)");
                     continue;
             }
         }
@@ -217,6 +215,9 @@ public class Game {
                 break;
             case "rogue":
                 Console.Write($"Created \x1B[34m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
+                break;
+            case "monk":
+                Console.Write($"Created \x1B[93m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
                 break;
             default: // Wont happen
                 break;
@@ -428,22 +429,10 @@ public class Game {
         }
     }
 
-    private void GivePlayerItems(Player Player, Dictionary<Item, int> Items) {
-        foreach (KeyValuePair<Item, int> kvp in Items) {
-            // If the player already has the item
-            if (Player.Items.ContainsKey(kvp.Key)) {
-                Player.Items[kvp.Key] += kvp.Value;
-            }
-            // Else add it to the inventory
-            else {
-                Player.Items[kvp.Key] = kvp.Value;
-            }
-        }
-    }
-
     private void CheckQuestsCompletion() {
         // If player is in the city and the quest has not yet been completed
         if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
+            this.NotifyQuestCompletion(this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])]);
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
             //this.GivePlayerItems(this.Player, this.quests[0].Rewards);
             this.Player.Coins += 5;
@@ -455,5 +444,27 @@ public class Game {
         foreach (KeyValuePair<Spell, int> kvp in this.Player.Spells) {
             Console.WriteLine($"{kvp.Key}");
         }
+    }
+
+    private void NotifyQuestCompletion(Quest Quest) {
+        Console.Clear();
+        Console.WriteLine("\x1b[36m================================================================================================================================");
+        Console.WriteLine("                           ___                  _       ____                      _      _           _ ");
+        Console.WriteLine("                          / _ \\ _   _  ___  ___| |_    / ___|___  _ __ ___  _ __ | | ___| |_ ___  __| |");
+        Console.WriteLine("                         | | | | | | |/ _ \\/ __| __|  | |   / _ \\| '_ ` _ \\| '_ \\| |/ _ \\ __/ _ \\/ _` |");
+        Console.WriteLine("                         | |_| | |_| |  __/\\__ \\ |_   | |__| (_) | | | | | | |_) | |  __/ ||  __/ (_| |");
+        Console.WriteLine("                          \\__\\_\\\\__,_|\\___||___/\\__|   \\____\\___/|_| |_| |_| .__/|_|\\___|\\__\\___|\\__,_|");
+        Console.WriteLine("                                                                           |_|                         ");
+        Console.WriteLine("================================================================================================================================\x1B[0m");
+        Console.WriteLine();
+        Console.Write("Name: ");
+        Console.WriteLine($"\x1b[32m{Quest.Name}\x1b[0m");
+        Console.Write("Description: ");
+        Console.WriteLine($"\x1b[90m{Quest.Description}\x1b[0m");
+        Console.WriteLine("\x1B[0mRewards:");
+        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        }
+        Util.pressAnyKey();
     }
 }

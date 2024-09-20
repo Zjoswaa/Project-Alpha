@@ -62,8 +62,8 @@ class ItemShop
     //Method that gets called to create the alchemist's shop
     public void AlchemistCatalog()
     {
-        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
-        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10);
+        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5);
+        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10);
 
         if (Stock is null)
         {
@@ -71,7 +71,7 @@ class ItemShop
         }
 
         Console.Clear();
-        Console.WriteLine("Welcome, take a look around.\n");
+        Console.WriteLine("Welcome, take a look around.");
 
         bool k = true;
         while (k)
@@ -80,10 +80,10 @@ class ItemShop
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
                 itemNumber += 1;
-                Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value} left");
+                Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left");
             }
 
-            Console.WriteLine("\nType the number corresponding with the item or type 'X' to exit:");
+            Console.WriteLine("\n\x1b[36mPress enter to exit, type any number to purchase that item.\x1b[0m");
 
             string userPurchase = Console.ReadLine().ToUpper();
 
@@ -96,7 +96,8 @@ class ItemShop
                 case "2":
                     PurchaseItem(bigPotion, 5);
                     break;
-                case "X":
+                case "":
+                case null:
                     k = false;
                     break;
             }
@@ -106,8 +107,8 @@ class ItemShop
     //Method that gets called to create the town's shop
     public void TownCatalog()
     {
-        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health", 5);
-        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health", 10);
+        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5);
+        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10);
 
         if (Stock is null)
         {
@@ -115,7 +116,7 @@ class ItemShop
         }
 
         Console.Clear();
-        Console.WriteLine("Welcome, take a look around.\n");
+        Console.WriteLine("Welcome, take a look around.");
 
         bool k = true;
         while (k)
@@ -124,10 +125,10 @@ class ItemShop
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
                 itemNumber += 1;
-                Console.WriteLine($"\n{itemNumber}. {kvp.Key}: {kvp.Value} left");
+                Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left");
             }
 
-            Console.WriteLine("\nType the number corresponding with the item or type 'X' to exit:");
+            Console.WriteLine("\n\x1b[36mPress enter to exit, type any number to purchase that item.\x1b[0m");
 
             string userPurchase = Console.ReadLine().ToUpper();
 
@@ -139,7 +140,8 @@ class ItemShop
                 case "2":
                     PurchaseItem(bigPotion, 5);
                     break;
-                case "X":
+                case "":
+                case null:
                     k = false;
                     break;
             }

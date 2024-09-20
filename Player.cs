@@ -186,6 +186,13 @@
         else if (monster.CurrentHitPoints <= 0)
         {
             Console.WriteLine($"You defeated {monster.Name}!");
+            // Monster kill reward
+            int coinsGained = 0;
+            if (monster.Name == "Slime") {
+                coinsGained = rand.Next(1, 5);
+            }
+            Console.WriteLine($"You gained {coinsGained} coins.");
+            this.Coins += coinsGained;
             return false;
         }
         return true;
