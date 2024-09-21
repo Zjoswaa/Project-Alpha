@@ -17,6 +17,7 @@
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
         new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
+        new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")
     };
 
     private static ItemShop TownShop;
@@ -173,11 +174,10 @@
 
         bool choiceMade = false;
         while (!choiceMade) {
-            switch (Console.ReadLine()) {
+            switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
-                    Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
@@ -197,7 +197,7 @@
                     break;
                 case "5":
                     this.Player = new Player(name, "monk", 40, 8, 8, 4, 4);
-                     // Starter weapon is given to the monk
+                     // Starter weapon is given to the monk, just not equipped yet.
                     Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
@@ -264,6 +264,8 @@
         Console.WriteLine("\x1b[1m\x1b[33m[W]\x1b[0m Walk in a direction");
         if (this.Player.CurrentLocation.ID == 1) {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Slime");
+        } else if (this.Player.CurrentLocation.ID == 6) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Spider");
         }
         if (Player.ClassName == "sorcerer") {
             Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
@@ -303,9 +305,13 @@
                     choiceMade = true;
                     break;
                 case "F":
-                    if (this.Player.CurrentLocation.ID == 1) {
+                    if (this.Player.CurrentLocation.ID == 1) { // Forest
                         choiceMade = true;
                         this.Player.Fight(new Monster(0, "Slime", 20, 20, 5), null);
+                        this.GameOverCheck();
+                    } else if (this.Player.CurrentLocation.ID == 6) { // Farmer's Meadows
+                        choiceMade = true;
+                        this.Player.Fight(new Monster(0, "Spider", 40, 40, 8), null);
                         this.GameOverCheck();
                     } else {
                         Console.WriteLine("Invalid input");
