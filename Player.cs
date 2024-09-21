@@ -71,9 +71,11 @@
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
-        Console.WriteLine("\x1B[0mRewards:");
-        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
-            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        if (Quest.Rewards != null) {
+            Console.WriteLine("\x1B[0mRewards:");
+            foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+                Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+            }
         }
 
         while (true) {
