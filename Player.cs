@@ -79,16 +79,16 @@
         }
 
         while (true) {
-            string input = Console.ReadLine().ToUpper();
+            string input = Console.ReadKey().KeyChar.ToString().ToUpper();
             if (input == "Y") {
                 this.KnownQuests.Add(Quest);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Added Quest");
+                Console.WriteLine("\nAdded Quest");
                 Console.ResetColor();
                 break;
             } else if (input == "N") {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Declined Quest");
+                Console.WriteLine("\nDeclined Quest");
                 Console.ResetColor();
                 break;
             } else {
@@ -111,7 +111,7 @@
             } else {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
             }
-            string choice = Console.ReadLine();
+            string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
 
             Console.Clear();
             switch (choice)
@@ -207,6 +207,10 @@
             int coinsGained = 0;
             if (monster.Name == "Slime") {
                 coinsGained = rand.Next(1, 5);
+            } else if (monster.Name == "Spider") {
+                coinsGained = rand.Next(3, 8);
+                Console.WriteLine("The spider dropped some silk.");
+                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."), 1 } });
             }
             Console.WriteLine($"You gained {coinsGained} coins.");
             this.Coins += coinsGained;
