@@ -16,7 +16,7 @@
         new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
-        new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
+        new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
     };
 
     private static ItemShop TownShop;
@@ -197,7 +197,8 @@
                     break;
                 case "5":
                     this.Player = new Player(name, "monk", 40, 8, 8, 4, 4);
-                    // no starter wep assigned for monk. start bare handed.
+                     // Starter weapon is given to the monk
+                    Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
                 default:
@@ -206,15 +207,13 @@
             }
         }
 
-        if (Player.Items.Count > 0 && Player.Items.ElementAt(0).Key is Weapon) //if statement to ensure the program doesn't break because monk starts without a weapon
-        {
+        // Monk starts with bare fists, staff can still be equipped
+        if (this.Player.ClassName == "monk") {
+            this.Player.ActiveWeapon = null;
+        } else {
             this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
         }
-        else
-        {
-            this.Player.ActiveWeapon = null;
-            Console.WriteLine("No weapon equipped.");
-        }
+
         Console.Clear();
         switch (this.Player.ClassName) {
             case "warrior":
@@ -424,13 +423,23 @@
             Console.WriteLine($"Current equipped weapon: None");
         }
 
-
-        Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
+        Console.WriteLine();
+        if (this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
+            
+            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot. Press X to unequip current weapon.\x1b[0m");
+        } else {
+            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
+        }
         while (true) {
             string input = Console.ReadLine();
             if (input == null || input == "") {
                 break;
             } else {
+                // Unequip possibility for monk.
+                if (input.ToUpper() == "X" && this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
+                    this.Player.ActiveWeapon = null;
+                    break;
+                }
                 if (!int.TryParse(input, out int inputNum)) {
                     Console.WriteLine("Invalid input");
                     continue;
