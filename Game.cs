@@ -169,7 +169,7 @@
         Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t2\t2");
         Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
         Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
-        Console.WriteLine("5: \x1B[93mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
+        Console.WriteLine("5: \x1B[35mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
 
         bool choiceMade = false;
         while (!choiceMade) {
@@ -197,7 +197,7 @@
                     break;
                 case "5":
                     this.Player = new Player(name, "monk", 40, 8, 8, 4, 4);
-                    Player.Items[items[7]] = 1; //
+                    // no starter wep assigned for monk. start bare handed.
                     choiceMade = true;
                     break;
                 default:
@@ -206,8 +206,15 @@
             }
         }
 
-        this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key; // maak hier een een if 
-
+        if (Player.Items.Count > 0 && Player.Items.ElementAt(0).Key is Weapon) //if statement to ensure the program doesn't break because monk starts without a weapon
+        {
+            this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
+        }
+        else
+        {
+            this.Player.ActiveWeapon = null;
+            Console.WriteLine("No weapon equipped.");
+        }
         Console.Clear();
         switch (this.Player.ClassName) {
             case "warrior":
@@ -223,7 +230,7 @@
                 Console.Write($"Created \x1B[34m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
                 break;
             case "monk":
-                Console.Write($"Created \x1B[93m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m "); //
+                Console.Write($"Created \x1B[35m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m "); //
                 break;
             default: // Wont happen
                 break;

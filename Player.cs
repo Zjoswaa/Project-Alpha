@@ -10,6 +10,7 @@
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
     public bool IsDefending { get; set; } = false;
     public int Coins { get; set; }
+    public int Spirit { get; set; } // temp spirit stat for player, might have to change
 
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
@@ -169,10 +170,24 @@
     public bool Attack(Monster monster)
     {
         Random rand = new Random();
-        int damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
-        Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+        int damage;
 
-        monster.CurrentHitPoints -= damage;
+        if (ActiveWeapon == null && ClassName == "monk") // monk's weaponless attack
+        {
+            int BareFistBonus = 3;
+            damage = rand.Next(0, 5) + this.Strength + BareFistBonus;
+            Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+            monster.CurrentHitPoints -= damage;
+        }
+        
+        else if (ActiveWeapon != null)
+        {
+            damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
+            Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+            monster.CurrentHitPoints -= damage;
+        }
+
+        //monster.CurrentHitPoints -= damage;
         //if (monster.CurrentHitPoints > 0)
         //{
         //    Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
