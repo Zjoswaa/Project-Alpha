@@ -75,30 +75,30 @@ public class World
         return null;
     }
 
-    public static void WorldMap()
+    public static void WorldMap(Location CurrentLocation)
     {
-        string mapLayout = @"
+        string mapLayout = $@"
                                                                               +----------------------+
-                                                                              |     Royal Palace     |
+                                                                              |     {(CurrentLocation.ID == 9 ? "\x1b[1m\x1b[35mRoyal Palace\x1b[0m" : "Royal Palace")}     |
                                                                               +----------------------+
                                                                                          |
                                                                                          |
                                                                                          |
                                                                                          |
                                                     +----------------------+  +----------------------+
-                                                    |   Alchemist's Hut    |--|      King's Pass     |
+                                                    |   {(CurrentLocation.ID == 4 ? "\x1b[1m\x1b[35mAlchemist's Hut\x1b[0m" : "Alchemist's Hut")}    |--|      {(CurrentLocation.ID == 8 ? "\x1b[1m\x1b[35mKing's Pass\x1b[0m" : "King's Pass")}     |
                                                     +----------------------+  +----------------------+
                                                                |                         |
                                                                |                         |
                                                                |                         |
 +----------------------+  +----------------------+  +----------------------+  +----------------------+  +----------------------+
-|      Farmhouse       |--|   Farmer's Meadows   |--|    Duskmire City     |--|     Military Camp    |--|   Torture Chambers   |
+|      {(CurrentLocation.ID == 7 ? "\x1b[1m\x1b[35mFarmhouse\x1b[0m" : "Farmhouse")}       |--|   {(CurrentLocation.ID == 6 ? "\x1b[1m\x1b[35mFarmer's Meadows\x1b[0m" : "Farmer's Meadows")}   |--|    {(CurrentLocation.ID == 2 ? "\x1b[1m\x1b[35mDuskmire Town\x1b[0m" : "Duskmire Town")}     |--|     {(CurrentLocation.ID == 3 ? "\x1b[1m\x1b[35mMilitary Camp\x1b[0m" : "Military Camp")}    |--|   {(CurrentLocation.ID == 5 ? "\x1b[1m\x1b[35mTorture Chambers\x1b[0m" : "Torture Chambers")}   |
 +----------------------+  +----------------------+  +----------------------+  +----------------------+  +----------------------+
                                                                |
                                                                |
                                                                |
                                                     +----------------------+
-                                                    |        Forest        |
+                                                    |        {(CurrentLocation.ID == 1 ? "\x1b[1m\x1b[35mForest\x1b[0m" : "Forest")}        |
                                                     +----------------------+
 ";
 

@@ -25,10 +25,14 @@ public class Quest {
     }
 
     override public string? ToString() {
-        if (this.Completed) {
-            return $"\x1B[92m{this.Name} \x1B[90m{this.Description}\x1B[0m";
+        if (this.QuestType == "MAIN") {
+            return $"\x1B[1m\x1B[93m{this.Name}\x1B[0m \x1B[90m{this.Description}\x1B[0m";
         }
-        return $"\x1B[91m{this.Name} \x1B[90m{this.Description}\x1B[0m";
+        return $"\x1B[1m{this.Name}\x1B[0m \x1B[90m{this.Description}\x1B[0m";
+        //if (this.Completed) {
+        //    return $"\x1B[92m{this.Name} \x1B[90m{this.Description}\x1B[0m";
+        //}
+        //return $"\x1B[91m{this.Name} \x1B[90m{this.Description}\x1B[0m";
     }
 
     override public bool Equals(object? obj) {

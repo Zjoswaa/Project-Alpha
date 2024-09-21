@@ -140,10 +140,10 @@
     private void start() {
         Player.AddQuest(quests[0]);
         Util.pressAnyKey();
-        //this.Player.AskAddQuest(quests[1]);
-        //this.pressAnyKey();
-        //this.Player.AskAddQuest(quests[2]);
-        //this.pressAnyKey();
+        this.Player.AskAddQuest(quests[1]);
+        Util.pressAnyKey();
+        this.Player.AskAddQuest(quests[2]);
+        Util.pressAnyKey();
 
         while (true) {
             this.CheckQuestsCompletion();
@@ -266,8 +266,8 @@
                     break;
                 case "M":
                     Console.Clear();
-                    Console.WriteLine($"Current location: \x1B[34m{this.Player.CurrentLocation.Name}\x1B[0m");
-                    World.WorldMap();
+                    //Console.WriteLine($"Current location: \x1B[34m{this.Player.CurrentLocation.Name}\x1B[0m");
+                    World.WorldMap(this.Player.CurrentLocation);
                     Util.pressAnyKey("Press any key to close the map...");
                     choiceMade = true;
                     break;
@@ -332,17 +332,30 @@
         // First print main quests
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "MAIN") {
-                Console.WriteLine($"\x1B[1m\x1B[33m[{quest.ID}]\x1B[0m {quest}");
-                foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
-                    Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                if (quest.Completed) {
+                    Console.WriteLine($"\x1B[1m\x1B[92m[{quest.ID}]\x1B[0m {quest}");
+                } else {
+                    Console.WriteLine($"\x1B[1m\x1B[91m[{quest.ID}]\x1B[0m {quest}");
+                }
+                if (quest.Rewards != null) {
+                    foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
+                        Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                    }
                 }
             }
         }
         // Then print side quest
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "SIDE") {
-                foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
-                    Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                if (quest.Completed) {
+                    Console.WriteLine($"\x1B[1m\x1B[92m[{quest.ID}]\x1B[0m {quest}");
+                } else {
+                    Console.WriteLine($"\x1B[1m\x1B[91m[{quest.ID}]\x1B[0m {quest}");
+                }
+                if (quest.Rewards != null) {
+                    foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
+                        Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                    }
                 }
             }
         }
