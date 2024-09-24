@@ -16,6 +16,7 @@
     public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
     public Dictionary<Item, int> Items { get; set; } = new(); // Item and count
     public Weapon ActiveWeapon { get; set; }
+    public bool MilitaryCommanderBeaten { get; set; } = false;
 
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
         this.Name = Name;
