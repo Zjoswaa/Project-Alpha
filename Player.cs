@@ -10,8 +10,8 @@
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
     public bool IsDefending { get; set; } = false;
     public int Coins { get; set; }
-    public int Spirit { get; set; } // temp spirit stat for player, might have to change
-
+    public int Spirit { get; set; } // spirit meter for the monk
+    public int SpiritCooldown { get; set; } // cooldown for the spirit usage
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
     public Dictionary<Item, int> Items { get; set; } = new(); // Item and count
@@ -31,6 +31,12 @@
         if (ClassName == "sorcerer") {
             Spells = new();
             Spells[new HealSpell(0, "Heal Spell", "A powerful spell that will heal the user.", 5, 10)] = 0;
+        }
+
+        if (ClassName == "monk")
+        {
+            this.Spirit = 10; // spirit starting value
+            this.SpiritCooldown = 0; // no cooldown at the start
         }
     }
 
@@ -108,6 +114,8 @@
             Console.WriteLine($"{monster.Name} \x1B[32mHP\x1B[0m: {monster.CurrentHitPoints}");
             if (this.ClassName == "sorcerer") {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) \x1b[96mOpen Spell book\x1b[0m");
+            } else if (this.ClassName == "monk") {
+                Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) Use Spirit"); 
             } else {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
             }
@@ -203,6 +211,12 @@
         else if (monster.CurrentHitPoints <= 0)
         {
             Console.WriteLine($"You defeated {monster.Name}!");
+
+            if (ClassName == "monk") // spirit reset for the monk when monster is defeated
+            {
+                SpiritCooldown = 0;
+                Console.WriteLine($"{this.Name} has regained their Spirit");
+            }
             // Monster kill reward
             int coinsGained = 0;
             if (monster.Name == "Slime") {
