@@ -3,8 +3,9 @@
     private World World = new();
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }),
-        new Quest(1, "Gearing up!", "Collect 3 spider silks by defeating spiders in Farmers Meadow's, and collect 3 Bones by defeating skeletons at the Farmhouse", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }, false),
+        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", null),
+        new Quest(1, "Slaying monsters.", "Collect 3 spider silks by defeating spiders in Farmer's Meadows, and collect 3 Bones by defeating skeletons at the Farmhouse.", "MAIN", null),
+        new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", null),
     };
 
     private static List<Item> items = new() {
@@ -21,6 +22,7 @@
         new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4),
         new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5),
         new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1),
+        new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")
     };
 
     private static ItemShop TownShop;
@@ -284,6 +286,8 @@
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Slime");
         } else if (this.Player.CurrentLocation.ID == 6) {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Spider");
+        } else if (this.Player.CurrentLocation.ID == 7) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Skeleton");
         }
         if (Player.ClassName == "sorcerer") {
             Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
@@ -329,9 +333,15 @@
                         this.GameOverCheck();
                     } else if (this.Player.CurrentLocation.ID == 6) { // Farmer's Meadows
                         choiceMade = true;
-                        this.Player.Fight(new Monster(0, "Spider", 40, 40, 8), null);
+                        this.Player.Fight(new Monster(0, "Spider", 30, 30, 10), null);
                         this.GameOverCheck();
-                    } else {
+                    } else if (this.Player.CurrentLocation.ID == 7) { // Farmhouse
+                        choiceMade = true;
+                        this.Player.Fight(new Monster(0, "Skeleton", 40, 40, 8), null);
+                        this.GameOverCheck();
+                    }
+                    
+                    else {
                         Console.WriteLine("Invalid input");
                         continue;
                     }
@@ -494,17 +504,24 @@
             this.NotifyQuestCompletion(this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])]);
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
             this.Player.Coins += 5;
+
+            // Add next quest
+            this.Player.AddQuest(this.quests[1]);
+            Util.pressAnyKey();
         }
 
         // Check for the "Web of Intrigue" quest completion
-        Quest webOfIntrigueQuest = this.Player.KnownQuests.Find(q => q.ID == 3);
+        Quest webOfIntrigueQuest = this.Player.KnownQuests.Find(q => q.ID == 1);
         if (webOfIntrigueQuest != null && !webOfIntrigueQuest.Completed) {
             int spiderSilkCount = this.Player.Items.ContainsKey(items[8]) ? this.Player.Items[items[8]] : 0;
             if (spiderSilkCount >= 3) {
                 this.NotifyQuestCompletion(webOfIntrigueQuest);
                 webOfIntrigueQuest.Completed = true;
                 this.Player.Coins += 5;
-                this.Player.Items[items[8]] -= 3; // Remove the spider silks used for the quest
+
+                // Add next quest
+                this.Player.AddQuest(quests[2]);
+                Util.pressAnyKey();
             }
         }
     }
