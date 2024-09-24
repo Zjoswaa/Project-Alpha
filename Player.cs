@@ -60,9 +60,11 @@
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
-        Console.WriteLine("\x1B[0mRewards:");
-        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
-            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        if (Quest.Rewards != null) {
+            Console.WriteLine("\x1B[0mRewards:");
+            foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+                Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+            }
         }
     }
 
@@ -225,6 +227,10 @@
                 coinsGained = rand.Next(3, 8);
                 Console.WriteLine("The spider dropped some silk.");
                 Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."), 1 } });
+            } else if (monster.Name == "Skeleton") {
+                coinsGained = rand.Next(3, 8);
+                Console.WriteLine("The skeleton dropped some bones.");
+                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons."), 1 } });
             }
             Console.WriteLine($"You gained {coinsGained} coins.");
             this.Coins += coinsGained;

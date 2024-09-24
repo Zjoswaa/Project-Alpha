@@ -3,9 +3,9 @@
     private World World = new();
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", null),
-        new Quest(1, "Slaying monsters.", "Collect 3 spider silks by defeating spiders in Farmer's Meadows, and collect 3 Bones by defeating skeletons at the Farmhouse.", "MAIN", null),
-        new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", null),
+        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(1, "Slaying monsters.", "Collect 3 spider silks by defeating spiders in Farmer's Meadows, and collect 3 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
     };
 
     private static List<Item> items = new() {
@@ -510,18 +510,31 @@
             Util.pressAnyKey();
         }
 
-        // Check for the "Web of Intrigue" quest completion
-        Quest webOfIntrigueQuest = this.Player.KnownQuests.Find(q => q.ID == 1);
-        if (webOfIntrigueQuest != null && !webOfIntrigueQuest.Completed) {
+        // Check for the "Slaying monsters." quest completion
+        Quest slayingMonstersQuest = this.Player.KnownQuests.Find(q => q.ID == 1);
+        if (slayingMonstersQuest != null && !slayingMonstersQuest.Completed) {
             int spiderSilkCount = this.Player.Items.ContainsKey(items[8]) ? this.Player.Items[items[8]] : 0;
-            if (spiderSilkCount >= 3) {
-                this.NotifyQuestCompletion(webOfIntrigueQuest);
-                webOfIntrigueQuest.Completed = true;
+            int bonesCount = this.Player.Items.ContainsKey(items[13]) ? this.Player.Items[items[13]] : 0;
+            if (spiderSilkCount >= 3 && bonesCount >= 3) {
+                this.NotifyQuestCompletion(slayingMonstersQuest);
+                slayingMonstersQuest.Completed = true;
                 this.Player.Coins += 5;
 
                 // Add next quest
                 this.Player.AddQuest(quests[2]);
                 Util.pressAnyKey();
+            }
+        }
+
+        // Check for the "Gearing up!" quest completion
+        Quest gearingUpQuest = this.Player.KnownQuests.Find(q => q.ID == 1);
+        if (gearingUpQuest != null && !gearingUpQuest.Completed) {
+            if (this.Player.Items.ContainsKey(items[9]) || this.Player.Items.ContainsKey(items[10]) || this.Player.Items.ContainsKey(items[11]) || this.Player.Items.ContainsKey(items[12])) {
+                this.NotifyQuestCompletion(gearingUpQuest);
+                gearingUpQuest.Completed = true;
+                this.Player.Coins += 5;
+
+
             }
         }
     }
