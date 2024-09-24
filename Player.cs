@@ -226,11 +226,11 @@
             } else if (monster.Name == "Spider") {
                 coinsGained = rand.Next(3, 8);
                 Console.WriteLine("The spider dropped some silk.");
-                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."), 1 } });
+                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."), rand.Next(1, 3) } });
             } else if (monster.Name == "Skeleton") {
                 coinsGained = rand.Next(3, 8);
                 Console.WriteLine("The skeleton dropped some bones.");
-                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons."), 1 } });
+                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons."), rand.Next(1, 3) } });
             }
             Console.WriteLine($"You gained {coinsGained} coins.");
             this.Coins += coinsGained;

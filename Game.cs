@@ -4,7 +4,7 @@
 
     private List<Quest> quests = new() {
         new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
-        new Quest(1, "Slaying monsters.", "Collect 3 spider silks by defeating spiders in Farmer's Meadows, and collect 3 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(1, "Slaying monsters.", "Collect 5 spider silks by defeating spiders in Farmer's Meadows, and collect 5 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
     };
 
@@ -14,8 +14,8 @@
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
         new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
-        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
-        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
+        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 10),
+        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 20),
         new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
         new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."),
         new Weapon(9, "Greatsword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7),
@@ -276,7 +276,7 @@
         }
         if (this.Player.CurrentLocation.ID == 2)
         {
-            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Clerk's Shop");
+            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Smith's Shop");
         }
         Console.WriteLine("\x1b[1m\x1b[33m[I]\x1b[0m Open inventory");
         Console.WriteLine("\x1b[1m\x1b[33m[M]\x1b[0m Show map");
@@ -515,7 +515,7 @@
         if (slayingMonstersQuest != null && !slayingMonstersQuest.Completed) {
             int spiderSilkCount = this.Player.Items.ContainsKey(items[8]) ? this.Player.Items[items[8]] : 0;
             int bonesCount = this.Player.Items.ContainsKey(items[13]) ? this.Player.Items[items[13]] : 0;
-            if (spiderSilkCount >= 3 && bonesCount >= 3) {
+            if (spiderSilkCount >= 5 && bonesCount >= 5) {
                 this.NotifyQuestCompletion(slayingMonstersQuest);
                 slayingMonstersQuest.Completed = true;
                 this.Player.Coins += 5;
