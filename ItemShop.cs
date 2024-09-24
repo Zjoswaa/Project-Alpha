@@ -107,12 +107,14 @@ class ItemShop
     //Method that gets called to create the town's shop
     public void TownCatalog()
     {
-        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5);
-        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10);
+        Weapon greatSword = new(9, "Greatsword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7);
+        Weapon quickfireBow = new(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4);
+        Weapon noviceWand = new(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5);
+        Weapon steelDagger = new(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1);
 
         if (Stock is null)
         {
-            Stock = new Dictionary<Item, int>(){ {potion, 2}, {bigPotion, 2} };
+            Stock = new Dictionary<Item, int>(){ {greatSword, 1}, {quickfireBow, 1}, {noviceWand, 1}, {steelDagger, 1} };
         }
 
         Console.Clear();
@@ -135,10 +137,16 @@ class ItemShop
             switch (userPurchase)
             {
                 case "1":
-                    PurchaseItem(potion, 3);
+                    PurchaseItem(greatSword, 5);
                     break;
                 case "2":
-                    PurchaseItem(bigPotion, 5);
+                    PurchaseItem(quickfireBow, 5);
+                    break;
+                case "3":
+                    PurchaseItem(noviceWand, 5);
+                    break;
+                case "4":
+                    PurchaseItem(steelDagger, 5);
                     break;
                 case "":
                 case null:
