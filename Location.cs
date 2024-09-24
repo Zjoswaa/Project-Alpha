@@ -18,31 +18,24 @@ public class Location
     // Dynamic compass that changes based on possible routes
     public string Compass()
     {
-        string direction = "From here you can go:\n\n";
-        string north = "";
-        string east = "";
-        string south = "";
-        string west = "";
+        string direction = "From here you can go:\n";
+        string north = LocationToNorth != null ? "[N]" : "   ";
+        string east = LocationToEast != null ? "[E]" : "   ";
+        string south = LocationToSouth != null ? "[S]" : "   ";
+        string west = LocationToWest != null ? "[W]" : "   ";
 
-        if (LocationToNorth != null)
+        string northLine = $"     \x1B[31m{north}\x1B[0m     ";
+        string middleLine = $"  {west}   {east}  ";
+        string southLine = $"     {south}     ";
+        
+        if (LocationToNorth == null && LocationToSouth == null)
         {
-            north = $"[N]";
-        }
-        if (LocationToEast != null)
-        {
-            east = $"[E]";
-        }
-        if (LocationToSouth != null)
-        {
-            south = $"[S]";
-        }
-        if (LocationToWest != null)
-        {
-            west = $"[W]";
+            middleLine = $"{west}     {east}";
         }
 
-        return $"{direction}\n     \x1B[31m{north}\x1B[0m\n  {west}   {east}\n     {south}";
+        return $"{direction}\n{northLine}\n{middleLine}\n{southLine}";
     }
+    
 
     // Based on user input, returns the location in that direction
     public Location? GetLocationAt(string location)
