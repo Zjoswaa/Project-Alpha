@@ -291,6 +291,10 @@
         if (Player.ClassName == "sorcerer") {
             Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
         }
+        if (Player.ClassName == "monk")
+        {
+            Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mRest\x1b[0m");
+        }
 
         bool choiceMade = false;
         while (!choiceMade) {
@@ -317,7 +321,15 @@
                         Util.pressAnyKey("Press any key to exit spell book...");
                         choiceMade = true;
                         break;
-                    } else {
+                    } 
+                    else if (Player.ClassName == "monk")
+                    {
+                        this.Rest();
+                        Util.pressAnyKey("Press any key to continue. . .");
+                        choiceMade = true;
+                        break;
+                    }
+                    else {
                         Console.WriteLine("Invalid input");
                         continue;
                     }
@@ -506,6 +518,13 @@
         foreach (KeyValuePair<Spell, int> kvp in this.Player.Spells) {
             Console.WriteLine($"{kvp.Key}");
         }
+    }
+
+    private void Rest()
+    {
+        Player.Spirit = 10;
+        Player.SpiritCooldown = 0;
+        Console.WriteLine($"{Player.Name} used Rest and regained their Spirit.");
     }
 
     private void NotifyQuestCompletion(Quest Quest) {
