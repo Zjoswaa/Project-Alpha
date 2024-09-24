@@ -10,6 +10,8 @@
     public Location CurrentLocation { get; set; } = World.LocationByID(1);
     public bool IsDefending { get; set; } = false;
     public int Coins { get; set; }
+    public int Spirit { get; set; } // spirit meter for the monk
+    public int SpiritCooldown { get; set; } // cooldown for the spirit usage
 
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
@@ -30,6 +32,12 @@
         if (ClassName == "sorcerer") {
             Spells = new();
             Spells[new HealSpell(0, "Heal Spell", "A powerful spell that will heal the user.", 5, 10)] = 0;
+        }
+
+        if (ClassName == "monk")
+        {
+            this.Spirit = 10; // spirit starting value
+            this.SpiritCooldown = 0; // no cooldown at the start
         }
     }
 
@@ -70,22 +78,24 @@
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
-        Console.WriteLine("\x1B[0mRewards:");
-        foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
-            Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+        if (Quest.Rewards != null) {
+            Console.WriteLine("\x1B[0mRewards:");
+            foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+                Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+            }
         }
 
         while (true) {
-            string input = Console.ReadLine().ToUpper();
+            string input = Console.ReadKey().KeyChar.ToString().ToUpper();
             if (input == "Y") {
                 this.KnownQuests.Add(Quest);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Added Quest");
+                Console.WriteLine("\nAdded Quest");
                 Console.ResetColor();
                 break;
             } else if (input == "N") {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Declined Quest");
+                Console.WriteLine("\nDeclined Quest");
                 Console.ResetColor();
                 break;
             } else {
@@ -105,10 +115,12 @@
             Console.WriteLine($"{monster.Name} \x1B[32mHP\x1B[0m: {monster.CurrentHitPoints}");
             if (this.ClassName == "sorcerer") {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) \x1b[96mOpen Spell book\x1b[0m");
+            } else if (this.ClassName == "monk") {
+                Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) Use Spirit"); 
             } else {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
             }
-            string choice = Console.ReadLine();
+            string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
 
             Console.Clear();
             switch (choice)
@@ -169,10 +181,24 @@
     public bool Attack(Monster monster)
     {
         Random rand = new Random();
-        int damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
-        Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+        int damage;
 
-        monster.CurrentHitPoints -= damage;
+        if (ActiveWeapon == null && ClassName == "monk") // monk's weaponless attack
+        {
+            int BareFistBonus = 3;
+            damage = rand.Next(0, 5) + this.Strength + BareFistBonus;
+            Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+            monster.CurrentHitPoints -= damage;
+        }
+        
+        else if (ActiveWeapon != null)
+        {
+            damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
+            Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
+            monster.CurrentHitPoints -= damage;
+        }
+
+        //monster.CurrentHitPoints -= damage;
         //if (monster.CurrentHitPoints > 0)
         //{
         //    Console.WriteLine($"{monster.Name} has {monster.CurrentHitPoints} HP left.");
@@ -186,10 +212,20 @@
         else if (monster.CurrentHitPoints <= 0)
         {
             Console.WriteLine($"You defeated {monster.Name}!");
+
+            if (ClassName == "monk") // spirit reset for the monk when monster is defeated
+            {
+                SpiritCooldown = 0;
+                Console.WriteLine($"{this.Name} has regained their Spirit");
+            }
             // Monster kill reward
             int coinsGained = 0;
             if (monster.Name == "Slime") {
                 coinsGained = rand.Next(1, 5);
+            } else if (monster.Name == "Spider") {
+                coinsGained = rand.Next(3, 8);
+                Console.WriteLine("The spider dropped some silk.");
+                Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."), 1 } });
             }
             Console.WriteLine($"You gained {coinsGained} coins.");
             this.Coins += coinsGained;
