@@ -330,7 +330,7 @@
                     else if (Player.ClassName == "monk")
                     {
                         this.Rest();
-                        Util.pressAnyKey("Press any key to continue. . .");
+                        Util.pressAnyKey();
                         choiceMade = true;
                         break;
                     }
@@ -576,6 +576,7 @@
     {
         Player.Spirit = 10;
         Player.SpiritCooldown = 0;
+        Console.Clear();
         Console.WriteLine($"{Player.Name} used Rest and regained their Spirit.");
     }
 
