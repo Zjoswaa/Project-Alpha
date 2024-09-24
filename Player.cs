@@ -12,7 +12,6 @@
     public int Coins { get; set; }
     public int Spirit { get; set; } // spirit meter for the monk
     public int SpiritCooldown { get; set; } // cooldown for the spirit usage
-
     public List<Quest> KnownQuests { get; set; } = new();
     public Dictionary<Spell, int> Spells { get; set; } = null; // Spell and cooldown
     public Dictionary<Item, int> Items { get; set; } = new(); // Item and count

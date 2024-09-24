@@ -16,7 +16,8 @@
         new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
-        new Weapon(7, "Dummy test weapon", "dummy weapon", 12, 1),
+        new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
+        new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")
     };
 
     private static ItemShop TownShop;
@@ -140,10 +141,10 @@
     private void start() {
         Player.AddQuest(quests[0]);
         Util.pressAnyKey();
-        //this.Player.AskAddQuest(quests[1]);
-        //this.pressAnyKey();
-        //this.Player.AskAddQuest(quests[2]);
-        //this.pressAnyKey();
+        this.Player.AskAddQuest(quests[1]);
+        Util.pressAnyKey();
+        this.Player.AskAddQuest(quests[2]);
+        Util.pressAnyKey();
 
         while (true) {
             this.CheckQuestsCompletion();
@@ -169,15 +170,14 @@
         Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t2\t2");
         Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
         Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
-        Console.WriteLine("5: \x1B[93mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
+        Console.WriteLine("5: \x1B[35mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
 
         bool choiceMade = false;
         while (!choiceMade) {
-            switch (Console.ReadLine()) {
+            switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "1":
                     this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
-                    Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
@@ -197,7 +197,8 @@
                     break;
                 case "5":
                     this.Player = new Player(name, "monk", 40, 8, 8, 4, 4);
-                    Player.Items[items[7]] = 1; //
+                     // Starter weapon is given to the monk, just not equipped yet.
+                    Player.Items[items[7]] = 1;
                     choiceMade = true;
                     break;
                 default:
@@ -206,7 +207,12 @@
             }
         }
 
-        this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key; // maak hier een een if 
+        // Monk starts with bare fists, staff can still be equipped
+        if (this.Player.ClassName == "monk") {
+            this.Player.ActiveWeapon = null;
+        } else {
+            this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
+        }
 
         Console.Clear();
         switch (this.Player.ClassName) {
@@ -223,7 +229,7 @@
                 Console.Write($"Created \x1B[34m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
                 break;
             case "monk":
-                Console.Write($"Created \x1B[93m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m "); //
+                Console.Write($"Created \x1B[35m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m "); //
                 break;
             default: // Wont happen
                 break;
@@ -258,6 +264,8 @@
         Console.WriteLine("\x1b[1m\x1b[33m[W]\x1b[0m Walk in a direction");
         if (this.Player.CurrentLocation.ID == 1) {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Slime");
+        } else if (this.Player.CurrentLocation.ID == 6) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Spider");
         }
         if (Player.ClassName == "sorcerer") {
             Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
@@ -272,8 +280,8 @@
                     break;
                 case "M":
                     Console.Clear();
-                    Console.WriteLine($"Current location: \x1B[34m{this.Player.CurrentLocation.Name}\x1B[0m");
-                    World.WorldMap();
+                    //Console.WriteLine($"Current location: \x1B[34m{this.Player.CurrentLocation.Name}\x1B[0m");
+                    World.WorldMap(this.Player.CurrentLocation);
                     Util.pressAnyKey("Press any key to close the map...");
                     choiceMade = true;
                     break;
@@ -297,9 +305,13 @@
                     choiceMade = true;
                     break;
                 case "F":
-                    if (this.Player.CurrentLocation.ID == 1) {
+                    if (this.Player.CurrentLocation.ID == 1) { // Forest
                         choiceMade = true;
                         this.Player.Fight(new Monster(0, "Slime", 20, 20, 5), null);
+                        this.GameOverCheck();
+                    } else if (this.Player.CurrentLocation.ID == 6) { // Farmer's Meadows
+                        choiceMade = true;
+                        this.Player.Fight(new Monster(0, "Spider", 40, 40, 8), null);
                         this.GameOverCheck();
                     } else {
                         Console.WriteLine("Invalid input");
@@ -338,17 +350,30 @@
         // First print main quests
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "MAIN") {
-                Console.WriteLine($"\x1B[1m\x1B[33m[{quest.ID}]\x1B[0m {quest}");
-                foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
-                    Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                if (quest.Completed) {
+                    Console.WriteLine($"\x1B[1m\x1B[92m[{quest.ID}]\x1B[0m {quest}");
+                } else {
+                    Console.WriteLine($"\x1B[1m\x1B[91m[{quest.ID}]\x1B[0m {quest}");
+                }
+                if (quest.Rewards != null) {
+                    foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
+                        Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                    }
                 }
             }
         }
         // Then print side quest
         foreach (Quest quest in this.Player.KnownQuests) {
             if (quest.QuestType == "SIDE") {
-                foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
-                    Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                if (quest.Completed) {
+                    Console.WriteLine($"\x1B[1m\x1B[92m[{quest.ID}]\x1B[0m {quest}");
+                } else {
+                    Console.WriteLine($"\x1B[1m\x1B[91m[{quest.ID}]\x1B[0m {quest}");
+                }
+                if (quest.Rewards != null) {
+                    foreach (KeyValuePair<Item, int> kvp in quest.Rewards) {
+                        Console.WriteLine($"\x1B[0m - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
+                    }
                 }
             }
         }
@@ -404,13 +429,23 @@
             Console.WriteLine($"Current equipped weapon: None");
         }
 
-
-        Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
+        Console.WriteLine();
+        if (this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
+            
+            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot. Press X to unequip current weapon.\x1b[0m");
+        } else {
+            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
+        }
         while (true) {
             string input = Console.ReadLine();
             if (input == null || input == "") {
                 break;
             } else {
+                // Unequip possibility for monk.
+                if (input.ToUpper() == "X" && this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
+                    this.Player.ActiveWeapon = null;
+                    break;
+                }
                 if (!int.TryParse(input, out int inputNum)) {
                     Console.WriteLine("Invalid input");
                     continue;
