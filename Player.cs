@@ -191,6 +191,10 @@
                         }
                         else if (this.ClassName == "monk")
                         {
+                            if (this.SpiritCooldown > 0) {
+                                Console.Clear();
+                                continue;
+                            }
                             this.UseSpirit();
                         }
                         inCombat = monster.Attack(this);
