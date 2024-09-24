@@ -4,8 +4,7 @@
 
     private List<Quest> quests = new() {
         new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }),
-        new Quest(1, "Test", "Completed", "SIDE", null, true), // TODO: Remove
-        new Quest(2, "Test", "Not completed", "SIDE", null, false), // TODO: Remove
+        new Quest(1, "Gearing up!", "Collect 3 spider silks by defeating spiders in Farmers Meadow's, and collect 3 Bones by defeating skeletons at the Farmhouse", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }, false),
     };
 
     private static List<Item> items = new() {
@@ -142,13 +141,11 @@
         Console.Clear();
     }
 
+
     private void start() {
         Player.AddQuest(quests[0]);
         Util.pressAnyKey();
-        this.Player.AskAddQuest(quests[1]);
-        Util.pressAnyKey();
-        this.Player.AskAddQuest(quests[2]);
-        Util.pressAnyKey();
+        
 
         while (true) {
             this.CheckQuestsCompletion();
@@ -453,14 +450,14 @@
         Console.WriteLine();
         if (this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
             
-            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot. Press X to unequip current weapon.\x1b[0m");
+            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot. Press X to Unequip current weapon.\x1b[0m");
         } else {
             Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
         }
         while (true) {
             string input = Console.ReadLine();
             if (input == null || input == "") {
-                break;
+                break;     
             } else {
                 // Unequip possibility for monk.
                 if (input.ToUpper() == "X" && this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
@@ -492,14 +489,26 @@
     }
 
     private void CheckQuestsCompletion() {
-        // If player is in the city and the quest has not yet been completed
+        // Check for the "Go to Duskmire" quest completion
         if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
             this.NotifyQuestCompletion(this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])]);
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
-            //this.GivePlayerItems(this.Player, this.quests[0].Rewards);
             this.Player.Coins += 5;
         }
+
+        // Check for the "Web of Intrigue" quest completion
+        Quest webOfIntrigueQuest = this.Player.KnownQuests.Find(q => q.ID == 3);
+        if (webOfIntrigueQuest != null && !webOfIntrigueQuest.Completed) {
+            int spiderSilkCount = this.Player.Items.ContainsKey(items[8]) ? this.Player.Items[items[8]] : 0;
+            if (spiderSilkCount >= 3) {
+                this.NotifyQuestCompletion(webOfIntrigueQuest);
+                webOfIntrigueQuest.Completed = true;
+                this.Player.Coins += 5;
+                this.Player.Items[items[8]] -= 3; // Remove the spider silks used for the quest
+            }
+        }
     }
+
 
     private void ShowSpellBook() {
         Console.Clear();
