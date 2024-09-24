@@ -28,6 +28,36 @@ class ItemShop
             return;
         }
 
+        if (Player.CurrentLocation.ID == 2)
+        {
+            bool checkWebs = false;
+            bool checkBones = false;
+            foreach (KeyValuePair<Item, int> playerItem in Player.Items)
+            {
+                if (playerItem.Key.ID == 8 && Player.Items[playerItem.Key] == 3)
+                {
+                    checkWebs = true;
+                }
+
+                if (playerItem.Key.ID == 13 && Player.Items[playerItem.Key] == 3)
+                {
+                    checkBones = true;
+                }
+            }
+                
+                if (checkWebs is false || checkBones is false)
+                {
+                    Console.WriteLine("You don't have the required materials.");
+                    return;
+                }
+
+                if (checkWebs is true && checkBones is true)
+                {
+                    Player.Items[new(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 3;
+                    Player.Items[new(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 3;
+                }
+        }
+
         if (Player.Coins >= price)
         {
             if (Stock[item] != 0)
@@ -118,7 +148,7 @@ class ItemShop
         }
 
         Console.Clear();
-        Console.WriteLine("Welcome, take a look around.");
+        Console.WriteLine("Welcome, take a look around. I'll need three bones and three silk to forge a new weapon.");
 
         bool k = true;
         while (k)
