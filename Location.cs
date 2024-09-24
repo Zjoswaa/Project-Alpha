@@ -7,12 +7,14 @@ public class Location
     public Location? LocationToEast;
     public Location? LocationToSouth;
     public Location? LocationToWest;
+    public bool IsUnlocked;
 
-    public Location(int ID, string Name, string Description)
+    public Location(int ID, string Name, string Description, bool IsUnlocked)
     {
         this.ID = ID;
         this.Name = Name;
         this.Description = Description;
+        this.IsUnlocked = IsUnlocked;
     }
 
     // Dynamic compass that changes based on possible routes
@@ -71,6 +73,12 @@ public class Location
             }
 
             Location? newLocation = currentLocation?.GetLocationAt(userInput);
+            if (!newLocation.IsUnlocked) {
+                Console.Clear();
+                Console.WriteLine("This location is not yet available.");
+                Util.pressAnyKey();
+                return;
+            }
 
             if (userInput == "N" || userInput == "E" || userInput == "S" || userInput == "W") {
                 if (newLocation != null) {

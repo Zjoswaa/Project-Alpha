@@ -28,19 +28,18 @@ class ItemShop
             return;
         }
 
-<<<<<<< Updated upstream
         if (Player.CurrentLocation.ID == 2)
         {
             bool checkWebs = false;
             bool checkBones = false;
             foreach (KeyValuePair<Item, int> playerItem in Player.Items)
             {
-                if (playerItem.Key.ID == 8 && Player.Items[playerItem.Key] == 3)
+                if (playerItem.Key.ID == 8 && Player.Items[playerItem.Key] >= 5)
                 {
                     checkWebs = true;
                 }
 
-                if (playerItem.Key.ID == 13 && Player.Items[playerItem.Key] == 3)
+                if (playerItem.Key.ID == 13 && Player.Items[playerItem.Key] >= 5)
                 {
                     checkBones = true;
                 }
@@ -54,12 +53,10 @@ class ItemShop
 
                 if (checkWebs is true && checkBones is true)
                 {
-                    Player.Items[new(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 3;
-                    Player.Items[new(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 3;
+                    Player.Items[new(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 5;
+                    Player.Items[new(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 5;
                 }
         }
-=======
->>>>>>> Stashed changes
 
         if (Player.Coins >= price)
         {
