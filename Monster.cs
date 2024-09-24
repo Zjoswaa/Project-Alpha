@@ -25,7 +25,10 @@
         Random rand = new Random();
         if (player.IsDefending)
         {
-            damage = Math.Max(0, rand.Next(0, this.MaximumDamage) - rand.Next(0, player.ActiveWeapon.Defence));
+            damage = Math.Max(0, rand.Next(0, this.MaximumDamage));
+            if (player.ActiveWeapon != null) {
+                damage -= rand.Next(0, player.ActiveWeapon.Defence);
+            }
             player.IsDefending = false;
         }
         else 
