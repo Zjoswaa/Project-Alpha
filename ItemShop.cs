@@ -14,18 +14,48 @@ class ItemShop
     public void PurchaseItem(Item item, int price)
     {
         Console.Clear();
-        Console.WriteLine($"This product costs {price} gold coins. Purchase this item? (y/n)");
+        Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
         string purchaseInput = Console.ReadLine().ToLower();
         while (purchaseInput != "y" && purchaseInput != "n")
         {
             Console.WriteLine("Invalid input.");
-            Console.WriteLine($"This product costs {price} gold coins. Purchase this item? (y/n)");
+            Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
             purchaseInput = Console.ReadLine().ToLower();
         }
         if (purchaseInput == "n")
         {
             Console.Clear();
             return;
+        }
+
+        if (Player.CurrentLocation.ID == 2)
+        {
+            bool checkWebs = false;
+            bool checkBones = false;
+            foreach (KeyValuePair<Item, int> playerItem in Player.Items)
+            {
+                if (playerItem.Key.ID == 8 && Player.Items[playerItem.Key] >= 5)
+                {
+                    checkWebs = true;
+                }
+
+                if (playerItem.Key.ID == 13 && Player.Items[playerItem.Key] >= 5)
+                {
+                    checkBones = true;
+                }
+            }
+                
+                if (checkWebs is false || checkBones is false)
+                {
+                    Console.WriteLine("You don't have the required materials.");
+                    return;
+                }
+
+                if (checkWebs is true && checkBones is true)
+                {
+                    Player.Items[new(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 5;
+                    Player.Items[new(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 5;
+                }
         }
 
         if (Player.Coins >= price)
@@ -44,7 +74,7 @@ class ItemShop
                 }
                 Stock[item] -= 1;
                 Player.Coins -= price;
-                Console.WriteLine($"{item} has been added to your inventory.");
+                Console.WriteLine($"{item.Name} has been added to your inventory.");
             }
             else
             {
@@ -67,7 +97,7 @@ class ItemShop
 
         if (Stock is null)
         {
-            Stock = new Dictionary<Item, int>(){ {potion, 2}, {bigPotion, 2} };
+            Stock = new Dictionary<Item, int>(){ {potion, 10}, {bigPotion, 5} };
         }
 
         Console.Clear();
@@ -76,6 +106,7 @@ class ItemShop
         bool k = true;
         while (k)
         {
+            Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
             int itemNumber = 0;
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
@@ -118,11 +149,12 @@ class ItemShop
         }
 
         Console.Clear();
-        Console.WriteLine("Welcome, take a look around.");
+        Console.WriteLine("Welcome, take a look around. I'll need three bones and three silk to forge a new weapon.");
 
         bool k = true;
         while (k)
         {
+            Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
             int itemNumber = 0;
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
@@ -137,15 +169,35 @@ class ItemShop
             switch (userPurchase)
             {
                 case "1":
+                    if (this.Player.ClassName != "warrior") {
+                        Console.Clear();
+                        Console.WriteLine("You cannot purchase this weapon!");
+                        break;
+                    }
                     PurchaseItem(greatSword, 5);
                     break;
                 case "2":
+                    if (this.Player.ClassName != "archer") {
+                        Console.Clear();
+                        Console.WriteLine("You cannot purchase this weapon!");
+                        break;
+                    }
                     PurchaseItem(quickfireBow, 5);
                     break;
                 case "3":
+                    if (this.Player.ClassName != "sorcerer") {
+                        Console.Clear();
+                        Console.WriteLine("You cannot purchase this weapon!");
+                        break;
+                    }
                     PurchaseItem(noviceWand, 5);
                     break;
                 case "4":
+                    if (this.Player.ClassName != "rogue") {
+                        Console.Clear();
+                        Console.WriteLine("You cannot purchase this weapon!");
+                        break;
+                    }
                     PurchaseItem(steelDagger, 5);
                     break;
                 case "":

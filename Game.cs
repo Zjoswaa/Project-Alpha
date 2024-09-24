@@ -3,25 +3,28 @@
     private World World = new();
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { items[4], 5 } }),
-        new Quest(1, "Test", "Completed", "SIDE", null, true), // TODO: Remove
-        new Quest(2, "Test", "Not completed", "SIDE", null, false), // TODO: Remove
+        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(1, "Slaying monsters.", "Collect 5 spider silks by defeating spiders in Farmer's Meadows, and collect 5 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(3, "Testing your strength", "Talk to the military commander in the camp.", "MAIN", new Dictionary<Item, int>() { { new Item(14, "Key", "An old key, could this be used to unlock something?"), 5 } }),
     };
 
     private static List<Item> items = new() {
-        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10, 5),
+        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10000, 5),
         new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
         new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
         new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
         new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
-        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
-        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
+        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 10),
+        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 20),
         new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
         new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."),
         new Weapon(9, "Greatsword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7),
         new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4),
         new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5),
         new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1),
+        new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons."),
+        new Item(14, "Key", "An old key, could this be used to unlock something?")
     };
 
     private static ItemShop TownShop;
@@ -142,13 +145,11 @@
         Console.Clear();
     }
 
+
     private void start() {
         Player.AddQuest(quests[0]);
         Util.pressAnyKey();
-        this.Player.AskAddQuest(quests[1]);
-        Util.pressAnyKey();
-        this.Player.AskAddQuest(quests[2]);
-        Util.pressAnyKey();
+        
 
         while (true) {
             this.CheckQuestsCompletion();
@@ -180,7 +181,7 @@
         while (!choiceMade) {
             switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "1":
-                    this.Player = new Player(name, "warrior", 80, 7, 2, 1, 2);
+                    this.Player = new Player(name, "warrior", 1000, 7, 2, 1, 2);
                     Player.Items[items[0]] = 1;
                     choiceMade = true;
                     break;
@@ -277,7 +278,7 @@
         }
         if (this.Player.CurrentLocation.ID == 2)
         {
-            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Clerk's Shop");
+            Console.WriteLine("\x1b[1m\x1b[33m[E]\x1b[0m Enter Smith's Shop");
         }
         Console.WriteLine("\x1b[1m\x1b[33m[I]\x1b[0m Open inventory");
         Console.WriteLine("\x1b[1m\x1b[33m[M]\x1b[0m Show map");
@@ -287,6 +288,10 @@
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Slime");
         } else if (this.Player.CurrentLocation.ID == 6) {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Spider");
+        } else if (this.Player.CurrentLocation.ID == 7) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Skeleton");
+        } else if (this.Player.CurrentLocation.ID == 3) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Talk to military commander");
         }
         if (Player.ClassName == "sorcerer") {
             Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
@@ -344,9 +349,15 @@
                         this.GameOverCheck();
                     } else if (this.Player.CurrentLocation.ID == 6) { // Farmer's Meadows
                         choiceMade = true;
-                        this.Player.Fight(new Monster(0, "Spider", 40, 40, 8), null);
+                        this.Player.Fight(new Monster(1, "Spider", 30, 30, 10), null);
                         this.GameOverCheck();
-                    } else {
+                    } else if (this.Player.CurrentLocation.ID == 7) { // Farmhouse
+                        choiceMade = true;
+                        this.Player.Fight(new Monster(2, "Skeleton", 40, 40, 8), null);
+                        this.GameOverCheck();
+                    }
+                    
+                    else {
                         Console.WriteLine("Invalid input");
                         continue;
                     }
@@ -465,14 +476,14 @@
         Console.WriteLine();
         if (this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
             
-            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot. Press X to unequip current weapon.\x1b[0m");
+            Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot. Press X to Unequip current weapon.\x1b[0m");
         } else {
             Console.WriteLine("\x1B[36mPress enter to exit quest menu, input any number to switch that weapon to active slot.\x1b[0m");
         }
         while (true) {
             string input = Console.ReadLine();
             if (input == null || input == "") {
-                break;
+                break;     
             } else {
                 // Unequip possibility for monk.
                 if (input.ToUpper() == "X" && this.Player.ClassName == "monk" && this.Player.ActiveWeapon != null) {
@@ -504,14 +515,55 @@
     }
 
     private void CheckQuestsCompletion() {
-        // If player is in the city and the quest has not yet been completed
+        // Check for the "Go to Duskmire" quest completion
         if (this.Player.CurrentLocation == World.LocationByID(2) && !this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed) {
             this.NotifyQuestCompletion(this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])]);
             this.Player.KnownQuests[this.Player.KnownQuests.IndexOf(quests[0])].Completed = true;
-            //this.GivePlayerItems(this.Player, this.quests[0].Rewards);
             this.Player.Coins += 5;
+
+            // Zone unlock
+            World.Locations[7].IsUnlocked = true; // Farmer's Meadows
+            World.Locations[8].IsUnlocked = true; // Farmhouse
+
+            // Add next quest
+            this.Player.AddQuest(this.quests[1]);
+            Util.pressAnyKey();
+        }
+
+        // Check for the "Slaying monsters." quest completion
+        Quest slayingMonstersQuest = this.Player.KnownQuests.Find(q => q.ID == 1);
+        if (slayingMonstersQuest != null && !slayingMonstersQuest.Completed) {
+            int spiderSilkCount = this.Player.Items.ContainsKey(items[8]) ? this.Player.Items[items[8]] : 0;
+            int bonesCount = this.Player.Items.ContainsKey(items[13]) ? this.Player.Items[items[13]] : 0;
+            if (spiderSilkCount >= 5 && bonesCount >= 5) {
+                this.NotifyQuestCompletion(slayingMonstersQuest);
+                slayingMonstersQuest.Completed = true;
+                this.Player.Coins += 5;
+
+                // Add next quest
+                this.Player.AddQuest(quests[2]);
+                Util.pressAnyKey();
+            }
+        }
+
+        // Check for the "Gearing up!" quest completion
+        Quest gearingUpQuest = this.Player.KnownQuests.Find(q => q.ID == 2);
+        if (gearingUpQuest != null && !gearingUpQuest.Completed) {
+            if (this.Player.Items.ContainsKey(items[9]) || this.Player.Items.ContainsKey(items[10]) || this.Player.Items.ContainsKey(items[11]) || this.Player.Items.ContainsKey(items[12])) {
+                this.NotifyQuestCompletion(gearingUpQuest);
+                gearingUpQuest.Completed = true;
+                this.Player.Coins += 5;
+
+                // Zone unlock
+                World.Locations[2].IsUnlocked = true; // Military camp
+
+                // Add next quest
+                this.Player.AddQuest(quests[3]);
+                Util.pressAnyKey();
+            }
         }
     }
+
 
     private void ShowSpellBook() {
         Console.Clear();
@@ -547,5 +599,17 @@
             Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
         }
         Util.pressAnyKey();
+    }
+
+    private void MilitaryCommanderDialogue() {
+        Console.WriteLine("You approach the military commander.");
+        Util.pressAnyKey();
+        Console.WriteLine("\"So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass.\" He says.");
+        Console.WriteLine();
+        Console.WriteLine("*He cracks his knuckles and steps forward, sizing you up.*");
+        Util.pressAnyKey();
+        Console.WriteLine("\"Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!\"");
+        Util.pressAnyKey();
+        this.Player.Fight(new Monster(3, "Military Commander", 50, 50, 10), this.quests[3]);
     }
 }
