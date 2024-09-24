@@ -17,7 +17,11 @@
         new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5),
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10),
         new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
-        new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")
+        new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."),
+        new Weapon(9, "Greatsword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7),
+        new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4),
+        new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5),
+        new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1),
     };
 
     private static ItemShop TownShop;
@@ -211,7 +215,24 @@
         if (this.Player.ClassName == "monk") {
             this.Player.ActiveWeapon = null;
         } else {
-            this.Player.ActiveWeapon = (Weapon)Player.Items.ElementAt(0).Key;
+            List<Weapon> weapons = new(){};
+            foreach (KeyValuePair<Item, int> kvp in Player.Items)
+            {
+                if (kvp.Key is Weapon weapon)
+                {
+                    weapons.Add(weapon);
+                }
+            }
+
+            Weapon bestStat = new(99, "", "", 0, 0);
+            foreach(Weapon weapon in weapons)
+            {
+                if (weapon.MaxDamage > bestStat.MaxDamage)
+                {
+                    bestStat = weapon;
+                }
+            }
+            this.Player.ActiveWeapon = bestStat;
         }
 
         Console.Clear();
