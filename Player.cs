@@ -1,4 +1,5 @@
-﻿public class Player {
+﻿public class Player
+{
     public string Name { get; set; }
     public string ClassName { get; set; }
     public int HitPoints { get; set; }
@@ -18,7 +19,8 @@
     public Weapon ActiveWeapon { get; set; }
     public bool MilitaryCommanderBeaten { get; set; } = false;
 
-    public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma) {
+    public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma)
+    {
         this.Name = Name;
         this.ClassName = ClassName;
         this.HitPoints = HitPoints;
@@ -29,7 +31,8 @@
         this.Charisma = Charisma;
         this.Coins = 0;
 
-        if (ClassName == "sorcerer") {
+        if (ClassName == "sorcerer")
+        {
             Spells = new();
             Spells[new HealSpell(0, "Heal Spell", "A powerful spell that will heal the user.", 5, 10)] = 0;
         }
@@ -41,7 +44,8 @@
         }
     }
 
-    public void AddQuest(Quest Quest) {
+    public void AddQuest(Quest Quest)
+    {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("================================================================================================================================");
         Console.WriteLine("                                    ___                  _         _       _     _          _ ");
@@ -69,7 +73,8 @@
         }
     }
 
-    public void AskAddQuest(Quest Quest) {
+    public void AskAddQuest(Quest Quest)
+    {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Do you want to accept this quest (y/n):");
         Console.ResetColor();
@@ -80,27 +85,35 @@
         Console.Write("Description: ");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(Quest.Description);
-        if (Quest.Rewards != null) {
+        if (Quest.Rewards != null)
+        {
             Console.WriteLine("\x1B[0mRewards:");
-            foreach (KeyValuePair<Item, int> kvp in Quest.Rewards) {
+            foreach (KeyValuePair<Item, int> kvp in Quest.Rewards)
+            {
                 Console.WriteLine($" - {kvp.Value}x \x1B[90m{kvp.Key.Name}\x1B[0m");
             }
         }
 
-        while (true) {
+        while (true)
+        {
             string input = Console.ReadKey().KeyChar.ToString().ToUpper();
-            if (input == "Y") {
+            if (input == "Y")
+            {
                 this.KnownQuests.Add(Quest);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\nAdded Quest");
                 Console.ResetColor();
                 break;
-            } else if (input == "N") {
+            }
+            else if (input == "N")
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nDeclined Quest");
                 Console.ResetColor();
                 break;
-            } else {
+            }
+            else
+            {
                 continue;
             }
         }
@@ -115,11 +128,16 @@
         {
             Console.WriteLine($"Player \x1B[32mHP\x1B[0m: {this.HitPoints}");
             Console.WriteLine($"{monster.Name} \x1B[32mHP\x1B[0m: {monster.CurrentHitPoints}");
-            if (this.ClassName == "sorcerer") {
+            if (this.ClassName == "sorcerer")
+            {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) \x1b[96mOpen Spell book\x1b[0m");
-            } else if (this.ClassName == "monk") {
-                Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) Use Spirit"); 
-            } else {
+            }
+            else if (this.ClassName == "monk")
+            {
+                Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee (5) Use Spirit");
+            }
+            else
+            {
                 Console.WriteLine("Choose an action: (1) Attack (2) Defend (3) Use Consumable (4) Flee");
             }
             string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
@@ -136,7 +154,8 @@
                     inCombat = monster.Attack(this);
                     break;
                 case "3":
-                    if (!this.UseConsumable()) {
+                    if (!this.UseConsumable())
+                    {
                         Console.Clear();
                         continue;
                     }
@@ -155,13 +174,24 @@
                     }
                     break;
                 case "5":
-                    if (this.ClassName != "sorcerer") {
+                    if (this.ClassName != "sorcerer" && this.ClassName != "monk")
+                    {
                         //Console.WriteLine("Invalid choice.");
                         break;
-                    } else {
-                        if (!this.UseSpell()) {
-                            Console.Clear();
-                            continue;
+                    }
+                    else
+                    {
+                        if (this.ClassName == "sorcerer")
+                        {
+                            if (!this.UseSpell())
+                            {
+                                Console.Clear();
+                                continue;
+                            }
+                        }
+                        else if (this.ClassName == "monk")
+                        {
+                            this.UseSpirit();
                         }
                         inCombat = monster.Attack(this);
                         break;
@@ -171,10 +201,17 @@
                     break;
             }
             // Decrease spell cooldowns
-            if (this.ClassName == "sorcerer") {
-                foreach (KeyValuePair<Spell, int> kvp in this.Spells) {
+            if (this.ClassName == "sorcerer")
+            {
+                foreach (KeyValuePair<Spell, int> kvp in this.Spells)
+                {
                     this.Spells[kvp.Key] = Math.Max(0, this.Spells[kvp.Key] - 1);
                 }
+            }
+            // Decrease spirit cooldown
+            else if (this.ClassName == "monk")
+            { 
+                SpiritCooldown = Math.Max(0, this.SpiritCooldown - 1);
             }
         }
         Util.pressAnyKey();
@@ -192,7 +229,7 @@
             Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
             monster.CurrentHitPoints -= damage;
         }
-        
+
         else if (ActiveWeapon != null)
         {
             damage = rand.Next(ActiveWeapon.MaxDamage) + this.Strength;
@@ -222,9 +259,12 @@
             }
             // Monster kill reward
             int coinsGained = 0;
-            if (monster.Name == "Slime") {
+            if (monster.Name == "Slime")
+            {
                 coinsGained = rand.Next(1, 5);
-            } else if (monster.Name == "Spider") {
+            }
+            else if (monster.Name == "Spider")
+            {
                 coinsGained = rand.Next(3, 8);
                 Console.WriteLine("The spider dropped some silk.");
                 Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."), rand.Next(1, 3) } });
@@ -257,24 +297,32 @@
         Console.WriteLine(":");
         for (int i = 0; i < this.Items.Count; i++)
         {
-            if (this.Items.ElementAt(i).Key.IsConsumable) {
+            if (this.Items.ElementAt(i).Key.IsConsumable)
+            {
                 Console.WriteLine($"[{this.Items.ElementAt(i).Key.ID}] {this.Items.ElementAt(i).Key.Name} {this.Items.ElementAt(i).Value}x");
             }
         }
         Console.WriteLine("\x1B[36mPress enter to close, input any number to use that item\x1B[0m");
-        while (true) {
+        while (true)
+        {
             string input = Console.ReadLine();
-            if (input == null || input == "") {
+            if (input == null || input == "")
+            {
                 return false;
             }
-            if (!int.TryParse(input, out int Choice)) {
+            if (!int.TryParse(input, out int Choice))
+            {
                 Console.WriteLine("Invalid input");
                 continue;
             }
-            foreach (Object obj in this.Items.Keys) {
-                if (obj is Consumable) {
-                    if (((Consumable)obj).ID == Choice) {
-                        if (this.Items[((Consumable)obj)] == 0) {
+            foreach (Object obj in this.Items.Keys)
+            {
+                if (obj is Consumable)
+                {
+                    if (((Consumable)obj).ID == Choice)
+                    {
+                        if (this.Items[((Consumable)obj)] == 0)
+                        {
                             Console.WriteLine($"You don't have any {((Consumable)obj).Name}.");
                             continue;
                         }
@@ -291,29 +339,38 @@
         }
     }
 
-    private bool UseSpell() {
+    private bool UseSpell()
+    {
         Console.Clear();
         Console.Write($"{this.Name}'s ");
         Console.Write("\x1b[96mSpell book\x1b[0m");
         Console.WriteLine(":");
-        foreach (KeyValuePair<Spell, int> kvp in this.Spells) {
+        foreach (KeyValuePair<Spell, int> kvp in this.Spells)
+        {
             Console.WriteLine($"\x1b[1m\x1b[33m[{kvp.Key.ID}]\x1b[0m {kvp.Key.Name} \x1b[90m(Cooldown: {kvp.Value})\x1b[0m");
         }
         Console.WriteLine("\x1B[36mPress enter to close spell book, enter any number to use that spell.\x1B[0m");
-        
-        while (true) {
+
+        while (true)
+        {
             string input = Console.ReadLine();
-            if (input == null || input == "") {
+            if (input == null || input == "")
+            {
                 return false;
             }
-            if (!int.TryParse(input, out int Choice)) {
+            if (!int.TryParse(input, out int Choice))
+            {
                 Console.WriteLine("Invalid input");
                 continue;
             }
-            foreach (Object obj in this.Spells.Keys) {
-                if (obj is Spell) {
-                    if (((Spell)obj).ID == Choice) {
-                        if (this.Spells[((Spell)obj)] != 0) {
+            foreach (Object obj in this.Spells.Keys)
+            {
+                if (obj is Spell)
+                {
+                    if (((Spell)obj).ID == Choice)
+                    {
+                        if (this.Spells[((Spell)obj)] != 0)
+                        {
                             Console.WriteLine($"{((Spell)obj).Name} is on cooldown");
                             continue;
                         }
@@ -322,7 +379,8 @@
                         // Decrease item count by 1
                         this.Spells[((Spell)obj)] = ((Spell)obj).Cooldown;
                         // If it is a heal spell, heal the player
-                        if (obj is HealSpell) {
+                        if (obj is HealSpell)
+                        {
                             this.HitPoints = Math.Min(this.MaxHitPoints, this.HitPoints + ((HealSpell)obj).Heal);
                         }
                         return true;
@@ -330,6 +388,30 @@
                 }
             }
             Console.WriteLine("Invalid input");
+        }
+    }
+
+    public void UseSpirit() // spirit usage for monk class
+    {
+        //Console.Clear();
+        if (this.ClassName == "monk")
+        {
+            if (SpiritCooldown > 0)
+            {
+                Console.WriteLine("Spirit is on cooldown!");
+                return;
+            }
+            Random rand = new Random();
+            int Healing = rand.Next(1, 10); // random heal between 1 to 10
+            this.HitPoints += Healing;
+            if (this.HitPoints >= this.MaxHitPoints)
+            {
+                this.HitPoints = this.MaxHitPoints; // HP max
+            }
+
+            Console.WriteLine($"{this.Name} used Spirit to heal for {Healing} HP.");
+            SpiritCooldown = 3;
+            Util.pressAnyKey();
         }
     }
 }
