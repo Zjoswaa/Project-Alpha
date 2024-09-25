@@ -780,11 +780,17 @@ public class Game {
 
         int turns = 0;
         bool guessedCorrectly = false;
+        int playerGuess;
 
         while (turns < GuessCount) {
             Console.WriteLine($"\nTurn {turns + 1}/{GuessCount}");
             Console.Write($"Guess a number between {MinNumber} and {MaxNumber}: ");
-            int playerGuess = int.Parse(Console.ReadLine());
+            
+            if (!int.TryParse(Console.ReadLine(), out int output)) {
+                continue;
+            } else {
+                playerGuess = output;
+            }
 
             if (playerGuess == secretNumber) {
                 guessedCorrectly = true;
@@ -810,6 +816,7 @@ public class Game {
     }
 
     private void FinalBossFight() {
-        return;
+        Console.WriteLine("In the dim light of the throne room, you see a form standing. His form appearing as an old man wearing a mask.");
+        Console.ReadKey();
     }
 }
