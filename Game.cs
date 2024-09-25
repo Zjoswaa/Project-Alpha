@@ -710,33 +710,36 @@ public class Game {
 
     bool choiceMade = false;
     Random rand = new();
+    
     while (!choiceMade) {
+        Console.WriteLine("What do you want to do? (1: Bribe, 2: Fight, 3: Leave)");
         string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
         Console.WriteLine();
+
         switch (choice) {
             case "1":
                 if (this.Player.Coins < this.Player.BribePrice) {
                     Console.WriteLine("You don't have enough coins.");
                     Util.pressAnyKey();
-                    this.RoyalGuardText();
-                    continue;
+                    continue; // Prompt again for choice
                 }
+
                 Console.WriteLine("\x1b[33mGuard\x1b[0m: Incentive, you say? What do you have in mind?");
                 Console.WriteLine($"You give the guard {this.Player.BribePrice} gold.");
+
                 if (rand.Next(0, 11) > 6) {
                     // Success
                     this.Player.GuardPassed = true;
                     Console.WriteLine("\x1b[33mGuard\x1b[0m: You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.");
-                    choiceMade = true;
-                    break;
+                    choiceMade = true; // Exit the loop
                 } else {
                     // Failure
                     Console.WriteLine("\x1b[33mGuard\x1b[0m: Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?");
                     this.Player.BribePrice += 10;
                     Util.pressAnyKey();
-                    this.RoyalGuardText();
-                    continue;
                 }
+                break;
+
             case "2":
                 Console.Clear();
                 Console.WriteLine("The guard snorts, raising his weapon");
@@ -745,19 +748,23 @@ public class Game {
                 this.Player.Fight(new Monster(4, "Royal Guard", 60, 60, 12), this.quests[5]);
                 this.GameOverCheck();
                 this.Player.GuardPassed = true;
-                choiceMade = true;
+                choiceMade = true; // exit the loop
                 break;
+
             case "3":
-                choiceMade = true;
+                Console.WriteLine("You decide not to press your luck and turn back.");
+                choiceMade = true; // exit the loop
                 break;
+
             default:
-                Console.WriteLine("Invalid input");
+                Console.WriteLine("Invalid input, please choose again.");
                 break;
         }
-        this.RoyalGuardText();
     }
+
     Util.pressAnyKey();
 }
+
 
 
     private void UnlockLocation(Location Location) {
