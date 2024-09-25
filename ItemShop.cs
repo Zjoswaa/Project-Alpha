@@ -16,12 +16,20 @@ class ItemShop
     public void PurchaseItem(Item item, int price)
     {
         Console.Clear();
-        Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
+        if (item is Consumable) {
+            Console.WriteLine($"This product costs {price} gold coins. Purchase this item? (y/n)");
+        } else {
+            Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
+        }
         string purchaseInput = Console.ReadKey().KeyChar.ToString().ToLower();
         while (purchaseInput != "y" && purchaseInput != "n")
         {
             Console.WriteLine("Invalid input.");
-            Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
+            if (item is Consumable) {
+                Console.WriteLine($"This product costs {price} gold coins. Purchase this item? (y/n)");
+            } else {
+                Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
+            }
             purchaseInput = Console.ReadKey().KeyChar.ToString().ToLower();
         }
         if (purchaseInput == "n")
@@ -96,8 +104,8 @@ class ItemShop
     //Method that gets called to create the alchemist's shop
     public void AlchemistCatalog()
     {
-        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 5);
-        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 10);
+        Consumable potion = new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 15);
+        Consumable bigPotion = new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 30);
 
         if (Stock is null)
         {

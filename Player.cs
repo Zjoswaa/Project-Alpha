@@ -35,7 +35,7 @@
         this.Agility = Agility;
         this.Intelligence = Intelligence;
         this.Charisma = Charisma;
-        this.Coins = 1000;
+        this.Coins = 0;
 
         if (ClassName == "sorcerer")
         {
@@ -281,6 +281,8 @@
                 coinsGained = rand.Next(3, 8);
                 Console.WriteLine("The skeleton dropped some bones.");
                 Util.GivePlayerItems(this, new Dictionary<Item, int>() { { new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons."), rand.Next(1, 3) } });
+            } else if (monster.Name == "Royal Guard") {
+                coinsGained = rand.Next(20, 50);
             }
             Console.WriteLine($"You gained {coinsGained} coins.");
             this.Coins += coinsGained;
@@ -411,14 +413,13 @@
                 return;
             }
             Random rand = new Random();
-            int Healing = rand.Next(1, 10); // random heal between 1 to 10
-            this.HitPoints += Healing;
+            this.HitPoints += 20;
             if (this.HitPoints >= this.MaxHitPoints)
             {
                 this.HitPoints = this.MaxHitPoints; // HP max
             }
 
-            Console.WriteLine($"{this.Name} used Spirit to heal for {Healing} HP.");
+            Console.WriteLine($"{this.Name} used Spirit to heal for 20 HP.");
             SpiritCooldown = 3;
             Util.pressAnyKey();
         }

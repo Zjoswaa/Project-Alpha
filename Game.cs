@@ -5,7 +5,7 @@ public class Game {
     private World World = new();
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(0, "Go to Duskmire.", "The strange old man called Arachthos told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(1, "Slaying monsters.", "Collect 5 spider silks by defeating spiders in Farmer's Meadows, and collect 5 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(3, "A test of strength", "Talk to the military commander in the camp.", "MAIN", new Dictionary<Item, int>() { { new Item(14, "Key", "An old key, could this be used to unlock something?"), 1 } }),
@@ -15,19 +15,19 @@ public class Game {
     };
 
     private static List<Item> items = new() {
-        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 10000, 5),
-        new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 12, 2),
-        new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 15, 3),
-        new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 12, 1),
+        new Weapon(0, "Rusty Sword", "An old iron sword, it looks rusted.", 16, 5),
+        new Weapon(1, "Weak Bow", "An old bow, there are cracks showing in the wood.", 17, 2),
+        new Weapon(2, "Crooked Wand", "A wooden stick, there is a leaf growing out of it.", 18, 3),
+        new Weapon(3, "Brittle Dagger", "A small homemade dagger, it looks quite brittle.", 15, 3),
         new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."),
-        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 10),
-        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 20),
+        new Consumable(5, "Health Potion", "A refreshing potion that restores your health.", 15),
+        new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 30),
         new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
         new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."),
-        new Weapon(9, "Great sword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7),
-        new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4),
-        new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5),
-        new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1),
+        new Weapon(9, "Great sword", "A heavy, steel blade built to cut through armor with raw power.", 30, 7),
+        new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 27, 4),
+        new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 28, 5),
+        new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 25, 5),
         new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons."),
         new Item(14, "Key", "An old key, could this be used to unlock something?")
     };
@@ -38,7 +38,7 @@ public class Game {
     public Game() {
         this.welcome();
         this.createPlayer();
-        //this.intro();
+        this.intro();
         this.start();
     }
 
@@ -176,37 +176,37 @@ public class Game {
         Console.WriteLine();
         Console.ResetColor();
         Console.WriteLine("\t\tHP\tSTR\tAGI\tINT\tCHA");
-        Console.WriteLine("1: \x1B[91mWarrior\x1B[0m\t80\t7\t2\t3\t2");
-        Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t5\t2");
-        Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
-        Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t6\t5");
-        Console.WriteLine("5: \x1B[35mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
+        Console.WriteLine("1: \x1B[91mWarrior\x1B[0m\t100\t15\t10\t5\t8");
+        Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t70\t8\t15\t10\t10");
+        Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t60\t5\t8\t18\t14");
+        Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t80\t10\t16\t8\t12");
+        Console.WriteLine("5: \x1B[35mMonk\t\x1B[0m\t75\t10\t14\t8\t16");
 
         bool choiceMade = false;
         while (!choiceMade) {
             switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "1":
-                    this.Player = new Player(name, "warrior", 1000, 7, 2, 10, 2);
+                    this.Player = new Player(name, "warrior", 100, 15, 10, 5, 8);
                     Player.Items[items[0]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
-                    this.Player = new Player(name, "archer", 40, 3, 9, 5, 2);
+                    this.Player = new Player(name, "archer", 70, 8, 15, 10, 10);
                     Player.Items[items[1]] = 1;
                     choiceMade = true;
                     break;
                 case "3":
-                    this.Player = new Player(name, "sorcerer", 20, 1, 3, 10, 4);
+                    this.Player = new Player(name, "sorcerer", 60, 5, 8, 18, 14);
                     Player.Items[items[2]] = 1;
                     choiceMade = true;
                     break;
                 case "4":
-                    this.Player = new Player(name, "rogue", 40, 3, 7, 6, 5);
+                    this.Player = new Player(name, "rogue", 80, 10, 16, 8, 12);
                     Player.Items[items[3]] = 1;
                     choiceMade = true;
                     break;
                 case "5":
-                    this.Player = new Player(name, "monk", 400, 8, 8, 4, 4);
+                    this.Player = new Player(name, "monk", 75, 10, 14, 8, 16);
                      // Starter weapon is given to the monk, just not equipped yet.
                     Player.Items[items[7]] = 1;
                     choiceMade = true;
@@ -355,7 +355,7 @@ public class Game {
                         this.MilitaryCommanderDialogue();
                     } else if (this.Player.CurrentLocation.ID == 5) { // Prison
                         choiceMade = true;
-                        this.HigherLowerGame(1, 30 - this.Player.Intelligence, this.Player.Intelligence);
+                        this.HigherLowerGame(1, 30 - this.Player.Intelligence, this.Player.Intelligence / 2);
                     } else if (this.Player.CurrentLocation.ID == 8 && !this.Player.GuardPassed) {
                         choiceMade = true;
                         this.RoyalGuardDialogue();
@@ -661,29 +661,29 @@ public class Game {
         Util.pressAnyKey();
     
         if (!this.Player.MilitaryCommanderBeaten) {
-            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass. He says.");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass.\"");
             Console.WriteLine();
             Console.WriteLine("*He cracks his knuckles and steps forward, sizing you up.*");
             Util.pressAnyKey();
-            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!\"");
         } else {
-            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: You have already beaten me in battle before. But I am always up for a fight, show me what you've got! He says");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"You have already beaten me in battle before. But I am always up for a fight, show me what you've got!\"");
         }
         Util.pressAnyKey();
 
-        this.Player.Fight(new Monster(3, "Military Commander", 50, 50, 10), this.quests[3]);
+        this.Player.Fight(new Monster(3, "Military Commander", 120, 120, 15), this.quests[3]);
         this.GameOverCheck();
 
         Console.Clear();
         Console.WriteLine("*Coughing and out of breath*");
-        Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: Impressive... I didn't think you'd have it in you. Few can best me in a fight.");
+        Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"Impressive... I didn't think you'd have it in you. Few can best me in a fight.\"");
 
         if (!this.Player.MilitaryCommanderBeaten)
         {
             Util.pressAnyKey();
             Console.WriteLine("*He stands up slowly, wiping blood from his lip.*");
             Console.WriteLine(
-                "\x1b[91m\x1b[1mCommander\x1b[0m: You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.");
+                "\x1b[91m\x1b[1mCommander\x1b[0m: \"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
         }
 
 
@@ -699,73 +699,81 @@ public class Game {
         Console.WriteLine($"[3] *Try to talk your way past the guard* \x1b[93m({this.Player.Charisma} Charisma)\x1b[0m");
     }
 
-   private void RoyalGuardDialogue() {
-    Console.Clear();
-    Console.WriteLine("You enter the king's pass.");
-    Console.WriteLine("You notice an armored guard standing in front of a big gate.");
-    Util.pressAnyKey();
-    Console.WriteLine("\x1b[33mGuard\x1b[0m: Stay right there! You're not allowed in. Only those with royal permission may pass these gates.");
-    Console.WriteLine();
-    this.RoyalGuardText();
-
-    bool choiceMade = false;
-    Random rand = new();
-    
-    while (!choiceMade) {
-        Console.WriteLine("What do you want to do? (1: Bribe, 2: Fight, 3: Leave)");
-        string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
+    private void RoyalGuardDialogue() {
+        Console.Clear();
+        Console.WriteLine("You enter the king's pass.");
+        Console.WriteLine("You notice an armored guard standing in front of a big gate.");
+        Util.pressAnyKey();
+        Console.WriteLine("\x1b[33mGuard\x1b[0m: Stay right there! You're not allowed in. Only those with royal permission may pass these gates.");
         Console.WriteLine();
+        this.RoyalGuardText();
 
-        switch (choice) {
-            case "1":
-                if (this.Player.Coins < this.Player.BribePrice) {
-                    Console.WriteLine("You don't have enough coins.");
+        bool choiceMade = false;
+        Random rand = new();
+
+        while (!choiceMade) {
+            Console.WriteLine("What do you want to do? (1: Bribe, 2: Fight, 3: Leave)");
+            //this.RoyalGuardText();
+            string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
+            Console.WriteLine();
+
+            switch (choice) {
+                case "1":
+                    if (this.Player.Coins < this.Player.BribePrice) {
+                        Console.WriteLine("You don't have enough coins.");
+                        Util.pressAnyKey();
+                        continue; // Prompt again for choice
+                    }
+
+                    Console.WriteLine("\x1b[33mGuard\x1b[0m: Incentive, you say? What do you have in mind?");
+                    Console.WriteLine($"You give the guard {this.Player.BribePrice} gold.");
+
+                    if (rand.Next(0, 11) > 6) {
+                        // Success
+                        this.Player.GuardPassed = true;
+                        Console.WriteLine("\x1b[33mGuard\x1b[0m: You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.");
+                        choiceMade = true; // Exit the loop
+                    } else {
+                        // Failure
+                        Console.WriteLine("\x1b[33mGuard\x1b[0m: Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?");
+                        this.Player.BribePrice += 10;
+                        Util.pressAnyKey();
+                    }
+                    break;
+
+                case "2":
+                    Console.Clear();
+                    Console.WriteLine("The guard snorts, raising his weapon");
+                    Console.WriteLine("\x1b[33mGuard\x1b[0m: Bold words. Let's see if your bravado matches your skill. En garde!");
                     Util.pressAnyKey();
-                    continue; // Prompt again for choice
-                }
-
-                Console.WriteLine("\x1b[33mGuard\x1b[0m: Incentive, you say? What do you have in mind?");
-                Console.WriteLine($"You give the guard {this.Player.BribePrice} gold.");
-
-                if (rand.Next(0, 11) > 6) {
-                    // Success
+                    this.Player.Fight(new Monster(4, "Royal Guard", 140, 140, 17), this.quests[5]);
+                    this.GameOverCheck();
                     this.Player.GuardPassed = true;
-                    Console.WriteLine("\x1b[33mGuard\x1b[0m: You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.");
-                    choiceMade = true; // Exit the loop
-                } else {
-                    // Failure
-                    Console.WriteLine("\x1b[33mGuard\x1b[0m: Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?");
-                    this.Player.BribePrice += 10;
-                    Util.pressAnyKey();
-                }
-                break;
+                    choiceMade = true; // exit the loop
+                    break;
 
-            case "2":
-                Console.Clear();
-                Console.WriteLine("The guard snorts, raising his weapon");
-                Console.WriteLine("\x1b[33mGuard\x1b[0m: Bold words. Let's see if your bravado matches your skill. En garde!");
-                Util.pressAnyKey();
-                this.Player.Fight(new Monster(4, "Royal Guard", 60, 60, 12), this.quests[5]);
-                this.GameOverCheck();
-                this.Player.GuardPassed = true;
-                choiceMade = true; // exit the loop
-                break;
+                case "3":
+                    Console.Clear();
+                    if (rand.Next(0, 20) < this.Player.Charisma) {
+                        Console.WriteLine("Your tricks don't work on the guard. Prepare to fight");
+                        Util.pressAnyKey();
+                        this.Player.Fight(new Monster(4, "Royal Guard", 140, 140, 17), this.quests[5]);
+                        this.GameOverCheck();
+                        this.Player.GuardPassed = true;
+                    } else {
+                        Console.WriteLine("You deceive the guard, he lets you pass.");
+                        this.Player.GuardPassed = true;
+                    }
+                    choiceMade = true;
+                    break;
 
-            case "3":
-                Console.WriteLine("You decide not to press your luck and turn back.");
-                choiceMade = true; // exit the loop
-                break;
-
-            default:
-                Console.WriteLine("Invalid input, please choose again.");
-                break;
+                default:
+                    Console.WriteLine("Invalid input, please choose again.");
+                    break;
+            }
         }
+        Util.pressAnyKey();
     }
-
-    Util.pressAnyKey();
-}
-
-
 
     private void UnlockLocation(Location Location) {
         Location.IsUnlocked = true;
@@ -829,6 +837,7 @@ public class Game {
     }
 
     private void FinalBossFight() {
+        Console.Clear();
         Console.WriteLine("In the dim light of the throne room, you see a form standing. His form appearing as an old man wearing a mask.");
         Console.ReadKey();
         Console.WriteLine();
@@ -850,28 +859,96 @@ public class Game {
         Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"You're the villain behind all this! You've used innocent lives for your own gain!\"");
         Console.ReadKey();
         Console.WriteLine();
-        Console.WriteLine("Arachthos straightens, his old form beginning to shimmer ominously");
         Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Innocence is a luxury this world can no longer afford. You’ve shown strength, yes, but you lack vision. You should thank me for your trials; they've made you stronger, haven't they?\"");
+        Console.WriteLine();
+        Console.WriteLine("*He straightens, his old form beginning to shimmer ominously*");
         Console.ReadKey();
         Console.WriteLine();
         Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"I'll never join you! I'll put an end to your plans!\"");
         Console.ReadKey();
         Console.WriteLine();
-        Console.WriteLine("Arachthos' voice blooms, the illusion of age fades as he transforms into a towering skeleton-spider hybrid");
         Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Foolish child! You think you can defy your destiny? This kingdom will fall, and I will rise from its ashes!\"");
+        Console.WriteLine();
+        Console.WriteLine("*His voice blooms, the illusion of age fades as he transforms into a towering skeleton-spider hybrid*");
         Console.ReadKey();
         Console.WriteLine();
         Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"What are you?!\"");
         Console.ReadKey();
         Console.WriteLine();
-        Console.WriteLine("Arachthos snarls, revealing sharp fangs and glistening legs");
         Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"I am the darkness incarnate, and soon you will feel the true power of my creation! Prepare yourself!\"");
+        Console.WriteLine();
+        Console.WriteLine("*He snarls, revealing sharp fangs and glistening legs*");
         Console.ReadKey();
         Console.WriteLine();
         Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"I'll stop you here and now!\"");
         Console.ReadKey();
         Console.WriteLine();
-        Console.WriteLine("Arachthos' skeletal form twists into a battle stance, limbs poised to strike");
         Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Then come! Let us see if you are worthy of your own legend. Show me the strength you've gained from my trials, and let us finally settle the score!\"");
+        Console.WriteLine();
+        Console.WriteLine("*His skeletal form twists into a battle stance, limbs poised to strike*");
+        Util.pressAnyKey();
+
+        this.Player.Fight(new Monster(6, "Arachthos", 60, 70, 12), null);
+        this.GameOverCheck();
+
+        Console.Clear();
+        Console.WriteLine("Arachthos staggers slightly, then straightens up with a chilling grin. The shadows around him deepen, and his form begins to shift into something more monstrous.");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Impressive, but you've only scratched the surface of my true power. You think you can defeat me so easily? I am the darkness that dwells in the hearts of men, and I will rise from the ashes of your folly! Prepare yourself; the real fight begins now!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("With a flick of his wrist, a surge of dark energy envelops him, boosting his strength as he prepares to unleash a more powerful attack.");
+        Util.pressAnyKey();
+
+        this.Player.Fight(new Monster(7, "Arachthos", 200, 200, 15), null);
+        this.GameOverCheck();
+
+        Console.Clear();
+        Console.WriteLine("Gasping for breath, Arachthos stumbles and falls to his knees.");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"I... underestimated you... But this... isn't over... The darkness... always returns...\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("With a final, rasping breath, Arachthos collapses, his form dissolving into shadows.");
+        Util.pressAnyKey();
+
+        // Game beat
+        this.GameFinishedScreen();
+    }
+
+    private void GameFinishedScreen() {
+        Console.Clear();
+        Console.WriteLine("                                                                                                   |\\      _,,,---,,_");
+        Console.WriteLine("                                                                                             ZZZzz /,`.-'`'    -.  ;-;;,_");
+        Console.WriteLine("                                                                                                  |,4-  ) )-,_. ,\\ (  `'-'");
+        Console.WriteLine("                                                                                                 '---''(_/--'  `-'\\_)  Eep well");
+        Console.WriteLine("================================================================================================================================");
+        Console.WriteLine("         ▄████  ▄▄▄       ███▄ ▄███▓▓█████        ▄████▄   ▒█████   ███▄ ▄███▓ ██▓███   ██▓    ▓█████▄▄▄█████▓▓█████ ");
+        Console.WriteLine("        ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀       ▒██▀ ▀█  ▒██▒  ██▒▓██▒▀█▀ ██▒▓██░  ██▒▓██▒    ▓█   ▀▓  ██▒ ▓▒▓█   ▀ ");
+        Console.WriteLine("       ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███         ▒▓█    ▄ ▒██░  ██▒▓██    ▓██░▓██░ ██▓▒▒██░    ▒███  ▒ ▓██░ ▒░▒███   ");
+        Console.WriteLine("       ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄       ▒▓▓▄ ▄██▒▒██   ██░▒██    ▒██ ▒██▄█▓▒ ▒▒██░    ▒▓█  ▄░ ▓██▓ ░ ▒▓█  ▄ ");
+        Console.WriteLine("       ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒      ▒ ▓███▀ ░░ ████▓▒░▒██▒   ░██▒▒██▒ ░  ░░██████▒░▒████▒ ▒██▒ ░ ░▒████▒");
+        Console.WriteLine("        ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░      ░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░   ░  ░▒▓▒░ ░  ░░ ▒░▓  ░░░ ▒░ ░ ▒ ░░   ░░ ▒░ ░");
+        Console.WriteLine("         ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░        ░  ▒     ░ ▒ ▒░ ░  ░      ░░▒ ░     ░ ░ ▒  ░ ░ ░  ░   ░     ░ ░  ░");
+        Console.WriteLine("       ░ ░   ░   ░   ▒   ░      ░      ░         ░        ░ ░ ░ ▒  ░      ░   ░░         ░ ░      ░    ░         ░   ");
+        Console.WriteLine("             ░       ░  ░       ░      ░  ░      ░ ░          ░ ░         ░                ░  ░   ░  ░           ░  ░");
+        Console.WriteLine("                                                 ░                                                                   ");
+        Console.WriteLine("================================================================================================================================");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("\x1b[36mWispers of the Web\x1b[0m");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("A game made by:");
+        Console.WriteLine("\u001b[94m- Tom van Genderen");
+        Console.WriteLine("\u001b[92m- Badr Jaroui");
+        Console.WriteLine("\u001b[95m- Sogaand Momayez");
+        Console.WriteLine("\u001b[93m- Joshua van der Jagt\x1b[0m");
+        Console.WriteLine();
+        Console.WriteLine();
+        Util.pressAnyKey("Thanks for playing :D");
+        System.Environment.Exit(0);
     }
 }
