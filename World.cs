@@ -24,7 +24,7 @@ public class World
         Location townSquare = new Location(2, "Duskmire Town", "The square hums with quiet activity, its worn cobblestones and weathered fountain whispering of old secrets. The air feels still, yet welcoming.", true);
         Location militarycamp = new Location(3, "Military Camp", "Rows of weathered tents stand in grim silence, you smell the scent of iron and sweat. Every movement feels watched, every command echoing through the stillness.", false);
         Location alchemisthut = new Location(4, "Alchemist's Hut", "Strange herbs hang from the rafters, and the air is thick with the scent of potions brewing. Mysterious symbols cover the walls, glowing faintly in the dim light.", true);
-        Location torturechambers = new Location(5, "Torture Chambers", "The cold, damp walls echo with distant screams. Rusted chains dangle from the ceiling, and the air is heavy with the stench of fear and decay.", false);
+        Location prison = new Location(5, "Prison", "The cold, damp walls echo with distant screams. Rusted chains dangle from the ceiling, and the air is heavy with the stench of fear and decay.", false);
         Location farmermedows = new Location(6, "Farmer's Meadows", "Rolling fields stretch under a soft, golden sun. The gentle breeze carries the scent of wildflowers and fresh earth, a place of quiet, simple life.", false);
         Location farmhouse = new Location(7, "Farmhouse", "A cozy, sunlit home with smoke curling from the chimney. Its wooden walls are weathered but welcoming, surrounded by neat gardens and the distant hum of farm life.", false);
         Location kingsPass = new Location(8, "King's Pass", "A narrow, winding corridor through jagged mountains, its towering cliffs etched with ancient runes. The path is shrouded in mist, with echoes of history whispering through the stone.", false);
@@ -43,8 +43,8 @@ public class World
         militarycamp.LocationToWest = townSquare;
         militarycamp.LocationToNorth = kingsPass;
         kingsPass.LocationToSouth = militarycamp;
-        militarycamp.LocationToEast = torturechambers;
-        torturechambers.LocationToWest = militarycamp;
+        militarycamp.LocationToEast = prison;
+        prison.LocationToWest = militarycamp;
         townSquare.LocationToWest = farmermedows;
         farmermedows.LocationToEast = townSquare;
         farmermedows.LocationToWest = farmhouse;
@@ -57,7 +57,7 @@ public class World
         Locations.Add(alchemisthut);
         Locations.Add(kingsPass);
         Locations.Add(kings_castle);
-        Locations.Add(torturechambers);
+        Locations.Add(prison);
         Locations.Add(farmermedows);
         Locations.Add(farmhouse);
     }
@@ -92,13 +92,13 @@ public class World
                                                                |                         |
                                                                |                         |
 +----------------------+  +----------------------+  +----------------------+  +----------------------+  +----------------------+
-|      {(CurrentLocation.ID == 7 ? "\x1b[1m\x1b[35mFarmhouse\x1b[0m" : "Farmhouse")}       |--|   {(CurrentLocation.ID == 6 ? "\x1b[1m\x1b[35mFarmer's Meadows\x1b[0m" : "Farmer's Meadows")}   |--|    {(CurrentLocation.ID == 2 ? "\x1b[1m\x1b[35mDuskmire Town\x1b[0m" : "Duskmire Town")}     |--|     {(CurrentLocation.ID == 3 ? "\x1b[1m\x1b[35mMilitary Camp\x1b[0m" : "Military Camp")}    |--|   {(CurrentLocation.ID == 5 ? "\x1b[1m\x1b[35mTorture Chambers\x1b[0m" : "Torture Chambers")}   |
+|      {(CurrentLocation.ID == 7 ? "\x1b[1m\x1b[35mFarmhouse\x1b[0m" : "Farmhouse")}       |--|   {(CurrentLocation.ID == 6 ? "\x1b[1m\x1b[35mFarmer's Meadows\x1b[0m" : "Farmer's Meadows")}   |--|    {(CurrentLocation.ID == 2 ? "\x1b[1m\x1b[35mDuskmire Town\x1b[0m" : "Duskmire Town")}     |--|     {(CurrentLocation.ID == 3 ? "\x1b[1m\x1b[35mMilitary Camp\x1b[0m" : "Military Camp")}    |--|        {(CurrentLocation.ID == 5 ? "\x1b[1m\x1b[35mPrison\x1b[0m" : "Prison")}        |
 +----------------------+  +----------------------+  +----------------------+  +----------------------+  +----------------------+
                                                                |
                                                                |
                                                                |
                                                     +----------------------+
-                                                    |        {(CurrentLocation.ID == 1 ? "\x1b[1m\x1b[35mForest\x1b[0m" : "Forest")}        |
+                                                    |        {(CurrentLocation.ID == 1 ? "\x1b[1m\x1b[35m??Forest\x1b[0m" : "Forest")}        |
                                                     +----------------------+
 ";
 
