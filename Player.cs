@@ -35,7 +35,7 @@
         this.Agility = Agility;
         this.Intelligence = Intelligence;
         this.Charisma = Charisma;
-        this.Coins = 0;
+        this.Coins = 1000;
 
         if (ClassName == "sorcerer")
         {

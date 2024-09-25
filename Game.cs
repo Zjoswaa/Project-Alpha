@@ -824,5 +824,47 @@ public class Game {
     private void FinalBossFight() {
         Console.WriteLine("In the dim light of the throne room, you see a form standing. His form appearing as an old man wearing a mask.");
         Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Ah, so you've finally made it here. I expected nothing less from someone who has clawed their way through my little games.\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"What are you talking about? Who are you, really?\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"You still don't see it, do you? I am Arachthos, the architect of the chaos that has plagued this land. You’ve played right into my hands, thinking you were on a noble quest.\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"What do you mean? What's your goal?\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"This kingdom is ripe for change, and I intend to be the one to bring it. You were merely a pawn in my grand design, a tool to test the strength of those who dare to challenge me.\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"You're the villain behind all this! You've used innocent lives for your own gain!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("Arachthos straightens, his old form beginning to shimmer ominously");
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Innocence is a luxury this world can no longer afford. You’ve shown strength, yes, but you lack vision. You should thank me for your trials; they've made you stronger, haven't they?\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"I'll never join you! I'll put an end to your plans!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("Arachthos' voice blooms, the illusion of age fades as he transforms into a towering skeleton-spider hybrid");
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Foolish child! You think you can defy your destiny? This kingdom will fall, and I will rise from its ashes!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"What are you?!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("Arachthos snarls, revealing sharp fangs and glistening legs");
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"I am the darkness incarnate, and soon you will feel the true power of my creation! Prepare yourself!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine($"\x1b[1m\x1b[93m{this.Player.Name}:\x1b[0m \"I'll stop you here and now!\"");
+        Console.ReadKey();
+        Console.WriteLine();
+        Console.WriteLine("Arachthos' skeletal form twists into a battle stance, limbs poised to strike");
+        Console.WriteLine("\x1b[1m\x1b[31mArachthos:\x1b[0m \"Then come! Let us see if you are worthy of your own legend. Show me the strength you've gained from my trials, and let us finally settle the score!\"");
     }
 }
