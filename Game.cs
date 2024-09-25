@@ -216,24 +216,7 @@
         if (this.Player.ClassName == "monk") {
             this.Player.ActiveWeapon = null;
         } else {
-            List<Weapon> weapons = new(){};
-            foreach (KeyValuePair<Item, int> kvp in Player.Items)
-            {
-                if (kvp.Key is Weapon weapon)
-                {
-                    weapons.Add(weapon);
-                }
-            }
-
-            Weapon bestStat = new(99, "", "", 0, 0);
-            foreach(Weapon weapon in weapons)
-            {
-                if (weapon.MaxDamage > bestStat.MaxDamage)
-                {
-                    bestStat = weapon;
-                }
-            }
-            this.Player.ActiveWeapon = bestStat;
+            this.Player.ActiveWeapon = (Weapon)this.Player.Items.ElementAt(0).Key;
         }
 
         Console.Clear();
@@ -522,8 +505,8 @@
             this.Player.Coins += 5;
 
             // Zone unlock
-            World.Locations[7].IsUnlocked = true; // Farmer's Meadows
-            World.Locations[8].IsUnlocked = true; // Farmhouse
+            this.UnlockLocation(World.Locations[7]); // Farmer's Meadows
+            this.UnlockLocation(World.Locations[8]); // Farmhouse
 
             // Add next quest
             this.Player.AddQuest(this.quests[1]);
@@ -555,12 +538,21 @@
                 this.Player.Coins += 5;
 
                 // Zone unlock
-                World.Locations[2].IsUnlocked = true; // Military camp
+                this.UnlockLocation(World.Locations[2]); // Military camp
 
                 // Add next quest
                 this.Player.AddQuest(quests[3]);
                 Util.pressAnyKey();
             }
+        }
+
+        // Check for the "Testing your strength" quest completion
+        Quest TestingYourStrengthQuest = this.Player.KnownQuests.Find(q => q.ID == 3);
+        if (TestingYourStrengthQuest != null && !TestingYourStrengthQuest.Completed) {
+            TestingYourStrengthQuest.Completed = true;
+
+            // Zone unlock
+            this.UnlockLocation(World.Locations[6]); // Prison
         }
     }
 
@@ -611,6 +603,36 @@
         Util.pressAnyKey();
         Console.WriteLine("\"Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!\"");
         Util.pressAnyKey();
+
         this.Player.Fight(new Monster(3, "Military Commander", 50, 50, 10), this.quests[3]);
+        this.GameOverCheck();
+        this.Player.MilitaryCommanderBeaten = true;
+
+        Console.Clear();
+        Console.WriteLine("*Coughing and out of breath*");
+        Console.WriteLine("\"Impressive... I didn't think you'd have it in you. Few can best me in a fight.\"");
+        Util.pressAnyKey();
+        Console.WriteLine("*He stands up slowly, wiping blood from his lip.*");
+        Console.WriteLine("\"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
+        Util.pressAnyKey();
+    }
+
+    private void UnlockLocation(Location Location) {
+        Location.IsUnlocked = true;
+        Console.Clear();
+        Console.WriteLine("\x1b[33m================================================================================================================================");
+        Console.WriteLine("     _                      _   _       _            _            _ ");
+        Console.WriteLine("    / \\   _ __ ___  __ _   | | | |_ __ | | ___   ___| | _____  __| |");
+        Console.WriteLine("   / _ \\ | '__/ _ \\/ _` |  | | | | '_ \\| |/ _ \\ / __| |/ / _ \\/ _` |");
+        Console.WriteLine("  / ___ \\| | |  __/ (_| |  | |_| | | | | | (_) | (__|   <  __/ (_| |");
+        Console.WriteLine(" /_/   \\_\\_|  \\___|\\__,_|   \\___/|_| |_|_|\\___/ \\___|_|\\_\\___|\\__,_|");
+        Console.WriteLine("                                                                    ");
+        Console.WriteLine("================================================================================================================================\x1B[0m");
+        Console.WriteLine();
+        Console.Write("Name: ");
+        Console.WriteLine($"\x1b[32m{Location.Name}\x1b[0m");
+        Console.Write("Description: ");
+        Console.WriteLine($"\x1b[90m{Location.Description}\x1b[0m");
+        Util.pressAnyKey();
     }
 }
