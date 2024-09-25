@@ -98,7 +98,7 @@ public class World
                                                                |
                                                                |
                                                     +----------------------+
-                                                    |        {(CurrentLocation.ID == 1 ? "\x1b[1m\x1b[35m??Forest\x1b[0m" : "Forest")}        |
+                                                    |        {(CurrentLocation.ID == 1 ? "\x1b[1m\x1b[35mForest\x1b[0m" : "Forest")}        |
                                                     +----------------------+
 ";
 

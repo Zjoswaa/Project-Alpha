@@ -74,7 +74,9 @@ class ItemShop
                 }
                 Stock[item] -= 1;
                 Player.Coins -= price;
-                Console.WriteLine($"{item.Name} has been added to your inventory.");
+                Console.Clear();
+                Console.WriteLine($"\x1b[1m\x1b[93m{item.Name} has been added to your inventory.\x1b[0m");
+                Console.WriteLine();
             }
             else
             {
@@ -97,7 +99,7 @@ class ItemShop
 
         if (Stock is null)
         {
-            Stock = new Dictionary<Item, int>(){ {potion, 10}, {bigPotion, 5} };
+            Stock = new Dictionary<Item, int>(){ {potion, 20}, {bigPotion, 10} };
         }
 
         Console.Clear();
@@ -149,7 +151,7 @@ class ItemShop
         }
 
         Console.Clear();
-        Console.WriteLine("Welcome, take a look around. I'll need three bones and three silk to forge a new weapon.");
+        Console.WriteLine("Welcome, take a look around. I'll need five bones and five silk to forge a new weapon.");
 
         bool k = true;
         while (k)
