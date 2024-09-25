@@ -40,7 +40,7 @@
         if (ClassName == "sorcerer")
         {
             Spells = new();
-            Spells[new HealSpell(0, "Heal Spell", "A powerful spell that will heal the user.", 5, 10)] = 0;
+            Spells[new HealSpell(0, "Heal Spell", "A powerful spell that will heal the user.", 5, 25)] = 0;
         }
 
         if (ClassName == "monk")
