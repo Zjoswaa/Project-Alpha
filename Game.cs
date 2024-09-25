@@ -1,4 +1,6 @@
-﻿public class Game {
+﻿using System.Numerics;
+
+public class Game {
     private Player Player = null;
     private World World = new();
 
@@ -6,7 +8,9 @@
         new Quest(0, "Go to Duskmire.", "The strange old man told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(1, "Slaying monsters.", "Collect 5 spider silks by defeating spiders in Farmer's Meadows, and collect 5 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
-        new Quest(3, "Testing your strength", "Talk to the military commander in the camp.", "MAIN", new Dictionary<Item, int>() { { new Item(14, "Key", "An old key, could this be used to unlock something?"), 5 } }),
+        new Quest(3, "A test of strength", "Talk to the military commander in the camp.", "MAIN", new Dictionary<Item, int>() { { new Item(14, "Key", "An old key, could this be used to unlock something?"), 1 } }),
+        new Quest(4, "Enigma", "Go to the prison and crack the code.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 10 } }),
+        new Quest(5, "Answers", "Go to the King's Pass.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 10 } }),
     };
 
     private static List<Item> items = new() {
@@ -171,22 +175,22 @@
         Console.WriteLine();
         Console.ResetColor();
         Console.WriteLine("\t\tHP\tSTR\tAGI\tINT\tCHA");
-        Console.WriteLine("1: \x1B[91mWarrior\x1B[0m\t80\t7\t2\t1\t2");
-        Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t2\t2");
+        Console.WriteLine("1: \x1B[91mWarrior\x1B[0m\t80\t7\t2\t3\t2");
+        Console.WriteLine("2: \x1B[92mArcher\x1B[0m\t40\t3\t9\t5\t2");
         Console.WriteLine("3: \x1B[96mSorcerer\x1B[0m\t20\t1\t3\t10\t4");
-        Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t1\t5");
+        Console.WriteLine("4: \x1B[34mRogue\x1B[0m\t40\t3\t7\t6\t5");
         Console.WriteLine("5: \x1B[35mMonk\t\x1B[0m\t40\t8\t8\t4\t4");
 
         bool choiceMade = false;
         while (!choiceMade) {
             switch (Console.ReadKey().KeyChar.ToString().ToUpper()) {
                 case "1":
-                    this.Player = new Player(name, "warrior", 1000, 7, 2, 1, 2);
+                    this.Player = new Player(name, "warrior", 1000, 7, 2, 10, 2);
                     Player.Items[items[0]] = 1;
                     choiceMade = true;
                     break;
                 case "2":
-                    this.Player = new Player(name, "archer", 40, 3, 9, 2, 2);
+                    this.Player = new Player(name, "archer", 40, 3, 9, 5, 2);
                     Player.Items[items[1]] = 1;
                     choiceMade = true;
                     break;
@@ -196,7 +200,7 @@
                     choiceMade = true;
                     break;
                 case "4":
-                    this.Player = new Player(name, "rogue", 40, 3, 7, 1, 5);
+                    this.Player = new Player(name, "rogue", 40, 3, 7, 6, 5);
                     Player.Items[items[3]] = 1;
                     choiceMade = true;
                     break;
@@ -275,7 +279,12 @@
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Fight Skeleton");
         } else if (this.Player.CurrentLocation.ID == 3) {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Talk to military commander");
+        } else if (this.Player.CurrentLocation.ID == 5) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Solve the puzzle");
+        } else if (this.Player.CurrentLocation.ID == 8 && !this.Player.GuardPassed) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Talk to the royal guard");
         }
+
         if (Player.ClassName == "sorcerer") {
             Console.WriteLine("\x1b[1m\x1b[33m[S]\x1b[0m \x1b[96mSpell book\x1b[0m");
         }
@@ -338,6 +347,15 @@
                         choiceMade = true;
                         this.Player.Fight(new Monster(2, "Skeleton", 40, 40, 8), null);
                         this.GameOverCheck();
+                    } else if (this.Player.CurrentLocation.ID == 3) { // Military camp
+                        choiceMade = true;
+                        this.MilitaryCommanderDialogue();
+                    } else if (this.Player.CurrentLocation.ID == 5) { // Prison
+                        choiceMade = true;
+                        this.HigherLowerGame(1, 30 - this.Player.Intelligence, this.Player.Intelligence);
+                    } else if (this.Player.CurrentLocation.ID == 8 && !this.Player.GuardPassed) {
+                        choiceMade = true;
+                        this.RoyalGuardDialogue();
                     }
                     
                     else {
@@ -548,11 +566,41 @@
 
         // Check for the "Testing your strength" quest completion
         Quest TestingYourStrengthQuest = this.Player.KnownQuests.Find(q => q.ID == 3);
-        if (TestingYourStrengthQuest != null && !TestingYourStrengthQuest.Completed) {
+        if (TestingYourStrengthQuest != null && !TestingYourStrengthQuest.Completed && this.Player.MilitaryCommanderBeaten) {
             TestingYourStrengthQuest.Completed = true;
 
             // Zone unlock
             this.UnlockLocation(World.Locations[6]); // Prison
+
+            // Add next quest
+            this.Player.AddQuest(quests[4]);
+            Util.pressAnyKey();
+        }
+
+        // Check for the "Enigma" quest completion
+        Quest EnigmaQuest = this.Player.KnownQuests.Find(q => q.ID == 4);
+        if (EnigmaQuest != null && !EnigmaQuest.Completed && this.Player.HigherLowerGameBeaten) {
+            EnigmaQuest.Completed = true;
+            this.Player.Coins += 10;
+
+            // Zone unlock
+            this.UnlockLocation(World.Locations[4]); // King's Pass
+
+            // Add next quest
+            this.Player.AddQuest(quests[5]);
+            Util.pressAnyKey();
+        }
+
+        // Check for the "Answers" quest completion
+        Quest AnswersQuest = this.Player.KnownQuests.Find(q => q.ID == 5);
+        if (AnswersQuest != null && !AnswersQuest.Completed && this.Player.HigherLowerGameBeaten && this.Player.GuardPassed) {
+            AnswersQuest.Completed = true;
+            this.Player.Coins += 10;
+
+            // Zone unlock
+            this.UnlockLocation(World.Locations[5]); // Royal Palace
+
+            // TODO add "enter the royal palace" quest
         }
     }
 
@@ -595,38 +643,113 @@
     }
 
     private void MilitaryCommanderDialogue() {
+        Console.Clear();
         Console.WriteLine("You approach the military commander.");
         Util.pressAnyKey();
-        Console.WriteLine("\"So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass.\" He says.");
-        Console.WriteLine();
-        Console.WriteLine("*He cracks his knuckles and steps forward, sizing you up.*");
-        Util.pressAnyKey();
-        Console.WriteLine("\"Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!\"");
+        if (!this.Player.MilitaryCommanderBeaten) {
+            Console.WriteLine("\"So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass.\" He says.");
+            Console.WriteLine();
+            Console.WriteLine("*He cracks his knuckles and steps forward, sizing you up.*");
+            Util.pressAnyKey();
+            Console.WriteLine("\"Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!\"");
+        } else {
+            Console.WriteLine("\"You have already beaten me in battle before. But I am always up for a fight, show me what you got!\". He says");
+        }
         Util.pressAnyKey();
 
         this.Player.Fight(new Monster(3, "Military Commander", 50, 50, 10), this.quests[3]);
         this.GameOverCheck();
-        this.Player.MilitaryCommanderBeaten = true;
+        
 
         Console.Clear();
         Console.WriteLine("*Coughing and out of breath*");
         Console.WriteLine("\"Impressive... I didn't think you'd have it in you. Few can best me in a fight.\"");
+        if (!this.Player.MilitaryCommanderBeaten) {
+            Util.pressAnyKey();
+            Console.WriteLine("*He stands up slowly, wiping blood from his lip.*");
+            Console.WriteLine("\"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
+        }
         Util.pressAnyKey();
-        Console.WriteLine("*He stands up slowly, wiping blood from his lip.*");
-        Console.WriteLine("\"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
+
+        this.Player.MilitaryCommanderBeaten = true;
+    }
+
+    private void RoyalGuardText() {
+        Console.WriteLine("You reply:");
+        Console.WriteLine($"[1] \"I see you have a keen eye for authority, but perhaps a little incentive could change your mind? \x1b[93m(-{this.Player.BribePrice} gold)\x1b[0m\"");
+        Console.WriteLine("[2] \"I don't have time for your rules! Move aside, or face the consequences!\"");
+        Console.WriteLine($"[3] *Try to talk your way past the guard* \x1b[93m({this.Player.Charisma} Charisma)\x1b[0m");
+    }
+
+    private void RoyalGuardDialogue() {
+        Console.Clear();
+        Console.WriteLine("You enter the king's pass.");
+        Console.WriteLine("You notice an armored guard standing in front of a big gate.");
         Util.pressAnyKey();
+        Console.WriteLine("\"Stay right there! You're not allowed in. Only those with royal permission may pass these gates.\"");
+        Console.WriteLine();
+        this.RoyalGuardText();
+
+        bool choiceMade = false;
+        Random rand = new();
+        while (!choiceMade) {
+            string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
+            Console.WriteLine();
+            switch (choice) {
+                case "1":
+                    if (this.Player.Coins < this.Player.BribePrice) {
+                        Console.WriteLine("You don't have enough coins.");
+                        Util.pressAnyKey();
+                        this.RoyalGuardDialogue();
+                        continue;
+                    }
+                    Console.WriteLine("\"Incentive, you say? What do you have in mind?\"");
+                    Console.WriteLine($"You give the guard {this.Player.BribePrice} gold.");
+                    if (rand.Next(0, 11) > 6) {
+                        // Success
+                        this.Player.GuardPassed = true;
+                        Console.WriteLine("\"You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.\"");
+                    } else {
+                        // Failure
+                        Console.WriteLine("\"Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?\"");
+                        this.Player.BribePrice += 10;
+                        Util.pressAnyKey();
+                        this.RoyalGuardDialogue();
+                        continue;
+                    }
+                    choiceMade = true;
+                    break;
+                case "2":
+                    Console.Clear();
+                    Console.WriteLine("The guard snorts, raising his weapon");
+                    Console.WriteLine("\"Bold words. Let's see if your bravado matches your skill. En garde!\"");
+                    Util.pressAnyKey();
+                    this.Player.Fight(new Monster(4, "Royal Guard", 60, 60, 12), this.quests[5]);
+                    this.GameOverCheck();
+                    this.Player.GuardPassed = true;
+                    choiceMade = true;
+                    break;
+                case "3":
+                    choiceMade = true;
+                    break;
+                default:
+                    Console.WriteLine("Invalid input");
+                    break;
+            }
+            this.RoyalGuardText();
+        }
     }
 
     private void UnlockLocation(Location Location) {
         Location.IsUnlocked = true;
         Console.Clear();
         Console.WriteLine("\x1b[33m================================================================================================================================");
-        Console.WriteLine("     _                      _   _       _            _            _ ");
-        Console.WriteLine("    / \\   _ __ ___  __ _   | | | |_ __ | | ___   ___| | _____  __| |");
-        Console.WriteLine("   / _ \\ | '__/ _ \\/ _` |  | | | | '_ \\| |/ _ \\ / __| |/ / _ \\/ _` |");
-        Console.WriteLine("  / ___ \\| | |  __/ (_| |  | |_| | | | | | (_) | (__|   <  __/ (_| |");
-        Console.WriteLine(" /_/   \\_\\_|  \\___|\\__,_|   \\___/|_| |_|_|\\___/ \\___|_|\\_\\___|\\__,_|");
-        Console.WriteLine("                                                                    ");
+        Console.WriteLine("                                   _                      _   _       _            _            _ ");
+        Console.WriteLine("                                  / \\   _ __ ___  __ _   | | | |_ __ | | ___   ___| | _____  __| |");
+        Console.WriteLine("                                 / _ \\ | '__/ _ \\/ _` |  | | | | '_ \\| |/ _ \\ / __| |/ / _ \\/ _` |");
+        Console.WriteLine("                                / ___ \\| | |  __/ (_| |  | |_| | | | | | (_) | (__|   <  __/ (_| |");
+        Console.WriteLine("                               /_/   \\_\\_|  \\___|\\__,_|   \\___/|_| |_|_|\\___/ \\___|_|\\_\\___|\\__,_|");
+        Console.WriteLine("                                                                                                  ");
         Console.WriteLine("================================================================================================================================\x1B[0m");
         Console.WriteLine();
         Console.Write("Name: ");
@@ -634,5 +757,42 @@
         Console.Write("Description: ");
         Console.WriteLine($"\x1b[90m{Location.Description}\x1b[0m");
         Util.pressAnyKey();
+    }
+
+    private void HigherLowerGame(int MinNumber, int MaxNumber, int GuessCount) {
+        Console.Clear();
+        Random random = new Random();
+        int secretNumber = random.Next(MinNumber, MaxNumber + 1);
+
+        int turns = 0;
+        bool guessedCorrectly = false;
+
+        while (turns < GuessCount) {
+            Console.WriteLine($"\nTurn {turns + 1}/{GuessCount}");
+            Console.Write($"Guess a number between {MinNumber} and {MaxNumber}: ");
+            int playerGuess = int.Parse(Console.ReadLine());
+
+            if (playerGuess == secretNumber) {
+                guessedCorrectly = true;
+                break;
+            } else if (playerGuess < secretNumber) {
+                Console.WriteLine("Higher!");
+            } else {
+                Console.WriteLine("Lower!");
+            }
+
+            turns++;
+        }
+
+        if (guessedCorrectly) {
+            this.Player.HigherLowerGameBeaten = true;
+            Console.WriteLine($"\nCongratulations! You guessed the number {secretNumber} in {turns + 1} turns.");
+            Util.pressAnyKey();
+        } else {
+
+            Console.WriteLine($"\nA trap triggers and hits you for 5 damage.");
+            this.Player.HitPoints = Math.Max(1, this.Player.HitPoints - 5);
+            Util.pressAnyKey();
+        }
     }
 }

@@ -26,7 +26,7 @@ public class Location
         string south = LocationToSouth != null ? "[S]" : "   ";
         string west = LocationToWest != null ? "[W]" : "   ";
 
-        string northLine = $"     \x1B[31m{north}\x1B[0m     ";
+        string northLine = $"     {north}     ";
         string middleLine = $"  {west}   {east}  ";
         string southLine = $"     {south}     ";
         
