@@ -24,7 +24,7 @@ public class Game {
         new Consumable(6, "Greater Health Potion", "An improved potion that restores your health.", 20),
         new Weapon(7, "Staff", "A monk staff that has been passed down for multiple generations. It holds spiritual energy.", 12, 5),
         new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons."),
-        new Weapon(9, "Greatsword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7),
+        new Weapon(9, "Great sword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7),
         new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4),
         new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5),
         new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1),
@@ -659,29 +659,34 @@ public class Game {
         Console.Clear();
         Console.WriteLine("You approach the military commander.");
         Util.pressAnyKey();
+    
         if (!this.Player.MilitaryCommanderBeaten) {
-            Console.WriteLine("\"So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass.\" He says.");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: So, you're the one trying to move forward. We don't let just anyone through these gates. Strength, skill, and determination, those are the qualities we need. Prove you have them, and I'll let you pass. He says.");
             Console.WriteLine();
             Console.WriteLine("*He cracks his knuckles and steps forward, sizing you up.*");
             Util.pressAnyKey();
-            Console.WriteLine("\"Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!\"");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: Let's see if you're as tough as they say. Ready your weapon, and don't hold back. Show me what you've got!");
         } else {
-            Console.WriteLine("\"You have already beaten me in battle before. But I am always up for a fight, show me what you got!\". He says");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: You have already beaten me in battle before. But I am always up for a fight, show me what you've got! He says");
         }
         Util.pressAnyKey();
 
         this.Player.Fight(new Monster(3, "Military Commander", 50, 50, 10), this.quests[3]);
         this.GameOverCheck();
-        
 
         Console.Clear();
         Console.WriteLine("*Coughing and out of breath*");
-        Console.WriteLine("\"Impressive... I didn't think you'd have it in you. Few can best me in a fight.\"");
-        if (!this.Player.MilitaryCommanderBeaten) {
+        Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: Impressive... I didn't think you'd have it in you. Few can best me in a fight.");
+
+        if (!this.Player.MilitaryCommanderBeaten)
+        {
             Util.pressAnyKey();
             Console.WriteLine("*He stands up slowly, wiping blood from his lip.*");
-            Console.WriteLine("\"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
+            Console.WriteLine(
+                "\x1b[91m\x1b[1mCommander\x1b[0m: You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.");
         }
+
+
         Util.pressAnyKey();
 
         this.Player.MilitaryCommanderBeaten = true;
@@ -694,76 +699,66 @@ public class Game {
         Console.WriteLine($"[3] *Try to talk your way past the guard* \x1b[93m({this.Player.Charisma} Charisma)\x1b[0m");
     }
 
-    private void RoyalGuardDialogue() {
-        Console.Clear();
-        Console.WriteLine("You enter the king's pass.");
-        Console.WriteLine("You notice an armored guard standing in front of a big gate.");
-        Util.pressAnyKey();
-        Console.WriteLine("\"Stay right there! You're not allowed in. Only those with royal permission may pass these gates.\"");
+   private void RoyalGuardDialogue() {
+    Console.Clear();
+    Console.WriteLine("You enter the king's pass.");
+    Console.WriteLine("You notice an armored guard standing in front of a big gate.");
+    Util.pressAnyKey();
+    Console.WriteLine("\x1b[33mGuard\x1b[0m: Stay right there! You're not allowed in. Only those with royal permission may pass these gates.");
+    Console.WriteLine();
+    this.RoyalGuardText();
+
+    bool choiceMade = false;
+    Random rand = new();
+    while (!choiceMade) {
+        string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
         Console.WriteLine();
-        this.RoyalGuardText();
-
-        bool choiceMade = false;
-        Random rand = new();
-
-        while (!choiceMade) {
-            string choice = Console.ReadKey().KeyChar.ToString().ToUpper();
-            Console.WriteLine();
-            switch (choice) {
-                case "1":
-                    if (this.Player.Coins < this.Player.BribePrice) {
-                        Console.WriteLine("You don't have enough coins.");
-                        Util.pressAnyKey();
-                        this.RoyalGuardText();
-                        continue;
-                    }
-                    Console.WriteLine("\"Incentive, you say? What do you have in mind?\"");
-                    Console.WriteLine($"You give the guard {this.Player.BribePrice} gold.");
-                    if (rand.Next(0, 11) > 6) {
-                        // Success
-                        this.Player.GuardPassed = true;
-                        Console.WriteLine("\"You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.\"");
-                        choiceMade = true;
-                        break;
-                    } else {
-                        // Failure
-                        Console.WriteLine("\"Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?\"");
-                        this.Player.BribePrice += 10;
-                        Util.pressAnyKey();
-                        this.RoyalGuardText();
-                        continue;
-                    }
-                case "2":
-                    Console.Clear();
-                    Console.WriteLine("The guard snorts, raising his weapon");
-                    Console.WriteLine("\"Bold words. Let's see if your bravado matches your skill. En garde!\"");
+        switch (choice) {
+            case "1":
+                if (this.Player.Coins < this.Player.BribePrice) {
+                    Console.WriteLine("You don't have enough coins.");
                     Util.pressAnyKey();
-                    this.Player.Fight(new Monster(4, "Royal Guard", 60, 60, 12), this.quests[5]);
-                    this.GameOverCheck();
+                    this.RoyalGuardText();
+                    continue;
+                }
+                Console.WriteLine("\x1b[33mGuard\x1b[0m: Incentive, you say? What do you have in mind?");
+                Console.WriteLine($"You give the guard {this.Player.BribePrice} gold.");
+                if (rand.Next(0, 11) > 6) {
+                    // Success
                     this.Player.GuardPassed = true;
+                    Console.WriteLine("\x1b[33mGuard\x1b[0m: You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.");
                     choiceMade = true;
                     break;
-                case "3":
-                    if (rand.Next(0, 11) < this.Player.Charisma) {
-                        Console.Clear();
-                        Console.WriteLine("You failed to deceive the guard. Prepare for a fight.");
-                        Util.pressAnyKey();
-                        this.Player.Fight(new Monster(4, "Royal Guard", 60, 60, 12), this.quests[5]);
-                        this.GameOverCheck();
-                    } else {
-                        Console.WriteLine("You trick the guard into letting you pass.");
-                        Util.pressAnyKey();
-                    }
-                    this.Player.GuardPassed = true;
-                    choiceMade = true;
-                    break;
-                default:
-                    Console.WriteLine("Invalid input");
-                    break;
-            }
+                } else {
+                    // Failure
+                    Console.WriteLine("\x1b[33mGuard\x1b[0m: Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?");
+                    this.Player.BribePrice += 10;
+                    Util.pressAnyKey();
+                    this.RoyalGuardText();
+                    continue;
+                }
+            case "2":
+                Console.Clear();
+                Console.WriteLine("The guard snorts, raising his weapon");
+                Console.WriteLine("\x1b[33mGuard\x1b[0m: Bold words. Let's see if your bravado matches your skill. En garde!");
+                Util.pressAnyKey();
+                this.Player.Fight(new Monster(4, "Royal Guard", 60, 60, 12), this.quests[5]);
+                this.GameOverCheck();
+                this.Player.GuardPassed = true;
+                choiceMade = true;
+                break;
+            case "3":
+                choiceMade = true;
+                break;
+            default:
+                Console.WriteLine("Invalid input");
+                break;
         }
-        Util.pressAnyKey();
+        this.RoyalGuardText();
     }
+    Util.pressAnyKey();
+}
+
 
     private void UnlockLocation(Location Location) {
         Location.IsUnlocked = true;
