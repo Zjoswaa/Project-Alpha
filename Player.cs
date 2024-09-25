@@ -21,6 +21,9 @@
     public bool HigherLowerGameBeaten { get; set; } = false;
     public int BribePrice { get; set; } = 50;
     public bool GuardPassed { get; set; } = false;
+    public bool BossBeaten { get; set; } = false;
+    public int BareFistBonus { get; set; } = 3;
+    public bool FistsUpgraded { get; set; } = false;
 
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma)
     {
@@ -167,7 +170,7 @@
                 case "4":
                     if (Quest == null || Quest.QuestType == "SIDE")
                     {
-                        //Console.WriteLine($"You fled from the {monster.Name}.");
+                        Console.WriteLine($"You fled from the {monster.Name}.");
                         inCombat = false;
                         break;
                     }
@@ -231,8 +234,7 @@
 
         if (ActiveWeapon == null && ClassName == "monk") // monk's weaponless attack
         {
-            int BareFistBonus = 3;
-            damage = rand.Next(0, 5) + this.Strength + BareFistBonus;
+            damage = rand.Next(0, 5) + this.Strength + this.BareFistBonus;
             Console.WriteLine($"{this.Name} attacks {monster.Name} for {damage} damage!");
             monster.CurrentHitPoints -= damage;
         }

@@ -11,6 +11,7 @@ public class Game {
         new Quest(3, "A test of strength", "Talk to the military commander in the camp.", "MAIN", new Dictionary<Item, int>() { { new Item(14, "Key", "An old key, could this be used to unlock something?"), 1 } }),
         new Quest(4, "Enigma", "Go to the prison and crack the code.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 10 } }),
         new Quest(5, "Answers", "Go to the King's Pass.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 10 } }),
+        new Quest(6, "Enter the palace", "Go to the Royal Palace", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 10 } }),
     };
 
     private static List<Item> items = new() {
@@ -205,7 +206,7 @@ public class Game {
                     choiceMade = true;
                     break;
                 case "5":
-                    this.Player = new Player(name, "monk", 40, 8, 8, 4, 4);
+                    this.Player = new Player(name, "monk", 400, 8, 8, 4, 4);
                      // Starter weapon is given to the monk, just not equipped yet.
                     Player.Items[items[7]] = 1;
                     choiceMade = true;
@@ -238,7 +239,7 @@ public class Game {
                 Console.Write($"Created \x1B[34m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
                 break;
             case "monk":
-                Console.Write($"Created \x1B[35m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m "); //
+                Console.Write($"Created \x1B[35m{char.ToUpper(this.Player.ClassName[0]) + this.Player.ClassName.Substring(1)}\x1B[0m ");
                 break;
             default: // Wont happen
                 break;
@@ -283,6 +284,8 @@ public class Game {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Solve the puzzle");
         } else if (this.Player.CurrentLocation.ID == 8 && !this.Player.GuardPassed) {
             Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Talk to the royal guard");
+        } else if (this.Player.CurrentLocation.ID == 9 && !this.Player.BossBeaten) {
+            Console.WriteLine("\x1b[1m\x1b[33m[F]\x1b[0m Enter the palace");
         }
 
         if (Player.ClassName == "sorcerer") {
@@ -356,9 +359,10 @@ public class Game {
                     } else if (this.Player.CurrentLocation.ID == 8 && !this.Player.GuardPassed) {
                         choiceMade = true;
                         this.RoyalGuardDialogue();
-                    }
-                    
-                    else {
+                    } else if (this.Player.CurrentLocation.ID == 9 && !this.Player.BossBeaten) {
+                        choiceMade = true;
+                        this.FinalBossFight();
+                    } else {
                         Console.WriteLine("Invalid input");
                         continue;
                     }
@@ -550,7 +554,7 @@ public class Game {
         // Check for the "Gearing up!" quest completion
         Quest gearingUpQuest = this.Player.KnownQuests.Find(q => q.ID == 2);
         if (gearingUpQuest != null && !gearingUpQuest.Completed) {
-            if (this.Player.Items.ContainsKey(items[9]) || this.Player.Items.ContainsKey(items[10]) || this.Player.Items.ContainsKey(items[11]) || this.Player.Items.ContainsKey(items[12])) {
+            if (this.Player.Items.ContainsKey(items[9]) || this.Player.Items.ContainsKey(items[10]) || this.Player.Items.ContainsKey(items[11]) || this.Player.Items.ContainsKey(items[12]) || this.Player.FistsUpgraded) {
                 this.NotifyQuestCompletion(gearingUpQuest);
                 gearingUpQuest.Completed = true;
                 this.Player.Coins += 5;
@@ -593,7 +597,7 @@ public class Game {
 
         // Check for the "Answers" quest completion
         Quest AnswersQuest = this.Player.KnownQuests.Find(q => q.ID == 5);
-        if (AnswersQuest != null && !AnswersQuest.Completed && this.Player.HigherLowerGameBeaten && this.Player.GuardPassed) {
+        if (AnswersQuest != null && !AnswersQuest.Completed && this.Player.GuardPassed) {
             AnswersQuest.Completed = true;
             this.Player.Coins += 10;
 
@@ -601,6 +605,15 @@ public class Game {
             this.UnlockLocation(World.Locations[5]); // Royal Palace
 
             // TODO add "enter the royal palace" quest
+            this.Player.AddQuest(quests[6]);
+            Util.pressAnyKey();
+        }
+
+        // Check for the "Enter the Royal palace" quest completion
+        Quest RoyalPalaceQuest = this.Player.KnownQuests.Find(q => q.ID == 6);
+        if (RoyalPalaceQuest != null && !RoyalPalaceQuest.Completed && this.Player.CurrentLocation.ID == 9) {
+            RoyalPalaceQuest.Completed = true;
+            this.Player.Coins += 10;
         }
     }
 
@@ -700,7 +713,7 @@ public class Game {
                     if (this.Player.Coins < this.Player.BribePrice) {
                         Console.WriteLine("You don't have enough coins.");
                         Util.pressAnyKey();
-                        this.RoyalGuardDialogue();
+                        this.RoyalGuardText();
                         continue;
                     }
                     Console.WriteLine("\"Incentive, you say? What do you have in mind?\"");
@@ -709,16 +722,16 @@ public class Game {
                         // Success
                         this.Player.GuardPassed = true;
                         Console.WriteLine("\"You think I can be bought so easily? I'll take your coins, but remember, trust is a fickle thing. Hand them over, and I'll let you through this once.\"");
+                        choiceMade = true;
+                        break;
                     } else {
                         // Failure
                         Console.WriteLine("\"Nice try, but you think I'm just a common thug? You’ve insulted my duty by trying to buy your way in. I'll let you try again, but make it worth my while. What else do you have?\"");
                         this.Player.BribePrice += 10;
                         Util.pressAnyKey();
-                        this.RoyalGuardDialogue();
+                        this.RoyalGuardText();
                         continue;
                     }
-                    choiceMade = true;
-                    break;
                 case "2":
                     Console.Clear();
                     Console.WriteLine("The guard snorts, raising his weapon");
@@ -738,6 +751,7 @@ public class Game {
             }
             this.RoyalGuardText();
         }
+        Util.pressAnyKey();
     }
 
     private void UnlockLocation(Location Location) {
@@ -775,10 +789,10 @@ public class Game {
             if (playerGuess == secretNumber) {
                 guessedCorrectly = true;
                 break;
-            } else if (playerGuess < secretNumber) {
-                Console.WriteLine("Higher!");
-            } else {
-                Console.WriteLine("Lower!");
+            } else if (playerGuess < secretNumber && turns != GuessCount - 1) {
+                Console.WriteLine("\x1b[32mHigher!\x1b[0m");
+            } else if (turns != GuessCount - 1) {
+                Console.WriteLine("\x1b[31mLower!\x1b[0m");
             }
 
             turns++;
@@ -789,10 +803,13 @@ public class Game {
             Console.WriteLine($"\nCongratulations! You guessed the number {secretNumber} in {turns + 1} turns.");
             Util.pressAnyKey();
         } else {
-
             Console.WriteLine($"\nA trap triggers and hits you for 5 damage.");
             this.Player.HitPoints = Math.Max(1, this.Player.HitPoints - 5);
             Util.pressAnyKey();
         }
+    }
+
+    private void FinalBossFight() {
+        return;
     }
 }

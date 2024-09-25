@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 class ItemShop
 {
     public Dictionary<Item, int> Stock;
@@ -15,12 +17,12 @@ class ItemShop
     {
         Console.Clear();
         Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
-        string purchaseInput = Console.ReadLine().ToLower();
+        string purchaseInput = Console.ReadKey().KeyChar.ToString().ToLower();
         while (purchaseInput != "y" && purchaseInput != "n")
         {
             Console.WriteLine("Invalid input.");
             Console.WriteLine($"This product costs {price} gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
-            purchaseInput = Console.ReadLine().ToLower();
+            purchaseInput = Console.ReadKey().KeyChar.ToString().ToLower();
         }
         if (purchaseInput == "n")
         {
@@ -163,6 +165,11 @@ class ItemShop
                 itemNumber += 1;
                 Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left");
             }
+            if (this.Player.ClassName == "monk" && !this.Player.FistsUpgraded) {
+                itemNumber++;
+                Console.WriteLine($"\n[{itemNumber}] Upgrade your fist bandages.");
+            }
+            
 
             Console.WriteLine("\n\x1b[36mPress enter to exit, type any number to purchase that item.\x1b[0m");
 
@@ -176,7 +183,7 @@ class ItemShop
                         Console.WriteLine("You cannot purchase this weapon!");
                         break;
                     }
-                    PurchaseItem(greatSword, 5);
+                    PurchaseItem(greatSword, 10);
                     break;
                 case "2":
                     if (this.Player.ClassName != "archer") {
@@ -184,7 +191,7 @@ class ItemShop
                         Console.WriteLine("You cannot purchase this weapon!");
                         break;
                     }
-                    PurchaseItem(quickfireBow, 5);
+                    PurchaseItem(quickfireBow, 10);
                     break;
                 case "3":
                     if (this.Player.ClassName != "sorcerer") {
@@ -192,7 +199,7 @@ class ItemShop
                         Console.WriteLine("You cannot purchase this weapon!");
                         break;
                     }
-                    PurchaseItem(noviceWand, 5);
+                    PurchaseItem(noviceWand, 10);
                     break;
                 case "4":
                     if (this.Player.ClassName != "rogue") {
@@ -200,11 +207,38 @@ class ItemShop
                         Console.WriteLine("You cannot purchase this weapon!");
                         break;
                     }
-                    PurchaseItem(steelDagger, 5);
+                    PurchaseItem(steelDagger, 10);
+                    break;
+                case "5":
+                    if (this.Player.ClassName != "monk" || this.Player.FistsUpgraded) {
+                        Console.Clear();
+                        break;
+                    }
+                    Console.Clear();
+                    Console.WriteLine($"This product costs 10 gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
+                    string purchaseInput = Console.ReadKey().KeyChar.ToString().ToLower();
+                    while (purchaseInput != "y" && purchaseInput != "n") {
+                        Console.Clear();
+                        Console.WriteLine("Invalid input.");
+                        Console.WriteLine($"This product costs 10 gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
+                        purchaseInput = Console.ReadKey().KeyChar.ToString().ToUpper();
+                    }
+                    if (purchaseInput == "n") {
+                        Console.Clear();
+                        break;
+                    }
+                    this.Player.FistsUpgraded = true;
+                    this.Player.BareFistBonus = 6;
+                    Console.Clear();
+                    Console.WriteLine($"\x1b[1m\x1b[93mYour fists have been upgraded.\x1b[0m");
+                    Console.WriteLine();
                     break;
                 case "":
                 case null:
                     k = false;
+                    break;
+                default:
+                    Console.Clear();
                     break;
             }
         }
