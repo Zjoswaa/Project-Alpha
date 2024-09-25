@@ -28,7 +28,7 @@ public class World
         Location farmermedows = new Location(6, "Farmer's Meadows", "Rolling fields stretch under a soft, golden sun. The gentle breeze carries the scent of wildflowers and fresh earth, a place of quiet, simple life.", false);
         Location farmhouse = new Location(7, "Farmhouse", "A cozy, sunlit home with smoke curling from the chimney. Its wooden walls are weathered but welcoming, surrounded by neat gardens and the distant hum of farm life.", false);
         Location kingsPass = new Location(8, "King's Pass", "A narrow, winding corridor through jagged mountains, its towering cliffs etched with ancient runes. The path is shrouded in mist, with echoes of history whispering through the stone.", false);
-        Location kings_castle = new Location(9, "Royal Palace", "A majestic edifice of grand halls and opulent chambers, adorned with golden tapestries and shimmering chandeliers. The air is filled with a regal silence, broken only by the soft murmur of courtly intrigue.", false);
+        Location royalpalace = new Location(9, "Royal Palace", "A majestic edifice of grand halls and opulent chambers, adorned with golden tapestries and shimmering chandeliers. The air is filled with a regal silence, broken only by the soft murmur of courtly intrigue.", false);
 
         // Links all locations together
         forest.LocationToNorth = townSquare;
@@ -37,8 +37,8 @@ public class World
         alchemisthut.LocationToSouth = townSquare;
         alchemisthut.LocationToEast = kingsPass;
         kingsPass.LocationToWest = alchemisthut;
-        kingsPass.LocationToNorth = kings_castle;
-        kings_castle.LocationToSouth = kingsPass;
+        kingsPass.LocationToNorth = royalpalace;
+        royalpalace.LocationToSouth = kingsPass;
         townSquare.LocationToEast = militarycamp;
         militarycamp.LocationToWest = townSquare;
         militarycamp.LocationToNorth = kingsPass;
@@ -56,7 +56,7 @@ public class World
         Locations.Add(militarycamp);
         Locations.Add(alchemisthut);
         Locations.Add(kingsPass);
-        Locations.Add(kings_castle);
+        Locations.Add(royalpalace);
         Locations.Add(prison);
         Locations.Add(farmermedows);
         Locations.Add(farmhouse);
