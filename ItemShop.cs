@@ -121,7 +121,13 @@ class ItemShop
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
                 itemNumber += 1;
-                Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left");
+                if (kvp.Key.ID == 5) {
+                    Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left \x1b[33m(3 coins)\x1b[0m");
+                } else if (kvp.Key.ID == 6) {
+                    Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left \x1b[33m(5 coins)\x1b[0m");
+                } else {
+                    Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left");
+                }
             }
 
             Console.WriteLine("\n\x1b[36mPress enter to exit, type any number to purchase that item.\x1b[0m");
@@ -148,10 +154,10 @@ class ItemShop
     //Method that gets called to create the town's shop
     public void TownCatalog()
     {
-        Weapon greatSword = new(9, "Greatsword", "A heavy, steel blade built to cut through armor with raw power.", 15, 7);
-        Weapon quickfireBow = new(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 18, 4);
-        Weapon noviceWand = new(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 20, 5);
-        Weapon steelDagger = new(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 16, 1);
+        Weapon greatSword = new Weapon(9, "Great sword", "A heavy, steel blade built to cut through armor with raw power.", 30, 7);
+        Weapon quickfireBow = new Weapon(10, "Quickfire Bow", "A lightweight bow designed for rapid firing.", 27, 4);
+        Weapon noviceWand = new Weapon(11, "Novice Wand", "A simple yet sturdy wand, designed for novice spellcasters to harness their first magical energies.", 28, 5);
+        Weapon steelDagger = new Weapon(12, "Steel Dagger", "A sharp, compact dagger forged from durable steel, ideal for quick strikes and stealthy maneuvers.", 25, 5);
 
         if (Stock is null)
         {
@@ -169,7 +175,7 @@ class ItemShop
             foreach (KeyValuePair<Item, int> kvp in Stock)
             {
                 itemNumber += 1;
-                Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left");
+                Console.WriteLine($"\n[{itemNumber}] {kvp.Key}: {kvp.Value} left \x1b[33m(10 coins)\x1b[0m");
             }
             if (this.Player.ClassName == "monk" && !this.Player.FistsUpgraded) {
                 itemNumber++;
@@ -227,7 +233,7 @@ class ItemShop
                         Console.Clear();
                         Console.WriteLine("Invalid input.");
                         Console.WriteLine($"This product costs 10 gold coins and requires 5 silk and 5 bones. Purchase this item? (y/n)");
-                        purchaseInput = Console.ReadKey().KeyChar.ToString().ToUpper();
+                        purchaseInput = Console.ReadKey().KeyChar.ToString().ToLower();
                     }
                     if (purchaseInput == "n") {
                         Console.Clear();

@@ -631,7 +631,7 @@ public class Game {
         Player.Spirit = 10;
         Player.SpiritCooldown = 0;
         Console.Clear();
-        Console.WriteLine($"{Player.Name} used Rest and regained their Spirit.");
+        Console.WriteLine($"{Player.Name} used Rest and regained their \x1b[96mSpirit\x1b[0m.");
     }
 
     private void NotifyQuestCompletion(Quest Quest) {
@@ -674,22 +674,18 @@ public class Game {
 
         if (this.Player.MilitaryCommanderBeaten) {
             this.Player.Fight(new Monster(3, "Military Commander", 120, 120, 15), null);
-        }
-        this.Player.Fight(new Monster(3, "Military Commander", 120, 120, 15), this.quests[3]);
-        this.GameOverCheck();
-
-        Console.Clear();
-        Console.WriteLine("*Coughing and out of breath*");
-        Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"Impressive... I didn't think you'd have it in you. Few can best me in a fight.\"");
-
-        if (!this.Player.MilitaryCommanderBeaten)
-        {
+            this.GameOverCheck();
+            Console.Clear();
+        } else {
+            this.Player.Fight(new Monster(3, "Military Commander", 120, 120, 15), this.quests[3]);
+            this.GameOverCheck();
+            Console.Clear();
+            Console.WriteLine("*Coughing and out of breath*");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"Impressive... I didn't think you'd have it in you. Few can best me in a fight.\"");
             Util.pressAnyKey();
             Console.WriteLine("*He stands up slowly, wiping blood from his lip.*");
-            Console.WriteLine(
-                "\x1b[91m\x1b[1mCommander\x1b[0m: \"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
+            Console.WriteLine("\x1b[91m\x1b[1mCommander\x1b[0m: \"You’ve earned the right to pass. Consider this a mark of respect. The road ahead is yours. Don’t waste the opportunity.\"");
         }
-
 
         Util.pressAnyKey();
 
