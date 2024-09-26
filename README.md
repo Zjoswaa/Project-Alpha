@@ -10,3 +10,6 @@ Our DnD Inspired, Console based RPG Game called: Whispers of the web
 - [@333Suki](https://github.com/333suki)
 - [@holy](https://github.com/TomvGenderen)
 - [@Young $heldon](https://github.com/humbertotan0182)
+
+## Project Board
+[GitHub Project Board](https://github.com/users/333suki/projects/1)
