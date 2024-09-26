@@ -44,28 +44,26 @@ class ItemShop
             bool checkBones = false;
             foreach (KeyValuePair<Item, int> playerItem in Player.Items)
             {
-                if (playerItem.Key.ID == 8 && Player.Items[playerItem.Key] >= 5)
+                if (playerItem.Key.ID == 8 && playerItem.Value >= 5)
                 {
                     checkWebs = true;
                 }
 
-                if (playerItem.Key.ID == 13 && Player.Items[playerItem.Key] >= 5)
+                if (playerItem.Key.ID == 13 && playerItem.Value >= 5)
                 {
                     checkBones = true;
                 }
             }
-                
-                if (checkWebs is false || checkBones is false)
-                {
-                    Console.WriteLine("You don't have the required materials.");
-                    return;
-                }
 
-                if (checkWebs is true && checkBones is true)
-                {
-                    Player.Items[new(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 5;
-                    Player.Items[new(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 5;
-                }
+            if (!checkWebs || !checkBones) {
+                Console.WriteLine("You don't have the required materials.");
+                return;
+            }
+
+            if (checkWebs && checkBones) {
+                Player.Items[new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 5;
+                Player.Items[new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 5;
+            }
         }
 
         if (Player.Coins >= price)
@@ -235,6 +233,31 @@ class ItemShop
                         Console.Clear();
                         break;
                     }
+
+                    if (Player.CurrentLocation.ID == 2) {
+                        bool checkWebs = false;
+                        bool checkBones = false;
+                        foreach (KeyValuePair<Item, int> playerItem in Player.Items) {
+                            if (playerItem.Key.ID == 8 && playerItem.Value >= 5) {
+                                checkWebs = true;
+                            }
+
+                            if (playerItem.Key.ID == 13 && playerItem.Value >= 5) {
+                                checkBones = true;
+                            }
+                        }
+
+                        if (!checkWebs || !checkBones) {
+                            Console.WriteLine("You don't have the required materials.");
+                            return;
+                        }
+
+                        if (checkWebs && checkBones) {
+                            Player.Items[new Item(13, "Skeleton Bone", "A bone dropped by a skeleton. It could be used to craft stronger weapons.")] -= 5;
+                            Player.Items[new Item(8, "Spider Silk", "Silk dropped by a spider. It looks quite sturdy, this could be used to craft new weapons.")] -= 5;
+                        }
+                    }
+
                     this.Player.FistsUpgraded = true;
                     this.Player.BareFistBonus = 6;
                     Console.Clear();
