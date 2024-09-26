@@ -199,6 +199,8 @@
                         {
                             if (this.SpiritCooldown > 0) {
                                 Console.Clear();
+                                Console.WriteLine($"Spirit is on cooldown for {SpiritCooldown} turns.");
+                                Util.pressAnyKey();
                                 continue;
                             }
                             this.UseSpirit();
@@ -208,7 +210,7 @@
                     }
                 default:
                     //Console.WriteLine("Invalid choice.");
-                    break;
+                    continue;
             }
             // Decrease spell cooldowns
             if (this.ClassName == "sorcerer")
@@ -407,11 +409,6 @@
         //Console.Clear();
         if (this.ClassName == "monk")
         {
-            if (SpiritCooldown > 0)
-            {
-                Console.WriteLine("Spirit is on cooldown!");
-                return;
-            }
             Random rand = new Random();
             this.HitPoints += 20;
             if (this.HitPoints >= this.MaxHitPoints)
