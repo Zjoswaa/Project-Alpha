@@ -73,14 +73,14 @@ public class Location
             }
 
             Location? newLocation = currentLocation?.GetLocationAt(userInput);
-            if (!newLocation.IsUnlocked) {
-                Console.Clear();
-                Console.WriteLine("This location is not yet available.");
-                Util.pressAnyKey();
-                return;
-            }
-
+            
             if (userInput == "N" || userInput == "E" || userInput == "S" || userInput == "W") {
+                if (!newLocation.IsUnlocked) {
+                    Console.Clear();
+                    Console.WriteLine("This location is not yet available.");
+                    Util.pressAnyKey();
+                    return;
+                }
                 if (newLocation != null) {
                     Player.CurrentLocation = newLocation;
                     //currentLocation = newLocation;
