@@ -24,6 +24,7 @@
     public bool BossBeaten { get; set; } = false;
     public int BareFistBonus { get; set; } = 3;
     public bool FistsUpgraded { get; set; } = false;
+    public int CurrentQuestID { get; set; }
 
     public Player(string Name, string ClassName, int HitPoints, int Strength, int Agility, int Intelligence, int Charisma)
     {
@@ -62,6 +63,7 @@
         Console.WriteLine("                                                                                              ");
         Console.WriteLine("================================================================================================================================");
         this.KnownQuests.Add(Quest);
+        this.CurrentQuestID = Quest.ID;
         Console.WriteLine();
         Console.ResetColor();
         Console.Write("Name: ");
@@ -343,7 +345,7 @@
                         // Decrease item count by 1
                         this.Items[((Consumable)obj)] -= 1;
                         // Increase player health
-                        this.HitPoints += ((Consumable)obj).Restoration;
+                        this.HitPoints = Math.Min(this.MaxHitPoints, this.HitPoints + ((Consumable)obj).Restoration);
                         return true;
                     }
                 }

@@ -5,8 +5,8 @@ public class Game {
     private World World = new();
 
     private List<Quest> quests = new() {
-        new Quest(0, "Go to Duskmire.", "The strange old man called Arachthos told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
-        new Quest(1, "Slaying monsters.", "Collect 5 spider silks by defeating spiders in Farmer's Meadows, and collect 5 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(0, "Go to Duskmire", "The strange old man called Arachthos told you find the nearby city called Duskmire. Find the way using your map.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
+        new Quest(1, "Slaying monsters", "Collect 5 spider silks by defeating spiders in Farmer's Meadows, and collect 5 Bones by defeating skeletons at the Farmhouse.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(2, "Gearing up!", "Using your silk and bones, upgrade your weapon at the Duskmire smithery.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 5 } }),
         new Quest(3, "A test of strength", "Talk to the military commander in the camp.", "MAIN", new Dictionary<Item, int>() { { new Item(14, "Key", "An old key, could this be used to unlock something?"), 1 } }),
         new Quest(4, "Enigma", "Go to the prison and crack the code.", "MAIN", new Dictionary<Item, int>() { { new Item(4, "Coin", "A currency widely used in and around the city of Duskmire."), 10 } }),
@@ -254,11 +254,12 @@ public class Game {
 
     private void ShowActionMenu() {
         Console.Clear();
-        Console.Write("\x1B[32mHP:\x1B[0m ");
+        Console.Write("\x1B[32mHealth:\x1B[0m ");
         Console.WriteLine($"{this.Player.HitPoints}/{this.Player.MaxHitPoints}");
-        Console.Write("\x1B[34mLocation:\x1B[0m ");
-        Console.WriteLine(this.Player.CurrentLocation.Name);
         Console.WriteLine($"\x1b[93mCoins: \x1b[0m{this.Player.Coins}");
+        Console.Write("\x1B[34mCurrent Location:\x1B[0m ");
+        Console.WriteLine(this.Player.CurrentLocation.Name);
+        Console.WriteLine($"\x1b[35mCurrent Quest: \x1b[0m{this.quests[this.Player.CurrentQuestID].Name}");
         Console.WriteLine();
         if (this.Player.CurrentLocation.ID == 4)
         {
@@ -355,7 +356,7 @@ public class Game {
                         this.MilitaryCommanderDialogue();
                     } else if (this.Player.CurrentLocation.ID == 5) { // Prison
                         choiceMade = true;
-                        this.HigherLowerGame(1, 30 - this.Player.Intelligence, this.Player.Intelligence / 2);
+                        this.HigherLowerGame(1, 30 - this.Player.Intelligence, (this.Player.Intelligence / 2) + 1);
                     } else if (this.Player.CurrentLocation.ID == 8 && !this.Player.GuardPassed) {
                         choiceMade = true;
                         this.RoyalGuardDialogue();
@@ -671,6 +672,9 @@ public class Game {
         }
         Util.pressAnyKey();
 
+        if (this.Player.MilitaryCommanderBeaten) {
+            this.Player.Fight(new Monster(3, "Military Commander", 120, 120, 15), null);
+        }
         this.Player.Fight(new Monster(3, "Military Commander", 120, 120, 15), this.quests[3]);
         this.GameOverCheck();
 
@@ -901,7 +905,7 @@ public class Game {
         Console.WriteLine("With a flick of his wrist, a surge of dark energy envelops him, boosting his strength as he prepares to unleash a more powerful attack.");
         Util.pressAnyKey();
 
-        this.Player.Fight(new Monster(7, "Arachthos", 200, 200, 15), null);
+        this.Player.Fight(new Monster(7, "Arachthos", 300, 300, 15), null);
         this.GameOverCheck();
 
         Console.Clear();
