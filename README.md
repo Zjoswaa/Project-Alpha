@@ -1,3 +1,4 @@
+<img src="eepy.jpg" alt="Eepy cat" width="100%" height="300"/>
 
 # Project Alpha by Team eepy 😸
 
