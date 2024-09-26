@@ -71,11 +71,10 @@ public class Location
             if (userInput == null || userInput == "") {
                 return;
             }
-
-            Location? newLocation = currentLocation?.GetLocationAt(userInput);
             
             if (userInput == "N" || userInput == "E" || userInput == "S" || userInput == "W") {
-                if (!newLocation.IsUnlocked) {
+                Location? newLocation = currentLocation?.GetLocationAt(userInput);
+                if (newLocation is not null && !newLocation.IsUnlocked) {
                     Console.Clear();
                     Console.WriteLine("This location is not yet available.");
                     Util.pressAnyKey();
